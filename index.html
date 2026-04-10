@@ -613,9 +613,9 @@ let matchEdits = {};
 let activeFilter = 'all';
 let editingMatch = null;
 
-// ─── CONFIG JSONBIN ───────────────────────────────────────────────────────────
-const JSONBIN_BIN_ID  = '69d8f909856a6821891c00b7';   // ex: 65f3a2b8dc74...
-const JSONBIN_API_KEY = '$2a$10$NDHe48CYCxYYghZygZlCu.o7KHrZBHtNd9Kuw//QVT3OK96gRTghG';  // ex: $2a$10$abc...
+// ─── CONFIG SUPABASE ─────────────────────────────────────────────────────────
+const SUPABASE_URL      = 'https://bdcfkjbdggeqfbpcmwfo.supabase.co';  // ← ton Project URL
+const SUPABASE_ANON_KEY = 'sb_publishable_mwkd0P2l02adfCir3AE7fA_iRNf4Xpj';  // ← ta clé anon/public
 const TOURNAMENT_PASSWORD = 'icam2026'; // mot de passe pour valider les scores
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -854,53 +854,67 @@ function showTab(name,btn){
   btn.classList.add('active');
 }
 
-// ─── JSONBIN : lecture + écriture ────────────────────────────────────────────
+// ─── SUPABASE : lecture + écriture ───────────────────────────────────────────
+const SB_HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': SUPABASE_ANON_KEY,
+  'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+};
+
 async function loadData() {
   try {
-    const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_API_KEY }
-    });
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits`,
+      { headers: SB_HEADERS }
+    );
     if(r.ok) {
-      const json = await r.json();
-      const data = json.record;
-      scores     = data.scores     || {};
-      elimScores = data.elimScores || {};
-      matchEdits = data.matchEdits || {};
-      return;
+      const rows = await r.json();
+      if(rows.length > 0) {
+        scores     = rows[0].scores      || {};
+        elimScores = rows[0].elim_scores || {};
+        matchEdits = rows[0].match_edits || {};
+        return;
+      }
     }
-  } catch(e) { console.warn('JSONBin lecture échouée, fallback localStorage', e); }
+  } catch(e) { console.warn('Supabase lecture échouée, fallback localStorage', e); }
 
-  // Fallback localStorage si JSONBin inaccessible
+  // Fallback localStorage si Supabase inaccessible
   try{const d=localStorage.getItem('pingpong_scores');if(d)scores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_elim');if(d)elimScores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_edits');if(d)matchEdits=JSON.parse(d);}catch(e){}
 }
 
 async function persist() {
-  const data = { scores, elimScores, matchEdits, updatedAt: new Date().toISOString() };
-
   // Backup localStorage
   try{localStorage.setItem('pingpong_scores',JSON.stringify(scores));}catch(e){}
   try{localStorage.setItem('pingpong_elim',JSON.stringify(elimScores));}catch(e){}
   try{localStorage.setItem('pingpong_edits',JSON.stringify(matchEdits));}catch(e){}
 
-  // Sauvegarde JSONBin
+  // Sauvegarde Supabase (UPSERT sur la ligne 'main')
   try {
-    const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
-      method: 'PUT',
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/tournament_data`, {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_API_KEY
+        ...SB_HEADERS,
+        'Prefer': 'resolution=merge-duplicates'  // équivalent UPSERT
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({
+        id: 'main',
+        scores,
+        elim_scores: elimScores,
+        match_edits: matchEdits,
+        updated_at: new Date().toISOString()
+      })
     });
-    if(r.ok) {
+    if(r.ok || r.status === 201) {
       showSaveStatus('✓ Score sauvegardé', true);
     } else {
+      const err = await r.text();
+      console.error('Supabase écriture erreur:', err);
       showSaveStatus('⚠ Sauvegarde locale uniquement', false);
     }
   } catch(e) {
-    console.error('JSONBin écriture échouée', e);
+    console.error('Supabase écriture échouée', e);
     showSaveStatus('⚠ Sauvegarde locale uniquement', false);
   }
 }
