@@ -906,6 +906,12 @@ async function persist() {
         updated_at: new Date().toISOString()
       })
     });
+    
+    
+    console.log('Status:', r.status);
+    console.log('Response:', await r.text());
+
+    
     if(r.ok || r.status === 201) {
       showSaveStatus('✓ Score sauvegardé', true);
     } else {
