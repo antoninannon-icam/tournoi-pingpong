@@ -908,8 +908,13 @@ async function persist() {
     });
     
     
-    console.log('Status:', r.status);
-    console.log('Response:', await r.text());
+    if(r.ok || r.status === 201) {
+        showSaveStatus('✓ Score sauvegardé', true);
+    } else {
+        const errorDetail = await r.json(); // On récupère le détail de l'erreur Supabase
+        console.error('Erreur Supabase détaillée:', errorDetail);
+        showSaveStatus('⚠ Erreur Supabase : ' + errorDetail.message, false);
+    }
 
     
     if(r.ok || r.status === 201) {
