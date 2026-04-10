@@ -613,13 +613,10 @@ let matchEdits = {};
 let activeFilter = 'all';
 let editingMatch = null;
 
-// ─── CONFIG GITHUB ───────────────────────────────────────────────────────────
-// À remplir avant de déployer sur GitHub :
-const GITHUB_OWNER  = 'antoninannon-icam';      // ex: 'jean-dupont'
-const GITHUB_REPO   = 'tournoi-pingpong';         // ex: 'tournoi-pingpong'
-const GITHUB_TOKEN  = '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'; // token avec droit "contents: write"
-const GITHUB_FILE   = 'scores.json';      // chemin du fichier dans le repo
-const TOURNAMENT_PASSWORD = 'icam2026';   // mot de passe pour valider les scores
+// ─── CONFIG JSONBIN ───────────────────────────────────────────────────────────
+const JSONBIN_BIN_ID  = '69d8f584aaba882197e4310c';   // ex: 65f3a2b8dc74...
+const JSONBIN_API_KEY = '$2a$10$NDHe48CYCxYYghZygZlCu.o7KHrZBHtNd9Kuw//QVT3OK96gRTghG';  // ex: $2a$10$abc...
+const TOURNAMENT_PASSWORD = 'icam2026'; // mot de passe pour valider les scores
 // ─────────────────────────────────────────────────────────────────────────────
 
 function getMatchId(m) { return m.phase+'-'+m.date+'-'+m.p1+'-'+m.p2; }
@@ -857,28 +854,23 @@ function showTab(name,btn){
   btn.classList.add('active');
 }
 
-// ─── GITHUB API : lecture + écriture du scores.json ──────────────────────────
-let githubFileSha = null; // SHA du fichier actuel, nécessaire pour le PUT
-
+// ─── JSONBIN : lecture + écriture ────────────────────────────────────────────
 async function loadData() {
-  // Essai lecture depuis GitHub
   try {
-    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
-    const r = await fetch(url, {
-      headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' }
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_API_KEY }
     });
     if(r.ok) {
-      const meta = await r.json();
-      githubFileSha = meta.sha;
-      const data = JSON.parse(atob(meta.content.replace(/\n/g,'')));
-      scores      = data.scores      || {};
-      elimScores  = data.elimScores  || {};
-      matchEdits  = data.matchEdits  || {};
+      const json = await r.json();
+      const data = json.record;
+      scores     = data.scores     || {};
+      elimScores = data.elimScores || {};
+      matchEdits = data.matchEdits || {};
       return;
     }
-  } catch(e) { console.warn('GitHub lecture échouée, fallback localStorage', e); }
+  } catch(e) { console.warn('JSONBin lecture échouée, fallback localStorage', e); }
 
-  // Fallback localStorage si GitHub inaccessible
+  // Fallback localStorage si JSONBin inaccessible
   try{const d=localStorage.getItem('pingpong_scores');if(d)scores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_elim');if(d)elimScores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_edits');if(d)matchEdits=JSON.parse(d);}catch(e){}
@@ -886,39 +878,29 @@ async function loadData() {
 
 async function persist() {
   const data = { scores, elimScores, matchEdits, updatedAt: new Date().toISOString() };
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
 
-  // Sauvegarde localStorage en parallèle (backup)
+  // Backup localStorage
   try{localStorage.setItem('pingpong_scores',JSON.stringify(scores));}catch(e){}
   try{localStorage.setItem('pingpong_elim',JSON.stringify(elimScores));}catch(e){}
   try{localStorage.setItem('pingpong_edits',JSON.stringify(matchEdits));}catch(e){}
 
-  // Sauvegarde GitHub
+  // Sauvegarde JSONBin
   try {
-    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
-    const body = {
-      message: `Mise à jour score – ${new Date().toLocaleString('fr-FR')}`,
-      content,
-      ...(githubFileSha ? { sha: githubFileSha } : {})
-    };
-    const r = await fetch(url, {
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
       method: 'PUT',
       headers: {
-        Authorization: `token ${GITHUB_TOKEN}`,
-        Accept: 'application/vnd.github+json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_API_KEY
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify(data)
     });
     if(r.ok) {
-      const res = await r.json();
-      githubFileSha = res.content?.sha || githubFileSha;
       showSaveStatus('✓ Score sauvegardé', true);
     } else {
       showSaveStatus('⚠ Sauvegarde locale uniquement', false);
     }
   } catch(e) {
-    console.error('GitHub écriture échouée', e);
+    console.error('JSONBin écriture échouée', e);
     showSaveStatus('⚠ Sauvegarde locale uniquement', false);
   }
 }
