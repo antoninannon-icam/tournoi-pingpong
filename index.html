@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournoi MSR / MSI · ICAM 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a5c3a;
+    --green-light: #2a7a50;
+    --gold: #e8b84b;
+    --cream: #f8f4ed;
+    --dark: #0f1f15;
+    --text: #1a1a1a;
+    --muted: #6b7c70;
+    --border: rgba(26,92,58,.15);
+    --card-bg: #ffffff;
+    --bg: #f0ede6;
+    --A: #1a5c8a; --A-bg: #e6f1fb;
+    --B: #8a1a4a; --B-bg: #fbeaf0;
+    --C: #2a6a14; --C-bg: #eaf3de;
+    --D: #7a4a0a; --D-bg: #faeeda;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    background: var(--green);
+    color: white;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: .12;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 180px; height: 180px;
+    background: white;
+    border-radius: 50%;
+    opacity: .05;
+  }
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: .5rem;
+  }
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(48px, 10vw, 80px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: .25rem;
+  }
+  .hero-sub {
+    font-size: 13px;
+    opacity: .7;
+    margin-bottom: 1.5rem;
+  }
+  .hero-stats {
+    display: inline-flex;
+    gap: 0;
+    background: rgba(255,255,255,.1);
+    border-radius: 40px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.2);
+  }
+  .hero-stat {
+    padding: .5rem 1.25rem;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,.15);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat .n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    display: block;
+  }
+  .hero-stat .l {
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: .6;
+  }
+  .location-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--gold);
+    color: #4a3000;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-top: 1rem;
+  }
+
+  /* NAV */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--dark);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    flex: 1;
+    min-width: 80px;
+    padding: .85rem .5rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+  }
+  .nav-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+  .nav-btn:hover:not(.active) { color: rgba(255,255,255,.7); }
+
+  /* MAIN */
+  .main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* POULES GRID */
+  .poules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media(max-width: 540px) { .poules-grid { grid-template-columns: 1fr; } }
+
+  .poule-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .poule-head {
+    padding: .7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .poule-A .poule-head { background: var(--A-bg); }
+  .poule-B .poule-head { background: var(--B-bg); }
+  .poule-C .poule-head { background: var(--C-bg); }
+  .poule-D .poule-head { background: var(--D-bg); }
+
+  .poule-letter {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+  .poule-A .poule-letter { background: var(--A); }
+  .poule-B .poule-letter { background: var(--B); }
+  .poule-C .poule-letter { background: var(--C); }
+  .poule-D .poule-letter { background: var(--D); }
+
+  .poule-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 14px;
+  }
+  .poule-A .poule-title { color: var(--A); }
+  .poule-B .poule-title { color: var(--B); }
+  .poule-C .poule-title { color: var(--C); }
+  .poule-D .poule-title { color: var(--D); }
+
+  .standings-cols {
+    display: flex;
+    justify-content: flex-end;
+    padding: .2rem 1rem;
+    gap: 0;
+    background: #fafafa;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .col-head {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--muted);
+    width: 28px;
+    text-align: center;
+  }
+  .col-head.pts { width: 32px; }
+
+  .player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .player-row:last-child { border-bottom: none; }
+  .player-row.qualified .player-name::before {
+    content: "★ ";
+    color: var(--gold);
+    font-size: 10px;
+  }
+  .player-name { color: var(--text); }
+  .player-vals { display: flex; gap: 0; }
+  .pv {
+    width: 28px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .pv.pts {
+    width: 32px;
+    font-weight: 600;
+    color: var(--text);
+    background: #f5f5f5;
+    border-radius: 4px;
+  }
+  .poule-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1rem;
+    padding: .5rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px dashed rgba(26,92,58,.2);
+  }
+
+  /* MATCHS */
+  .filter-bar {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem;
+  }
+  .filter-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: .5px; text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: white;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all .15s;
+  }
+  .filter-btn.active {
+    background: var(--green); color: white; border-color: var(--green);
+  }
+  .filter-btn:hover:not(.active) { border-color: var(--green); color: var(--green); }
+
+  .day-group { margin-bottom: 1.25rem; }
+  .day-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--green);
+    padding: .3rem .6rem;
+    background: rgba(26,92,58,.07);
+    border-radius: 4px;
+    margin-bottom: 6px;
+    display: inline-block;
+  }
+  .match-item {
+    background: white;
+    border-radius: 10px;
+    padding: .7rem 1rem;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    flex-wrap: wrap;
+  }
+  .m-poule {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+    min-width: 38px; text-align: center;
+  }
+  .mp-A { background: var(--A-bg); color: var(--A); }
+  .mp-B { background: var(--B-bg); color: var(--B); }
+  .mp-C { background: var(--C-bg); color: var(--C); }
+  .mp-D { background: var(--D-bg); color: var(--D); }
+  .mp-E { background: #f1efe8; color: #5f5e5a; }
+  .m-time {
+    font-size: 11px; color: var(--muted); min-width: 38px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 500;
+  }
+  .m-players { flex: 1; display: flex; align-items: center; gap: 7px; font-size: 13px; min-width: 160px; }
+  .m-vs { font-size: 10px; color: var(--muted); font-weight: 600; }
+  .m-score { display: flex; align-items: center; gap: 5px; }
+  .score-in {
+    width: 34px; height: 30px;
+    text-align: center; font-size: 14px; font-weight: 600;
+    border: 1.5px solid #ddd;
+    border-radius: 6px; background: #fafafa;
+    color: var(--text);
+    transition: border-color .15s;
+  }
+  .score-in:focus { outline: none; border-color: var(--green); background: white; }
+  .ok-btn {
+    font-size: 11px; padding: 4px 10px;
+    border: 1.5px solid #ddd; border-radius: 6px;
+    background: transparent; cursor: pointer; color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+    transition: all .15s;
+  }
+  .ok-btn:hover { border-color: var(--green); color: var(--green); }
+  .m-status {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: .5px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 10px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .ms-done { background: #eaf3de; color: #2a6a14; }
+  .ms-upcoming { background: #f1efe8; color: #888; }
+  .m-note {
+    font-size: 11px; color: var(--muted);
+    text-align: center; margin-top: 1rem;
+    padding: .5rem; background: white;
+    border-radius: 8px; border: 1px dashed rgba(0,0,0,.1);
+  }
+  .edit-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 13px; padding: 2px 4px;
+    border-radius: 4px; line-height: 1; opacity: .5;
+    transition: opacity .15s;
+  }
+  .edit-btn:hover { opacity: 1; }
+  .edit-row {
+    width: 100%; margin-top: 8px;
+    padding: 8px 10px;
+    background: #f8f6f0;
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    border: 1px solid var(--border);
+  }
+  .edit-row label { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .edit-in {
+    height: 28px; padding: 0 8px; font-size: 13px;
+    border: 1.5px solid #ddd; border-radius: 6px;
+    background: white; color: var(--text);
+    font-family: 'Barlow', sans-serif;
+  }
+  .edit-in:focus { outline: none; border-color: var(--green); }
+  .edit-save {
+    font-size: 11px; padding: 4px 12px; border-radius: 6px;
+    background: var(--green); color: white; border: none;
+    cursor: pointer; font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; letter-spacing: .5px;
+  }
+  .edit-cancel {
+    font-size: 11px; padding: 4px 10px; border-radius: 6px;
+    background: none; color: var(--muted);
+    border: 1.5px solid #ddd; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+  }
+
+  /* BRACKET */
+  .bracket-section { margin-bottom: 1.5rem; }
+  .bracket-round-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .bracket-round-title::after {
+    content: '';
+    flex: 1; height: 1px; background: var(--border);
+  }
+  .elim-match {
+    background: white;
+    border-radius: 10px;
+    padding: .75rem 1rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    flex-wrap: wrap;
+  }
+  .elim-match.final-match {
+    border: 2px solid var(--gold);
+  }
+  .elim-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .elim-players {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .elim-p {
+    font-size: 13px;
+    background: #f5f5f5;
+    padding: 3px 10px; border-radius: 5px;
+    color: var(--text);
+  }
+  .elim-vs { font-size: 10px; color: var(--muted); font-weight: 600; }
+  .elim-score { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .winner-pill {
+    font-size: 10px; padding: 2px 9px; border-radius: 10px;
+    background: #eaf3de; color: #2a6a14;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; letter-spacing: .5px;
+  }
+  .trophy {
+    text-align: center; padding: 2rem 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .trophy-icon { font-size: 48px; display: block; margin-bottom: .5rem; }
+  .trophy p { font-size: 14px; color: var(--muted); }
+
+  /* REGLEMENT */
+  .rules-grid { display: grid; gap: 12px; }
+  .rule-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .rule-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 700;
+    letter-spacing: .5px; text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: .75rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--gold);
+    display: inline-block;
+  }
+  .rule-item {
+    font-size: 13.5px; color: #3a3a3a;
+    line-height: 1.75;
+    padding: .3rem 0 .3rem 1.25rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+  .rule-item:last-child { border-bottom: none; }
+  .rule-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: .75rem;
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">ICAM · Avril 2026</div>
+  <h1>MSR / MSI</h1>
+  <p class="hero-sub">Tournoi de ping-pong inter-promo · 13 – 29 avril 2026</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="n">20</span><span class="l">Joueurs</span></div>
+    <div class="hero-stat"><span class="n">4</span><span class="l">Poules</span></div>
+    <div class="hero-stat"><span class="n">40</span><span class="l">Matchs</span></div>
+  </div>
+  <div><div class="location-badge">📍 Table devant le bar ICAM · 13h chaque jour</div></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('poules',this)">Poules</button>
+  <button class="nav-btn" onclick="showTab('matchs',this)">Matchs</button>
+  <button class="nav-btn" onclick="showTab('bracket',this)">Finale</button>
+  <button class="nav-btn" onclick="showTab('regles',this)">Règlement</button>
+</nav>
+
+<div class="main">
+  <div id="tab-poules" class="section active"></div>
+  <div id="tab-matchs" class="section"></div>
+  <div id="tab-bracket" class="section"></div>
+  <div id="tab-regles" class="section">
+    <div class="rules-grid">
+      <div class="rule-card">
+        <h3>Format des matchs</h3>
+        <div class="rule-item">Manches en 11 points. 2 points d'écart obligatoires en cas d'égalité à 10-10.</div>
+        <div class="rule-item">Format BO3 : le premier joueur à 2 manches gagnantes remporte le match.</div>
+      </div>
+      <div class="rule-card">
+        <h3>Service</h3>
+        <div class="rule-item">Le service doit rebondir au maximum une fois dans le camp adverse.</div>
+        <div class="rule-item">Le service n'est pas obligatoirement croisé.</div>
+        <div class="rule-item">Let (service touchant le filet et atterrissant dans la zone adverse) : le service est rejoué. Au 3ᵉ let consécutif, le point est accordé à l'adversaire.</div>
+        <div class="rule-item">Les services "carotte" sont autorisés.</div>
+      </div>
+      <div class="rule-card">
+        <h3>Règles de jeu</h3>
+        <div class="rule-item">Interdit de poser la main sur la table pendant l'échange.</div>
+        <div class="rule-item">Interdit de faire bouger la table : le point est accordé à l'adversaire.</div>
+      </div>
+      <div class="rule-card">
+        <h3>Déroulement du tournoi</h3>
+        <div class="rule-item">Matchs sur le temps du midi : 13h–14h chaque jour.</div>
+        <div class="rule-item">Phase de poules : chaque joueur affronte tous les autres de sa poule une fois.</div>
+        <div class="rule-item">Les 1ers et 2èmes de chaque poule se qualifient pour la phase finale.</div>
+        <div class="rule-item">Phase finale : Quarts de finale → Demi-finales → Finale.</div>
+        <div class="rule-item">Ouvert à tous : étudiants et collaborateurs bienvenus.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PLAYERS = {
+  A: ["de Lavenne Clément","Langlais Eloïse","Decouz Gustave","de Monneron Patrick","Vidal Samuel"],
+  B: ["Valdenaire Maximilien","Rapenne Clement","Marcade Ludovic","Pelletier Lucas","Laquenan Gaspard"],
+  C: ["Soit-Vizante Alexandru","Flamand Emmanuel","Vallette Thomas","Rafalimanana Lovasoa","Elizechea Margaux"],
+  D: ["Rouzioux Valentin","Girard de Montille W.","MIGADEL Caroline","Mihigo Moralie","Annon Antonin"]
+};
+
+const MATCHES_RAW = [
+  {phase:"A",date:"13/04",time:"13:00",p1:0,p2:1},
+  {phase:"B",date:"13/04",time:"13:20",p1:0,p2:1},
+  {phase:"C",date:"13/04",time:"13:40",p1:0,p2:1},
+  {phase:"D",date:"14/04",time:"13:00",p1:0,p2:1},
+  {phase:"A",date:"14/04",time:"13:20",p1:0,p2:2},
+  {phase:"B",date:"14/04",time:"13:40",p1:0,p2:2},
+  {phase:"C",date:"15/04",time:"13:00",p1:0,p2:2},
+  {phase:"D",date:"15/04",time:"13:20",p1:0,p2:2},
+  {phase:"A",date:"15/04",time:"13:40",p1:0,p2:3},
+  {phase:"B",date:"16/04",time:"13:00",p1:0,p2:3},
+  {phase:"C",date:"16/04",time:"13:20",p1:0,p2:3},
+  {phase:"D",date:"16/04",time:"13:40",p1:0,p2:3},
+  {phase:"A",date:"17/04",time:"13:00",p1:0,p2:4},
+  {phase:"B",date:"17/04",time:"13:20",p1:0,p2:4},
+  {phase:"C",date:"17/04",time:"13:40",p1:0,p2:4},
+  {phase:"D",date:"20/04",time:"13:00",p1:0,p2:4},
+  {phase:"A",date:"20/04",time:"13:20",p1:1,p2:2},
+  {phase:"B",date:"20/04",time:"13:40",p1:1,p2:2},
+  {phase:"C",date:"21/04",time:"13:00",p1:1,p2:2},
+  {phase:"D",date:"21/04",time:"13:20",p1:1,p2:2},
+  {phase:"A",date:"21/04",time:"13:40",p1:1,p2:3},
+  {phase:"B",date:"22/04",time:"13:00",p1:1,p2:3},
+  {phase:"C",date:"22/04",time:"13:20",p1:1,p2:3},
+  {phase:"D",date:"22/04",time:"13:40",p1:1,p2:3},
+  {phase:"A",date:"23/04",time:"13:00",p1:1,p2:4},
+  {phase:"B",date:"23/04",time:"13:20",p1:1,p2:4},
+  {phase:"C",date:"23/04",time:"13:40",p1:1,p2:4},
+  {phase:"D",date:"24/04",time:"13:00",p1:1,p2:4},
+  {phase:"A",date:"24/04",time:"13:20",p1:2,p2:3},
+  {phase:"B",date:"24/04",time:"13:40",p1:2,p2:3},
+  {phase:"C",date:"27/04",time:"13:00",p1:2,p2:3},
+  {phase:"D",date:"27/04",time:"13:20",p1:2,p2:3},
+  {phase:"A",date:"27/04",time:"13:40",p1:2,p2:4},
+  {phase:"B",date:"28/04",time:"13:00",p1:2,p2:4},
+  {phase:"C",date:"28/04",time:"13:20",p1:2,p2:4},
+  {phase:"D",date:"28/04",time:"13:40",p1:2,p2:4},
+  {phase:"A",date:"29/04",time:"13:00",p1:3,p2:4},
+  {phase:"B",date:"29/04",time:"13:20",p1:3,p2:4},
+  {phase:"C",date:"29/04",time:"13:40",p1:3,p2:4},
+  {phase:"D",date:"29/04",time:"13:50",p1:3,p2:4}
+];
+
+const ELIM = [
+  {round:"Quarts de finale",id:"Q1",label:"Quart 1",p1:"1er Poule A",p2:"2e Poule B"},
+  {round:"Quarts de finale",id:"Q2",label:"Quart 2",p1:"1er Poule B",p2:"2e Poule A"},
+  {round:"Quarts de finale",id:"Q3",label:"Quart 3",p1:"1er Poule C",p2:"2e Poule D"},
+  {round:"Quarts de finale",id:"Q4",label:"Quart 4",p1:"1er Poule D",p2:"2e Poule C"},
+  {round:"Demi-finales",id:"D1",label:"Demi 1",p1:"Vainqueur Q1",p2:"Vainqueur Q3"},
+  {round:"Demi-finales",id:"D2",label:"Demi 2",p1:"Vainqueur Q2",p2:"Vainqueur Q4"},
+  {round:"Finale",id:"F",label:"Finale",p1:"Vainqueur D1",p2:"Vainqueur D2"}
+];
+
+
+let scores = {};
+let elimScores = {};
+let matchEdits = {};
+let activeFilter = 'all';
+let editingMatch = null;
+
+// ─── CONFIG GITHUB ───────────────────────────────────────────────────────────
+// À remplir avant de déployer sur GitHub :
+const GITHUB_OWNER  = 'TON_USERNAME';      // ex: 'jean-dupont'
+const GITHUB_REPO   = 'TON_REPO';         // ex: 'tournoi-pingpong'
+const GITHUB_TOKEN  = 'TON_TOKEN_GITHUB'; // token avec droit "contents: write"
+const GITHUB_FILE   = 'scores.json';      // chemin du fichier dans le repo
+const TOURNAMENT_PASSWORD = 'icam2026';   // mot de passe pour valider les scores
+// ─────────────────────────────────────────────────────────────────────────────
+
+function getMatchId(m) { return m.phase+'-'+m.date+'-'+m.p1+'-'+m.p2; }
+function getMatchIdx(m) { return MATCHES_RAW.indexOf(m); }
+
+function getMatchDate(m) { return matchEdits[getMatchIdx(m)]?.date || m.date; }
+function getMatchTime(m) { return matchEdits[getMatchIdx(m)]?.time || m.time; }
+
+function getStandings(poule) {
+  const pl = PLAYERS[poule].map((name,i)=>({name,i,pts:0,w:0,l:0,played:0}));
+  MATCHES_RAW.filter(m=>m.phase===poule).forEach(m=>{
+    const sc=scores[getMatchId(m)];
+    if(sc&&sc.s1!==''&&sc.s2!==''){
+      const s1=parseInt(sc.s1)||0,s2=parseInt(sc.s2)||0;
+      pl[m.p1].played++;pl[m.p2].played++;
+      if(s1>s2){pl[m.p1].pts+=2;pl[m.p1].w++;pl[m.p2].l++;}
+      else if(s2>s1){pl[m.p2].pts+=2;pl[m.p2].w++;pl[m.p1].l++;}
+    }
+  });
+  return pl.sort((a,b)=>b.pts-a.pts||b.w-a.w);
+}
+
+function renderPoules() {
+  let html = '<div class="poules-grid">';
+  for(const p of ['A','B','C','D']) {
+    const st = getStandings(p);
+    html += `<div class="poule-card poule-${p}">
+      <div class="poule-head">
+        <span class="poule-letter">${p}</span>
+        <div><div class="poule-title">Poule ${p}</div><div style="font-size:10px;color:var(--muted)">10 matchs</div></div>
+      </div>
+      <div class="standings-cols">
+        <span class="col-head">J</span><span class="col-head">V</span><span class="col-head">D</span><span class="col-head pts">Pts</span>
+      </div>`;
+    st.forEach((pl,rank)=>{
+      html+=`<div class="player-row${rank<2?' qualified':''}">
+        <span class="player-name">${pl.name}</span>
+        <div class="player-vals">
+          <span class="pv">${pl.played}</span><span class="pv">${pl.w}</span><span class="pv">${pl.l}</span><span class="pv pts">${pl.pts}</span>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  html+='</div><p class="poule-note">★ Les 2 premiers de chaque poule se qualifient pour la phase finale</p>';
+  document.getElementById('tab-poules').innerHTML=html;
+}
+
+function renderMatchs() {
+  const matches = activeFilter==='all' ? MATCHES_RAW : MATCHES_RAW.filter(m=>m.phase===activeFilter);
+  let html = `<div class="filter-bar">
+    <button class="filter-btn${activeFilter==='all'?' active':''}" onclick="setFilter('all')">Tous</button>
+    <button class="filter-btn${activeFilter==='A'?' active':''}" onclick="setFilter('A')">Poule A</button>
+    <button class="filter-btn${activeFilter==='B'?' active':''}" onclick="setFilter('B')">Poule B</button>
+    <button class="filter-btn${activeFilter==='C'?' active':''}" onclick="setFilter('C')">Poule C</button>
+    <button class="filter-btn${activeFilter==='D'?' active':''}" onclick="setFilter('D')">Poule D</button>
+  </div>`;
+
+  const byDay={};
+  matches.forEach(m=>{
+    const d=getMatchDate(m);
+    if(!byDay[d])byDay[d]=[];byDay[d].push(m);
+  });
+
+  const sortedDays = Object.keys(byDay).sort((a,b)=>{
+    const parseD = s => { const [d,mo]=s.split('/').map(Number); return mo*100+d; };
+    return parseD(a)-parseD(b);
+  });
+
+  const allDayLabels = {};
+  for(let d=1;d<=30;d++) for(let mo=1;mo<=12;mo++){
+    const key=String(d).padStart(2,'0')+'/'+String(mo).padStart(2,'0');
+    const date=new Date(2026,mo-1,d);
+    const days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    allDayLabels[key]=days[date.getDay()]+' '+d+' '+months[mo-1];
+  }
+
+  for(const date of sortedDays){
+    html+=`<div class="day-group"><div class="day-label">${allDayLabels[date]||date}</div>`;
+    byDay[date].forEach(m=>{
+      const idx=getMatchIdx(m);
+      const id=getMatchId(m);
+      const sc=scores[id]||{s1:'',s2:''};
+      const done=sc.s1!==''&&sc.s2!=='';
+      const isEditing=editingMatch===idx;
+      const curDate=getMatchDate(m);
+      const curTime=getMatchTime(m);
+      html+=`<div class="match-item" style="flex-wrap:wrap">
+        <span class="m-poule mp-${m.phase}">${m.phase}</span>
+        <span class="m-time">${curTime}</span>
+        <div class="m-players">
+          <span>${PLAYERS[m.phase][m.p1]}</span>
+          <span class="m-vs">vs</span>
+          <span>${PLAYERS[m.phase][m.p2]}</span>
+        </div>
+        <div class="m-score">
+          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s1}" id="s1_${id}">
+          <span class="m-vs" style="font-size:16px">–</span>
+          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s2}" id="s2_${id}">
+          <button class="ok-btn" onclick="saveScore('${id}')">OK</button>
+        </div>
+        <span class="m-status ${done?'ms-done':'ms-upcoming'}">${done?'Joué':'À venir'}</span>
+        <button class="edit-btn" onclick="toggleEdit(${idx})" title="Modifier date/heure">✏️</button>
+        ${isEditing?`<div class="edit-row">
+          <label>Date</label>
+          <input class="edit-in" id="edit-date-${idx}" value="${curDate}" placeholder="JJ/MM" style="width:80px">
+          <label>Heure</label>
+          <input class="edit-in" id="edit-time-${idx}" value="${curTime}" placeholder="HH:MM" style="width:70px">
+          <button class="edit-save" onclick="saveMatchEdit(${idx})">Enregistrer</button>
+          <button class="edit-cancel" onclick="cancelEdit()">Annuler</button>
+        </div>`:''}
+      </div>`;
+    });
+    html+='</div>';
+  }
+  html+='<p class="m-note">Saisissez le nombre de manches gagnées (0-3) et cliquez OK · ✏️ pour modifier date/heure</p>';
+  document.getElementById('tab-matchs').innerHTML=html;
+}
+
+function renderBracket() {
+  const rounds={};
+  ELIM.forEach(m=>{if(!rounds[m.round])rounds[m.round]=[];rounds[m.round].push(m);});
+  let html='';
+  for(const [round,matches] of Object.entries(rounds)){
+    html+=`<div class="bracket-section"><div class="bracket-round-title">${round}</div>`;
+    matches.forEach(m=>{
+      const sc=elimScores[m.id]||{s1:'',s2:''};
+      const done=sc.s1!==''&&sc.s2!=='';
+      const isFinal=m.id==='F';
+      let winner='';
+      if(done){const s1=parseInt(sc.s1)||0,s2=parseInt(sc.s2)||0;winner=s1>s2?m.p1:m.p2;}
+      html+=`<div class="elim-match${isFinal?' final-match':''}">
+        <div>
+          <div class="elim-label">${m.label}</div>
+          <div class="elim-players">
+            <span class="elim-p">${m.p1}</span>
+            <span class="elim-vs">vs</span>
+            <span class="elim-p">${m.p2}</span>
+          </div>
+        </div>
+        <div class="elim-score">
+          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s1}" id="es1_${m.id}">
+          <span class="m-vs" style="font-size:16px">–</span>
+          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s2}" id="es2_${m.id}">
+          <button class="ok-btn" onclick="saveElimScore('${m.id}')">OK</button>
+          ${done?`<span class="winner-pill">🏆 ${winner}</span>`:''}
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  html+=`<div class="trophy"><span class="trophy-icon">🏆</span><p>La finale aura lieu le 29 avril 2026</p></div>`;
+  document.getElementById('tab-bracket').innerHTML=html;
+}
+
+// ─── MOT DE PASSE ────────────────────────────────────────────────────────────
+let pendingAction = null; // { type: 'score'|'elim'|'edit', args: [...] }
+
+function askPassword(action) {
+  pendingAction = action;
+  document.getElementById('pwd-modal').style.display = 'flex';
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-error').style.display = 'none';
+  setTimeout(()=>document.getElementById('pwd-input').focus(), 50);
+}
+function closePwdModal() {
+  document.getElementById('pwd-modal').style.display = 'none';
+  pendingAction = null;
+}
+function confirmPassword() {
+  const val = document.getElementById('pwd-input').value;
+  if(val !== TOURNAMENT_PASSWORD) {
+    document.getElementById('pwd-error').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+    return;
+  }
+  closePwdModal();
+  if(!pendingAction) return;
+  const {type, args} = pendingAction;
+  if(type==='score')    doSaveScore(...args);
+  if(type==='elim')     doSaveElimScore(...args);
+  if(type==='edit')     doSaveMatchEdit(...args);
+}
+document.addEventListener('keydown', e => {
+  if(e.key==='Enter' && document.getElementById('pwd-modal').style.display==='flex') confirmPassword();
+  if(e.key==='Escape') closePwdModal();
+});
+
+// ─── ACTIONS SCORE (avec mot de passe) ───────────────────────────────────────
+function saveScore(id) {
+  const s1=document.getElementById('s1_'+id)?.value;
+  const s2=document.getElementById('s2_'+id)?.value;
+  askPassword({type:'score', args:[id,s1,s2]});
+}
+function doSaveScore(id,s1,s2) {
+  scores[id]={s1,s2};
+  persist();
+  renderPoules(); renderMatchs(); renderBracket();
+}
+
+function saveElimScore(id) {
+  const s1=document.getElementById('es1_'+id)?.value;
+  const s2=document.getElementById('es2_'+id)?.value;
+  askPassword({type:'elim', args:[id,s1,s2]});
+}
+function doSaveElimScore(id,s1,s2) {
+  elimScores[id]={s1,s2};
+  persist();
+  renderBracket();
+}
+
+function toggleEdit(idx) {
+  editingMatch = editingMatch===idx ? null : idx;
+  renderMatchs();
+}
+function cancelEdit() { editingMatch=null; renderMatchs(); }
+function saveMatchEdit(idx) {
+  askPassword({type:'edit', args:[idx]});
+}
+function doSaveMatchEdit(idx) {
+  const d=document.getElementById('edit-date-'+idx)?.value.trim();
+  const t=document.getElementById('edit-time-'+idx)?.value.trim();
+  if(d||t){ matchEdits[idx]={date:d||MATCHES_RAW[idx].date, time:t||MATCHES_RAW[idx].time}; }
+  editingMatch=null;
+  persist();
+  renderMatchs();
+}
+function setFilter(f){ activeFilter=f; renderMatchs(); }
+function showTab(name,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── GITHUB API : lecture + écriture du scores.json ──────────────────────────
+let githubFileSha = null; // SHA du fichier actuel, nécessaire pour le PUT
+
+async function loadData() {
+  // Essai lecture depuis GitHub
+  try {
+    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+    const r = await fetch(url, {
+      headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github+json' }
+    });
+    if(r.ok) {
+      const meta = await r.json();
+      githubFileSha = meta.sha;
+      const data = JSON.parse(atob(meta.content.replace(/\n/g,'')));
+      scores      = data.scores      || {};
+      elimScores  = data.elimScores  || {};
+      matchEdits  = data.matchEdits  || {};
+      return;
+    }
+  } catch(e) { console.warn('GitHub lecture échouée, fallback localStorage', e); }
+
+  // Fallback localStorage si GitHub inaccessible
+  try{const d=localStorage.getItem('pingpong_scores');if(d)scores=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('pingpong_elim');if(d)elimScores=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('pingpong_edits');if(d)matchEdits=JSON.parse(d);}catch(e){}
+}
+
+async function persist() {
+  const data = { scores, elimScores, matchEdits, updatedAt: new Date().toISOString() };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+
+  // Sauvegarde localStorage en parallèle (backup)
+  try{localStorage.setItem('pingpong_scores',JSON.stringify(scores));}catch(e){}
+  try{localStorage.setItem('pingpong_elim',JSON.stringify(elimScores));}catch(e){}
+  try{localStorage.setItem('pingpong_edits',JSON.stringify(matchEdits));}catch(e){}
+
+  // Sauvegarde GitHub
+  try {
+    const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`;
+    const body = {
+      message: `Mise à jour score – ${new Date().toLocaleString('fr-FR')}`,
+      content,
+      ...(githubFileSha ? { sha: githubFileSha } : {})
+    };
+    const r = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+        Accept: 'application/vnd.github+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if(r.ok) {
+      const res = await r.json();
+      githubFileSha = res.content?.sha || githubFileSha;
+      showSaveStatus('✓ Score sauvegardé', true);
+    } else {
+      showSaveStatus('⚠ Sauvegarde locale uniquement', false);
+    }
+  } catch(e) {
+    console.error('GitHub écriture échouée', e);
+    showSaveStatus('⚠ Sauvegarde locale uniquement', false);
+  }
+}
+
+function showSaveStatus(msg, ok) {
+  let el = document.getElementById('save-status');
+  if(!el) {
+    el = document.createElement('div');
+    el.id = 'save-status';
+    el.style.cssText = `position:fixed;bottom:1rem;right:1rem;padding:8px 16px;border-radius:20px;
+      font-size:12px;font-family:'Barlow Condensed',sans-serif;font-weight:600;
+      letter-spacing:.5px;z-index:999;transition:opacity .4s;`;
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = ok ? '#eaf3de' : '#faeeda';
+  el.style.color = ok ? '#2a6a14' : '#7a4a0a';
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(()=>{ el.style.opacity='0'; }, 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadData().then(() => {
+  renderPoules();
+  renderMatchs();
+  renderBracket();
+});
+</script>
+<!-- MODAL MOT DE PASSE -->
+<div id="pwd-modal" style="display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.55);align-items:center;justify-content:center;backdrop-filter:blur(3px);">
+  <div style="background:white;border-radius:16px;padding:2rem 1.75rem;max-width:340px;width:90%;
+    box-shadow:0 8px 40px rgba(0,0,0,.2);text-align:center;">
+    <div style="font-size:32px;margin-bottom:.5rem;">🔒</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;
+      color:#0f1f15;margin-bottom:.25rem;letter-spacing:.5px;">MOT DE PASSE REQUIS</div>
+    <div style="font-size:12px;color:#6b7c70;margin-bottom:1.25rem;">
+      Entrez le code secret pour valider ce score
+    </div>
+    <input id="pwd-input" type="password" placeholder="Mot de passe…"
+      style="width:100%;height:42px;text-align:center;font-size:16px;font-family:'Barlow',sans-serif;
+      border:1.5px solid #ddd;border-radius:8px;padding:0 12px;color:#1a1a1a;
+      outline:none;transition:border-color .15s;letter-spacing:3px;"
+      onfocus="this.style.borderColor='#1a5c3a'" onblur="this.style.borderColor='#ddd'">
+    <div id="pwd-error" style="display:none;color:#c0392b;font-size:12px;margin-top:.5rem;
+      font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.5px;">
+      ✗ Mot de passe incorrect
+    </div>
+    <div style="display:flex;gap:8px;margin-top:1.25rem;">
+      <button onclick="closePwdModal()"
+        style="flex:1;height:38px;border:1.5px solid #ddd;border-radius:8px;background:none;
+        font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
+        color:#6b7c70;cursor:pointer;letter-spacing:.5px;">
+        ANNULER
+      </button>
+      <button onclick="confirmPassword()"
+        style="flex:1;height:38px;border:none;border-radius:8px;background:#1a5c3a;color:white;
+        font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+        cursor:pointer;letter-spacing:.5px;transition:background .15s;"
+        onmouseover="this.style.background='#2a7a50'" onmouseout="this.style.background='#1a5c3a'">
+        VALIDER ✓
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
