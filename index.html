@@ -885,27 +885,39 @@ async function loadData() {
 }
 
 async function persist() {
-  // Backup localStorage
-  try{localStorage.setItem('pingpong_scores',JSON.stringify(scores));}catch(e){}
-  try{localStorage.setItem('pingpong_elim',JSON.stringify(elimScores));}catch(e){}
-  try{localStorage.setItem('pingpong_edits',JSON.stringify(matchEdits));}catch(e){}
+  const payload = {
+    id: 'main',
+    scores,
+    elim_scores: elimScores,
+    match_edits: matchEdits,
+    updated_at: new Date().toISOString()
+  };
 
-  // Sauvegarde Supabase (UPSERT sur la ligne 'main')
+  // Backup local immédiat au cas où le réseau échoue
+  localStorage.setItem('pingpong_backup', JSON.stringify(payload));
+
   try {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/tournament_data`, {
-      method: 'POST',
+      method: 'POST', // PostgREST utilise POST + Header spécifique pour l'UPSERT
       headers: {
         ...SB_HEADERS,
-        'Prefer': 'resolution=merge-duplicates'  // équivalent UPSERT
+        'Prefer': 'resolution=merge-duplicates',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        id: 'main',
-        scores,
-        elim_scores: elimScores,
-        match_edits: matchEdits,
-        updated_at: new Date().toISOString()
-      })
+      body: JSON.stringify(payload)
     });
+
+    if (!r.ok) {
+      const errorText = await r.text();
+      throw new Error(`Erreur HTTP: ${r.status} - ${errorText}`);
+    }
+
+    showSaveStatus('✓ Synchronisé avec Supabase', true);
+  } catch(e) {
+    console.error('Échec de la sauvegarde:', e);
+    showSaveStatus('⚠ Erreur réseau - Sauvegarde locale uniquement', false);
+  }
+}
     
     
     console.log('Status:', r.status);
