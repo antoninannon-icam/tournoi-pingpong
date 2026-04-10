@@ -789,18 +789,22 @@ function closePwdModal() {
 }
 function confirmPassword() {
   const val = document.getElementById('pwd-input').value;
+
   if(val !== TOURNAMENT_PASSWORD) {
     document.getElementById('pwd-error').style.display = 'block';
-    document.getElementById('pwd-input').value = '';
-    document.getElementById('pwd-input').focus();
     return;
   }
+
+  const action = pendingAction; // 🔥 sauvegarde AVANT reset
   closePwdModal();
-  if(!pendingAction) return;
-  const {type, args} = pendingAction;
-  if(type==='score')    doSaveScore(...args);
-  if(type==='elim')     doSaveElimScore(...args);
-  if(type==='edit')     doSaveMatchEdit(...args);
+
+  if(!action) return;
+
+  const {type, args} = action;
+
+  if(type==='score') doSaveScore(...args);
+  if(type==='elim')  doSaveElimScore(...args);
+  if(type==='edit')  doSaveMatchEdit(...args);
 }
 document.addEventListener('keydown', e => {
   if(e.key==='Enter' && document.getElementById('pwd-modal').style.display==='flex') confirmPassword();
