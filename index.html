@@ -393,6 +393,180 @@
     font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
   }
 
+  .match-item-col { flex-direction: column; align-items: stretch; gap: 8px; }
+  .match-top-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .match-sets-row {
+    display: flex; align-items: stretch; gap: 12px;
+    border-top: 1px solid var(--border); padding-top: 8px;
+  }
+  .sets-col { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+  .set-row { display: flex; align-items: center; gap: 6px; }
+  .set-label {
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: .3px; min-width: 64px;
+  }
+  .set-dash { color: #bbb; font-weight: 600; }
+  .set-in { width: 46px !important; font-size: 13px !important; }
+  .final-score-col {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px; min-width: 90px;
+    border-left: 1px solid var(--border); padding-left: 12px;
+  }
+  .final-score-label {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .final-score-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px; font-weight: 700; color: var(--green);
+    line-height: 1;
+  }
+  .final-score-empty { color: #ccc; }
+  .ok-btn-lg {
+    font-size: 12px !important; padding: 6px 14px !important;
+    background: var(--green) !important; color: white !important;
+    border-color: var(--green) !important; border-radius: 8px !important;
+    font-weight: 700 !important;
+  }
+  .ok-btn-lg:hover { background: var(--green-light) !important; border-color: var(--green-light) !important; }
+
+  .sets-score { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .set-sep { color: #ccc; font-size: 16px; margin: 0 2px; }
+  .set-summary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--green);
+    background: #eaf3de;
+    padding: 2px 8px; border-radius: 6px;
+    white-space: nowrap;
+  }
+  .set-detail {
+    font-size: 11px; font-weight: 400; color: #2a6a14; opacity: .8;
+  }
+  .edit-reset {
+    font-size: 11px; padding: 4px 12px; border-radius: 6px;
+    background: #faeeda; color: #7a4a0a;
+    border: 1.5px solid #e0c080; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+  }
+  .edit-reset:hover { background: #f5d9a0; }
+
+  /* LOCKED PAGE */
+  .locked-page {
+    text-align: center; padding: 3rem 1.5rem;
+    background: white; border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .lock-icon { font-size: 56px; margin-bottom: .75rem; filter: grayscale(.3); }
+  .lock-title {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 700;
+    color: var(--dark); letter-spacing: .5px; margin-bottom: .4rem;
+  }
+  .lock-subtitle { font-size: 13px; color: var(--muted); max-width: 320px; margin: 0 auto 1.75rem; line-height: 1.6; }
+  .lock-progress { max-width: 280px; margin: 0 auto 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+  .lock-poule-row { display: flex; align-items: center; gap: 8px; }
+  .lock-poule-label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:11px; padding:2px 7px; border-radius:4px; min-width:24px; text-align:center; }
+  .lock-bar-track { flex:1; height:8px; background:#f0ede6; border-radius:8px; overflow:hidden; }
+  .lock-bar-fill { height:100%; border-radius:8px; background:linear-gradient(90deg,var(--green),var(--green-light)); transition:width .5s ease; }
+  .lock-poule-count { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:600; color:var(--muted); min-width:28px; text-align:right; }
+  .lock-hint { font-size:12px; color:var(--muted); background:#f8f4ed; border-radius:8px; padding:.6rem 1rem; display:inline-block; }
+
+  /* PODIUM */
+  .podium {
+    display: flex; align-items: flex-end; justify-content: center;
+    gap: 8px; padding: 2rem 1rem 1rem; margin-top: 1rem;
+  }
+  .podium-place {
+    text-align: center; border-radius: 12px 12px 0 0;
+    padding: 1rem .75rem .75rem; flex: 1; max-width: 140px;
+  }
+  .podium-place.p1 { background: linear-gradient(160deg,#fffbea,#fff3c0); border: 2px solid #e8b84b; min-height: 130px; }
+  .podium-place.p2 { background: linear-gradient(160deg,#f5f5f5,#e8e8e8); border: 2px solid #bbb; min-height: 100px; }
+  .podium-place.p3 { background: linear-gradient(160deg,#fff0e8,#ffe0cc); border: 2px solid #cd7f32; min-height: 80px; }
+  .podium-icon { font-size: 28px; margin-bottom: .25rem; }
+  .podium-name { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:var(--dark); line-height:1.2; }
+  .podium-rank { font-size:10px; color:var(--muted); margin-top:2px; font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; letter-spacing:.5px; }
+
+  /* BRACKET TREE VISUEL (affiché dans tab-poules après fin des poules) */
+  .bracket-tree-wrap { padding: .5rem 0 1rem; }
+  .back-poules-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    color: var(--green); background: white;
+    border: 1.5px solid var(--border); border-radius: 20px; padding: 5px 14px;
+    cursor: pointer; margin-bottom: 1rem; transition: all .15s;
+  }
+  .back-poules-btn:hover { border-color: var(--green); background: #f0f8f4; }
+  .btree-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); text-align: center; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btree-title::before, .btree-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .btree {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    overflow-x: auto;
+    padding: 4px 2px 8px;
+    gap: 0;
+  }
+  .btree-side { display: flex; align-items: center; gap: 0; }
+  .btree-side.right { flex-direction: row-reverse; }
+  .btree-col { display: flex; flex-direction: column; gap: 28px; padding: 6px 0; }
+  .btree-col.right { align-items: flex-end; }
+  .btree-match { width: 138px; }
+  .btree-meta {
+    font-size: 9px; color: var(--muted);
+    font-family: 'Barlow Condensed', sans-serif; letter-spacing: .3px; margin-bottom: 2px;
+  }
+  .btree-meta.right { text-align: right; }
+  .btree-player {
+    background: var(--green); color: white;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 600;
+    padding: 5px 8px; border-radius: 6px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 138px; margin-bottom: 2px; opacity: .55;
+  }
+  .btree-player.winner { opacity: 1; box-shadow: 0 2px 5px rgba(26,92,58,.25); }
+  .btree-player.loser  { background: #aaa; opacity: .45; }
+  .btree-player.tbd    { background: #c8d4cc; color: #7a8c80; opacity: .8; font-style: italic; }
+  .btree-player.center { text-align: center; width: 122px; max-width: 122px; }
+  .btree-score {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px; font-weight: 700; color: var(--muted);
+    text-align: center; margin: 1px 0 4px; letter-spacing: .5px;
+  }
+  .btree-score.done { color: var(--green); }
+  .btree-center {
+    display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 6px;
+  }
+  .btree-center-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); text-align: center;
+  }
+  .btree-final-box {
+    width: 122px; border-radius: 10px; padding: 6px 8px; text-align: center;
+    background: white; border: 1.5px solid #ddd;
+  }
+  .btree-final-box.done { background: #fffbea; border: 2px solid var(--gold); }
+  .btree-final-vs { color: #ccc; font-size: 13px; font-weight: 700; font-family: 'Barlow Condensed',sans-serif; margin: 2px 0; }
+  .btree-final-score { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:var(--green); margin: 2px 0; }
+  .btree-champion { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; color:#b8860b; text-align:center; margin-top:3px; }
+  .btree-sf-col { display: flex; flex-direction: column; justify-content: center; padding: 6px 0; }
+  .btree-sf-col.right { align-items: flex-end; }
+  @media(max-width:400px){
+    .btree-match { width: 110px; }
+    .btree-player { font-size:10px; padding:4px 6px; max-width:110px; }
+    .btree-player.center { width:100px; max-width:100px; }
+    .btree-final-box { width:100px; }
+  }
   /* BRACKET */
   .bracket-section { margin-bottom: 1.5rem; }
   .bracket-round-title {
@@ -487,6 +661,108 @@
     background: var(--gold);
     border-radius: 50%;
   }
+  /* STATS */
+  .stats-player-filter {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem;
+  }
+  .stats-filter-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 20px;
+    border: 1.5px solid var(--border); background: white;
+    cursor: pointer; color: var(--muted); transition: all .15s;
+  }
+  .stats-filter-btn.active { background: var(--dark); color: var(--gold); border-color: var(--dark); }
+  .stats-filter-btn:hover:not(.active) { border-color: var(--green); color: var(--green); }
+
+  .stat-section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted);
+    margin: 1.5rem 0 .6rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .stat-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  /* Player hero card */
+  .player-hero {
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+    border-radius: 14px; padding: 1.25rem 1.5rem;
+    color: white; display: flex; align-items: center; gap: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .player-avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .player-hero-name { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; line-height: 1; }
+  .player-hero-sub { font-size: 11px; opacity: .7; margin-top: 2px; }
+  .player-hero-badge {
+    margin-left: auto; text-align: center;
+    background: rgba(255,255,255,.15); border-radius: 10px; padding: .5rem .9rem;
+  }
+  .player-hero-badge .bval { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700; color:var(--gold); display:block; line-height:1; }
+  .player-hero-badge .blbl { font-size:9px; letter-spacing:1px; text-transform:uppercase; opacity:.7; }
+
+  /* Stat cards grid */
+  .stat-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 1rem; }
+  @media(max-width:480px){ .stat-cards { grid-template-columns: repeat(2,1fr); } }
+  .stat-card {
+    background: white; border-radius: 10px; padding: .8rem .9rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05); text-align: center;
+  }
+  .stat-card .sv { font-family:'Barlow Condensed',sans-serif; font-size:26px; font-weight:700; color:var(--text); line-height:1; }
+  .stat-card .sl { font-size:9px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-top:2px; font-family:'Barlow Condensed',sans-serif; font-weight:600; }
+  .stat-card.accent .sv { color: var(--green); }
+  .stat-card.gold .sv { color: #b8860b; }
+  .stat-card.red .sv { color: #c0392b; }
+
+  /* Win rate bar */
+  .winrate-bar-wrap { background: white; border-radius: 10px; padding: 1rem 1.1rem; box-shadow: 0 1px 3px rgba(0,0,0,.05); margin-bottom: 1rem; }
+  .winrate-bar-label { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:.4rem; font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.3px; }
+  .winrate-bar-track { height: 10px; background: #f0ede6; border-radius: 10px; overflow: hidden; }
+  .winrate-bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--green), var(--green-light)); transition: width .6s ease; }
+  .winrate-bar-pct { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; color:var(--green); text-align:center; margin-top:.4rem; }
+
+  /* Set stats */
+  .set-stats-row { display:flex; gap:8px; margin-bottom:1rem; }
+  .set-stat-box { flex:1; background:white; border-radius:10px; padding:.75rem; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .set-stat-box .ssv { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; color:var(--text); }
+  .set-stat-box .ssl { font-size:9px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-weight:600; }
+
+  /* H2H table */
+  .h2h-table { background:white; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .h2h-row { display:flex; align-items:center; justify-content:space-between; padding:.6rem 1rem; border-bottom:1px solid var(--border); font-size:13px; gap:8px; }
+  .h2h-row:last-child { border-bottom:none; }
+  .h2h-opp { flex:1; color:var(--text); }
+  .h2h-result { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; padding:2px 8px; border-radius:6px; }
+  .h2h-win { background:#eaf3de; color:#2a6a14; }
+  .h2h-loss { background:#fbeaea; color:#c0392b; }
+  .h2h-pending { background:#f1efe8; color:#888; }
+  .h2h-score { font-size:11px; color:var(--muted); }
+
+  /* Global leaderboard */
+  .leaderboard { background:white; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.05); }
+  .lb-row { display:flex; align-items:center; gap:10px; padding:.65rem 1rem; border-bottom:1px solid var(--border); }
+  .lb-row:last-child { border-bottom:none; }
+  .lb-rank { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; color:var(--muted); min-width:22px; }
+  .lb-rank.r1 { color: #b8860b; }
+  .lb-rank.r2 { color: #888; }
+  .lb-rank.r3 { color: #a0522d; }
+  .lb-name { flex:1; font-size:13px; color:var(--text); }
+  .lb-poule { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
+  .lb-stat { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:var(--muted); min-width:38px; text-align:right; }
+  .lb-stat.pts { color:var(--text); font-size:15px; }
+
+  /* Points avg bar */
+  .mini-bar { height:4px; border-radius:4px; background:#f0ede6; margin-top:2px; }
+  .mini-bar-fill { height:100%; border-radius:4px; background:var(--green); }
+
+  /* Responsive */
+  @media(max-width:540px){ .player-hero { flex-wrap:wrap; } .player-hero-badge { margin-left:0; } }
 </style>
 </head>
 <body>
@@ -506,7 +782,9 @@
 <nav class="nav">
   <button class="nav-btn active" onclick="showTab('poules',this)">Poules</button>
   <button class="nav-btn" onclick="showTab('matchs',this)">Matchs</button>
-  <button class="nav-btn" onclick="showTab('bracket',this)">Finale</button>
+  <button class="nav-btn" id="nav-elim" onclick="handleElimClick(this)">Phase élim.</button>
+  <button class="nav-btn" id="nav-final" onclick="handleFinalClick(this)">Finale 🏆</button>
+  <button class="nav-btn" onclick="showTab('stats',this);renderStats()">Stats</button>
   <button class="nav-btn" onclick="showTab('regles',this)">Règlement</button>
 </nav>
 
@@ -514,6 +792,8 @@
   <div id="tab-poules" class="section active"></div>
   <div id="tab-matchs" class="section"></div>
   <div id="tab-bracket" class="section"></div>
+  <div id="tab-final" class="section"></div>
+  <div id="tab-stats" class="section"></div>
   <div id="tab-regles" class="section">
     <div class="rules-grid">
       <div class="rule-card">
@@ -597,21 +877,24 @@ const MATCHES_RAW = [
 ];
 
 const ELIM = [
-  {round:"Quarts de finale",id:"Q1",label:"Quart 1",p1:"1er Poule A",p2:"2e Poule B"},
-  {round:"Quarts de finale",id:"Q2",label:"Quart 2",p1:"1er Poule B",p2:"2e Poule A"},
-  {round:"Quarts de finale",id:"Q3",label:"Quart 3",p1:"1er Poule C",p2:"2e Poule D"},
-  {round:"Quarts de finale",id:"Q4",label:"Quart 4",p1:"1er Poule D",p2:"2e Poule C"},
-  {round:"Demi-finales",id:"D1",label:"Demi 1",p1:"Vainqueur Q1",p2:"Vainqueur Q3"},
-  {round:"Demi-finales",id:"D2",label:"Demi 2",p1:"Vainqueur Q2",p2:"Vainqueur Q4"},
-  {round:"Finale",id:"F",label:"Finale",p1:"Vainqueur D1",p2:"Vainqueur D2"}
+  {round:"Quarts de finale",id:"Q1",label:"Quart 1",p1:"1er Poule A",p2:"2e Poule B",date:"27/04",time:"13:00"},
+  {round:"Quarts de finale",id:"Q2",label:"Quart 2",p1:"1er Poule B",p2:"2e Poule A",date:"27/04",time:"13:30"},
+  {round:"Quarts de finale",id:"Q3",label:"Quart 3",p1:"1er Poule C",p2:"2e Poule D",date:"28/04",time:"13:00"},
+  {round:"Quarts de finale",id:"Q4",label:"Quart 4",p1:"1er Poule D",p2:"2e Poule C",date:"28/04",time:"13:30"},
+  {round:"Demi-finales",id:"D1",label:"Demi-finale 1",p1:"Vainqueur Q1",p2:"Vainqueur Q3",date:"29/04",time:"13:00"},
+  {round:"Demi-finales",id:"D2",label:"Demi-finale 2",p1:"Vainqueur Q2",p2:"Vainqueur Q4",date:"29/04",time:"13:30"},
 ];
 
 
 let scores = {};
 let elimScores = {};
+let elimSetScores = {}; // scores par manche pour les matchs élim {id: [{s1,s2},{s1,s2},{s1,s2}]}
 let matchEdits = {};
+let elimMatchEdits = {}; // date/heure modifiables pour les matchs élim {id: {date, time}}
+let setScores = {}; // { matchId: [{s1:11,s2:8},{s1:9,s2:11},{s1:11,s2:4}] }
 let activeFilter = 'all';
 let editingMatch = null;
+let editingElimMatch = null; // id du match élim en cours d'édition
 
 // ─── CONFIG SUPABASE ─────────────────────────────────────────────────────────
 const SUPABASE_URL      = 'https://bdcfkjbdggeqfbpcmwfo.supabase.co';  // ← ton Project URL
@@ -625,21 +908,62 @@ function getMatchIdx(m) { return MATCHES_RAW.indexOf(m); }
 function getMatchDate(m) { return matchEdits[getMatchIdx(m)]?.date || m.date; }
 function getMatchTime(m) { return matchEdits[getMatchIdx(m)]?.time || m.time; }
 
+// ─── CALCUL RÉSULTAT D'UN MATCH ──────────────────────────────────────────────
+// Retourne {w1, w2, sets:[{s1,s2}]} depuis setScores[id]
+function getMatchResult(id) {
+  const sets = setScores[id] || [];
+  let w1 = 0, w2 = 0;
+  const validSets = [];
+  for(const s of sets) {
+    const a = parseInt(s.s1)||0, b = parseInt(s.s2)||0;
+    if(s.s1===''&&s.s2==='') continue;
+    validSets.push({s1:a,s2:b});
+    if(a>b) w1++; else if(b>a) w2++;
+    if(w1===2||w2===2) break; // BO3 : stop à 2 manches gagnées
+  }
+  return {w1, w2, sets: validSets};
+}
+
+// Nombre de manches à afficher dans les inputs (1, 2 ou 3)
+function getVisibleSets(id) {
+  const sets = setScores[id] || [];
+  let w1=0, w2=0, n=1;
+  for(let i=0;i<sets.length;i++){
+    const s = sets[i];
+    const a=parseInt(s.s1)||0, b=parseInt(s.s2)||0;
+    const hasValue = s.s1!=='' || s.s2!=='';
+    if(hasValue){
+      n = Math.min(i+2, 3); // affiche jusqu'à la manche suivante
+      if(a>b) w1++; else if(b>a) w2++;
+      if(w1===2||w2===2){ n=i+1; break; }
+    }
+  }
+  return n;
+}
+
 function getStandings(poule) {
   const pl = PLAYERS[poule].map((name,i)=>({name,i,pts:0,w:0,l:0,played:0}));
   MATCHES_RAW.filter(m=>m.phase===poule).forEach(m=>{
-    const sc=scores[getMatchId(m)];
-    if(sc&&sc.s1!==''&&sc.s2!==''){
-      const s1=parseInt(sc.s1)||0,s2=parseInt(sc.s2)||0;
+    const id=getMatchId(m);
+    const res=getMatchResult(id);
+    if(res.sets.length>0&&(res.w1===2||res.w2===2)){
       pl[m.p1].played++;pl[m.p2].played++;
-      if(s1>s2){pl[m.p1].pts+=2;pl[m.p1].w++;pl[m.p2].l++;}
-      else if(s2>s1){pl[m.p2].pts+=2;pl[m.p2].w++;pl[m.p1].l++;}
+      if(res.w1>res.w2){pl[m.p1].pts+=1;pl[m.p1].w++;pl[m.p2].l++;}
+      else if(res.w2>res.w1){pl[m.p2].pts+=1;pl[m.p2].w++;pl[m.p1].l++;}
     }
   });
   return pl.sort((a,b)=>b.pts-a.pts||b.w-a.w);
 }
 
 function renderPoules() {
+  if(arePoulesDone()) {
+    renderPoulesBracket();
+  } else {
+    renderPoulesClassement();
+  }
+}
+
+function renderPoulesClassement() {
   let html = '<div class="poules-grid">';
   for(const p of ['A','B','C','D']) {
     const st = getStandings(p);
@@ -663,6 +987,219 @@ function renderPoules() {
   }
   html+='</div><p class="poule-note">★ Les 2 premiers de chaque poule se qualifient pour la phase finale</p>';
   document.getElementById('tab-poules').innerHTML=html;
+}
+
+function renderPoulesBracket() {
+  // Initialise les slots ELIM
+  const quarts = [
+    {id:'Q1', p1slot:'1A', p2slot:'2B'},
+    {id:'Q2', p1slot:'1B', p2slot:'2A'},
+    {id:'Q3', p1slot:'1C', p2slot:'2D'},
+    {id:'Q4', p1slot:'1D', p2slot:'2C'},
+  ];
+  const demis = [
+    {id:'D1', p1slot:'WQ1', p2slot:'WQ3'},
+    {id:'D2', p1slot:'WQ2', p2slot:'WQ4'},
+  ];
+  ELIM.forEach(m => {
+    const q = quarts.find(q=>q.id===m.id) || demis.find(d=>d.id===m.id);
+    if(q){ m.p1slot=q.p1slot; m.p2slot=q.p2slot; }
+  });
+
+  function sn(n) { // short name
+    if(!n||n==='?') return '?';
+    const parts = n.trim().split(' ');
+    if(parts.length===1) return n;
+    const last = parts[parts.length-1];
+    const first = parts[0];
+    return last.length > 9 ? last : first[0]+'. '+last;
+  }
+
+  function matchCard(id, side) {
+    const elim = ELIM.find(m=>m.id===id);
+    const pq = quarts.find(q=>q.id===id);
+    const p1slot = elim?.p1slot || pq?.p1slot || '';
+    const p2slot = elim?.p2slot || pq?.p2slot || '';
+    const n1 = resolveElimName(p1slot);
+    const n2 = resolveElimName(p2slot);
+    const res = getElimMatchResult(id);
+    const done = res.done;
+    const w1 = res.w1 > res.w2;
+    const date = getElimMatchDate(id);
+    const time = getElimMatchTime(id);
+    const meta = date ? `${date}${time?' · '+time:''}` : '';
+    const cls1 = done?(w1?'winner':'loser'):(n1==='?'?'tbd':'');
+    const cls2 = done?(!w1?'winner':'loser'):(n2==='?'?'tbd':'');
+    const scoreStr = done ? `${res.w1}–${res.w2}` : meta;
+    const scoreCls = done ? 'done' : '';
+    const isRight = side==='right';
+    return `<div class="btree-match">
+      <div class="btree-meta${isRight?' right':''}">${meta&&!done?'':''}</div>
+      <div class="btree-player ${cls1}" title="${n1}">${sn(n1)}</div>
+      <div class="btree-score ${scoreCls}">${scoreStr}</div>
+      <div class="btree-player ${cls2}" title="${n2}">${sn(n2)}</div>
+    </div>`;
+  }
+
+  function sfCard(id, side) {
+    const elim = ELIM.find(m=>m.id===id);
+    const pd = demis.find(d=>d.id===id);
+    const p1slot = elim?.p1slot || pd?.p1slot || '';
+    const p2slot = elim?.p2slot || pd?.p2slot || '';
+    const n1 = resolveElimName(p1slot);
+    const n2 = resolveElimName(p2slot);
+    const res = getElimMatchResult(id);
+    const done = res.done;
+    const w1 = res.w1 > res.w2;
+    const date = getElimMatchDate(id);
+    const time = getElimMatchTime(id);
+    const meta = date ? `${date}${time?' · '+time:''}` : '';
+    const cls1 = done?(w1?'winner':'loser'):(n1==='?'?'tbd':'');
+    const cls2 = done?(!w1?'winner':'loser'):(n2==='?'?'tbd':'');
+    const scoreStr = done ? `${res.w1}–${res.w2}` : meta;
+    const scoreCls = done ? 'done' : '';
+    const isRight = side==='right';
+    return `<div class="btree-match">
+      <div class="btree-player ${cls1}" title="${n1}">${sn(n1)}</div>
+      <div class="btree-score ${scoreCls}">${scoreStr}</div>
+      <div class="btree-player ${cls2}" title="${n2}">${sn(n2)}</div>
+    </div>`;
+  }
+
+  // Finale
+  const d1res = getElimMatchResult('D1');
+  const d2res = getElimMatchResult('D2');
+  const D1m = ELIM.find(m=>m.id==='D1');
+  const D2m = ELIM.find(m=>m.id==='D2');
+  const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
+  const d1n2 = resolveElimName(D1m?.p2slot||'WQ3');
+  const d2n1 = resolveElimName(D2m?.p1slot||'WQ2');
+  const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
+  const f_p1 = d1res.done?(d1res.w1>d1res.w2?d1n1:d1n2):'?';
+  const f_p2 = d2res.done?(d2res.w1>d2res.w2?d2n1:d2n2):'?';
+  const fRes = getElimMatchResult('F');
+  const fDone = fRes.done;
+  const fW1 = fRes.w1 > fRes.w2;
+  const fDate = getElimMatchDate('F');
+  const fTime = getElimMatchTime('F');
+  const fMeta = fDate ? `${fDate}${fTime?' · '+fTime:''}` : '';
+  const fCls1 = fDone?(fW1?'winner':'loser'):(f_p1==='?'?'tbd':'');
+  const fCls2 = fDone?(!fW1?'winner':'loser'):(f_p2==='?'?'tbd':'');
+  const champion = fDone?(fW1?f_p1:f_p2):null;
+
+  const html = `
+  <div class="bracket-tree-wrap">
+    <button class="back-poules-btn" onclick="showPoulesClassement()">📊 Scores des poules</button>
+    <div class="btree-title">Tableau éliminatoire</div>
+
+    <div class="btree">
+
+      <!-- GAUCHE -->
+      <div class="btree-side">
+        <div class="btree-col">
+          <div>
+            <div class="btree-meta">QF · ${getElimMatchDate('Q1')||'–'} ${getElimMatchTime('Q1')||''}</div>
+            ${matchCard('Q1','left')}
+          </div>
+          <div>
+            <div class="btree-meta">QF · ${getElimMatchDate('Q2')||'–'} ${getElimMatchTime('Q2')||''}</div>
+            ${matchCard('Q2','left')}
+          </div>
+        </div>
+        <svg width="20" height="148" viewBox="0 0 20 148" fill="none" style="flex-shrink:0">
+          <line x1="0" y1="32" x2="13" y2="32" stroke="#b5c9be" stroke-width="1.5"/>
+          <line x1="13" y1="32" x2="13" y2="116" stroke="#b5c9be" stroke-width="1.5"/>
+          <line x1="0" y1="116" x2="13" y2="116" stroke="#b5c9be" stroke-width="1.5"/>
+          <line x1="13" y1="74" x2="20" y2="74" stroke="#b5c9be" stroke-width="1.5"/>
+        </svg>
+        <div class="btree-sf-col">
+          <div class="btree-meta">1/2 · ${getElimMatchDate('D1')||'–'} ${getElimMatchTime('D1')||''}</div>
+          ${sfCard('D1','left')}
+        </div>
+        <svg width="14" height="50" viewBox="0 0 14 50" fill="none" style="flex-shrink:0">
+          <line x1="0" y1="25" x2="14" y2="25" stroke="#b5c9be" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <!-- CENTRE -->
+      <div class="btree-center">
+        <div class="btree-center-label">🏆 Finale</div>
+        ${fMeta&&!fDone?`<div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--muted)">${fMeta}</div>`:''}
+        <div class="btree-final-box${fDone?' done':''}">
+          <div class="btree-player center ${fCls1}" style="margin-bottom:4px">${sn(f_p1)}</div>
+          ${fDone
+            ? `<div class="btree-final-score">${fRes.w1}–${fRes.w2}</div>`
+            : `<div class="btree-final-vs">vs</div>`}
+          <div class="btree-player center ${fCls2}" style="margin-top:4px">${sn(f_p2)}</div>
+        </div>
+        ${champion?`<div class="btree-champion">🥇 ${sn(champion)}</div>`:''}
+      </div>
+
+      <!-- DROITE -->
+      <div class="btree-side right">
+        <div class="btree-col right">
+          <div>
+            <div class="btree-meta right">QF · ${getElimMatchDate('Q3')||'–'} ${getElimMatchTime('Q3')||''}</div>
+            ${matchCard('Q3','right')}
+          </div>
+          <div>
+            <div class="btree-meta right">QF · ${getElimMatchDate('Q4')||'–'} ${getElimMatchTime('Q4')||''}</div>
+            ${matchCard('Q4','right')}
+          </div>
+        </div>
+        <svg width="20" height="148" viewBox="0 0 20 148" fill="none" style="flex-shrink:0">
+          <line x1="20" y1="32" x2="7" y2="32" stroke="#b5c9be" stroke-width="1.5"/>
+          <line x1="7" y1="32" x2="7" y2="116" stroke="#b5c9be" stroke-width="1.5"/>
+          <line x1="20" y1="116" x2="7" y2="116" stroke="#b5c9be" stroke-width="1.5"/>
+          <line x1="7" y1="74" x2="0" y2="74" stroke="#b5c9be" stroke-width="1.5"/>
+        </svg>
+        <div class="btree-sf-col right">
+          <div class="btree-meta right">1/2 · ${getElimMatchDate('D2')||'–'} ${getElimMatchTime('D2')||''}</div>
+          ${sfCard('D2','right')}
+        </div>
+        <svg width="14" height="50" viewBox="0 0 14 50" fill="none" style="flex-shrink:0">
+          <line x1="14" y1="25" x2="0" y2="25" stroke="#b5c9be" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+    </div>
+    <p class="m-note">Scores saisis dans l'onglet <strong>Matchs</strong> · Détail des matchs élim. dans <strong>Phase élim.</strong></p>
+  </div>`;
+
+  document.getElementById('tab-poules').innerHTML = html;
+}
+
+let poulesViewMode = 'bracket'; // 'bracket' | 'classement'
+function showPoulesClassement() {
+  poulesViewMode = 'classement';
+  let html = `<button class="back-poules-btn" onclick="showPoulesTree()">🏆 Tableau éliminatoire</button>`;
+  html += '<div class="poules-grid">';
+  for(const p of ['A','B','C','D']) {
+    const st = getStandings(p);
+    html += `<div class="poule-card poule-${p}">
+      <div class="poule-head">
+        <span class="poule-letter">${p}</span>
+        <div><div class="poule-title">Poule ${p}</div></div>
+      </div>
+      <div class="standings-cols">
+        <span class="col-head">J</span><span class="col-head">V</span><span class="col-head">D</span><span class="col-head pts">Pts</span>
+      </div>`;
+    st.forEach((pl,rank)=>{
+      html+=`<div class="player-row${rank<2?' qualified':''}">
+        <span class="player-name">${pl.name}</span>
+        <div class="player-vals">
+          <span class="pv">${pl.played}</span><span class="pv">${pl.w}</span><span class="pv">${pl.l}</span><span class="pv pts">${pl.pts}</span>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  }
+  html+='</div><p class="poule-note">★ Les 2 premiers de chaque poule se qualifient pour la phase finale</p>';
+  document.getElementById('tab-poules').innerHTML = html;
+}
+function showPoulesTree() {
+  poulesViewMode = 'bracket';
+  renderPoulesBracket();
 }
 
 function renderMatchs() {
@@ -700,27 +1237,51 @@ function renderMatchs() {
     byDay[date].forEach(m=>{
       const idx=getMatchIdx(m);
       const id=getMatchId(m);
-      const sc=scores[id]||{s1:'',s2:''};
-      const done=sc.s1!==''&&sc.s2!=='';
+      const res=getMatchResult(id);
+      const done=(res.w1===2||res.w2===2);
       const isEditing=editingMatch===idx;
       const curDate=getMatchDate(m);
       const curTime=getMatchTime(m);
-      html+=`<div class="match-item" style="flex-wrap:wrap">
-        <span class="m-poule mp-${m.phase}">${m.phase}</span>
-        <span class="m-time">${curTime}</span>
-        <div class="m-players">
-          <span>${PLAYERS[m.phase][m.p1]}</span>
-          <span class="m-vs">vs</span>
-          <span>${PLAYERS[m.phase][m.p2]}</span>
+
+      const setsData = setScores[id] || [];
+      // Toujours 3 manches visibles
+      let setsHtml = '';
+      for(let i=0;i<3;i++){
+        const sv = setsData[i]||{s1:'',s2:''};
+        setsHtml+=`<div class="set-row">
+          <span class="set-label">Manche ${i+1}</span>
+          <input class="score-in set-in" type="number" min="0" max="99" placeholder="–" value="${sv.s1===undefined?'':sv.s1}" id="ss1_${id}_${i}">
+          <span class="set-dash">-</span>
+          <input class="score-in set-in" type="number" min="0" max="99" placeholder="–" value="${sv.s2===undefined?'':sv.s2}" id="ss2_${id}_${i}">
+        </div>`;
+      }
+
+      const winnerName = done ? (res.w1>res.w2 ? PLAYERS[m.phase][m.p1] : PLAYERS[m.phase][m.p2]) : '';
+      const finalScore = done ? `<div class="final-score-val">${res.w1}–${res.w2}</div>` : `<div class="final-score-val final-score-empty">–</div>`;
+
+      html+=`<div class="match-item match-item-col">
+        <div class="match-top-row">
+          <span class="m-poule mp-${m.phase}">${m.phase}</span>
+          <span class="m-time">${curTime}</span>
+          <div class="m-players">
+            <span>${PLAYERS[m.phase][m.p1]}</span>
+            <span class="m-vs">vs</span>
+            <span>${PLAYERS[m.phase][m.p2]}</span>
+          </div>
+          <span class="m-status ${done?'ms-done':'ms-upcoming'}">${done?'Joué':'À venir'}</span>
+          <button class="edit-btn" onclick="toggleEdit(${idx})" title="Modifier / Réinitialiser">✏️</button>
         </div>
-        <div class="m-score">
-          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s1}" id="s1_${id}">
-          <span class="m-vs" style="font-size:16px">–</span>
-          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s2}" id="s2_${id}">
-          <button class="ok-btn" onclick="saveScore('${id}')">OK</button>
+        <div class="match-sets-row">
+          <div class="sets-col">
+            ${setsHtml}
+          </div>
+          <div class="final-score-col">
+            <div class="final-score-label">Score final</div>
+            ${finalScore}
+            ${done?`<div style="font-size:10px;color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-align:center">✓ ${winnerName}</div>`:''}
+            <button class="ok-btn ok-btn-lg" onclick="saveScore('${id}')">✓ OK</button>
+          </div>
         </div>
-        <span class="m-status ${done?'ms-done':'ms-upcoming'}">${done?'Joué':'À venir'}</span>
-        <button class="edit-btn" onclick="toggleEdit(${idx})" title="Modifier date/heure">✏️</button>
         ${isEditing?`<div class="edit-row">
           <label>Date</label>
           <input class="edit-in" id="edit-date-${idx}" value="${curDate}" placeholder="JJ/MM" style="width:80px">
@@ -728,50 +1289,358 @@ function renderMatchs() {
           <input class="edit-in" id="edit-time-${idx}" value="${curTime}" placeholder="HH:MM" style="width:70px">
           <button class="edit-save" onclick="saveMatchEdit(${idx})">Enregistrer</button>
           <button class="edit-cancel" onclick="cancelEdit()">Annuler</button>
+          <button class="edit-reset" onclick="resetMatch('${id}')">🔄 Remettre À jouer</button>
         </div>`:''}
       </div>`;
     });
     html+='</div>';
   }
-  html+='<p class="m-note">Saisissez le nombre de manches gagnées (0-3) et cliquez OK · ✏️ pour modifier date/heure</p>';
+  html+='<p class="m-note">Saisissez le score de chaque manche (ex : 11-8) et cliquez OK · ✏️ pour modifier ou réinitialiser un match</p>';
   document.getElementById('tab-matchs').innerHTML=html;
 }
 
-function renderBracket() {
-  const rounds={};
-  ELIM.forEach(m=>{if(!rounds[m.round])rounds[m.round]=[];rounds[m.round].push(m);});
-  let html='';
-  for(const [round,matches] of Object.entries(rounds)){
-    html+=`<div class="bracket-section"><div class="bracket-round-title">${round}</div>`;
-    matches.forEach(m=>{
-      const sc=elimScores[m.id]||{s1:'',s2:''};
-      const done=sc.s1!==''&&sc.s2!=='';
-      const isFinal=m.id==='F';
-      let winner='';
-      if(done){const s1=parseInt(sc.s1)||0,s2=parseInt(sc.s2)||0;winner=s1>s2?m.p1:m.p2;}
-      html+=`<div class="elim-match${isFinal?' final-match':''}">
-        <div>
-          <div class="elim-label">${m.label}</div>
-          <div class="elim-players">
-            <span class="elim-p">${m.p1}</span>
-            <span class="elim-vs">vs</span>
-            <span class="elim-p">${m.p2}</span>
-          </div>
-        </div>
-        <div class="elim-score">
-          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s1}" id="es1_${m.id}">
-          <span class="m-vs" style="font-size:16px">–</span>
-          <input class="score-in" type="number" min="0" max="3" placeholder="–" value="${sc.s2}" id="es2_${m.id}">
-          <button class="ok-btn" onclick="saveElimScore('${m.id}')">OK</button>
-          ${done?`<span class="winner-pill">🏆 ${winner}</span>`:''}
-        </div>
-      </div>`;
-    });
-    html+='</div>';
-  }
-  html+=`<div class="trophy"><span class="trophy-icon">🏆</span><p>La finale aura lieu le 29 avril 2026</p></div>`;
-  document.getElementById('tab-bracket').innerHTML=html;
+// ─── RÉSOLUTION DES NOMS ÉLIM ─────────────────────────────────────────────────
+function getPouleRanking(poule) {
+  return getStandings(poule); // retourne joueurs triés [{name,...}]
 }
+
+function getElimMatchResult(id) {
+  const sets = elimSetScores[id] || [];
+  let w1=0, w2=0;
+  const validSets = [];
+  for(const s of sets) {
+    const a=parseInt(s.s1)||0, b=parseInt(s.s2)||0;
+    if(s.s1===''&&s.s2==='') continue;
+    validSets.push({s1:a,s2:b});
+    if(a>b) w1++; else if(b>a) w2++;
+    if(w1===2||w2===2) break;
+  }
+  return {w1, w2, sets:validSets, done:w1===2||w2===2};
+}
+
+// Résout le nom d'un joueur en phase élim selon son identifiant de slot
+function resolveElimName(slot) {
+  // Slots de quarts : "1A","2A","1B","2B","1C","2C","1D","2D"
+  const pouleMap = {
+    '1A': ()=>getPouleRanking('A')[0]?.name,
+    '2A': ()=>getPouleRanking('A')[1]?.name,
+    '1B': ()=>getPouleRanking('B')[0]?.name,
+    '2B': ()=>getPouleRanking('B')[1]?.name,
+    '1C': ()=>getPouleRanking('C')[0]?.name,
+    '2C': ()=>getPouleRanking('C')[1]?.name,
+    '1D': ()=>getPouleRanking('D')[0]?.name,
+    '2D': ()=>getPouleRanking('D')[1]?.name,
+  };
+  if(pouleMap[slot]) return pouleMap[slot]() || '?';
+
+  // Slots de demi : vainqueur/perdant d'un quart
+  const m = slot.match(/^([WL])(Q[1-4]|D[12])$/);
+  if(m) {
+    const [,wl,qid] = m;
+    const res = getElimMatchResult(qid);
+    const match = ELIM.find(e=>e.id===qid);
+    if(!match||!res.done) return '?';
+    const n1 = resolveElimName(match.p1slot);
+    const n2 = resolveElimName(match.p2slot);
+    if(wl==='W') return res.w1>res.w2 ? n1 : n2;
+    else          return res.w1>res.w2 ? n2 : n1;
+  }
+  return slot;
+}
+
+// ─── VÉRIFIE SI LES POULES SONT TERMINÉES ────────────────────────────────────
+function arePoulesDone() {
+  return MATCHES_RAW.every(m => {
+    const res = getMatchResult(getMatchId(m));
+    return res.w1===2 || res.w2===2;
+  });
+}
+
+function areElimDone() {
+  return ELIM.every(m => getElimMatchResult(m.id).done);
+}
+
+function handleElimClick(btn) {
+  if(!arePoulesDone()) {
+    showLockedPage('bracket', btn);
+  } else {
+    showTab('bracket', btn);
+    renderBracket();
+  }
+}
+
+function handleFinalClick(btn) {
+  if(!areElimDone()) {
+    showLockedPageElim('final', btn);
+  } else {
+    showTab('final', btn);
+    renderFinal();
+  }
+}
+
+function showLockedPage(tabId, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tabId).classList.add('active');
+  btn.classList.add('active');
+  const label = tabId==='bracket' ? 'Phase éliminatoire' : 'Finale';
+  document.getElementById('tab-'+tabId).innerHTML = `
+    <div class="locked-page">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">${label}</div>
+      <div class="lock-subtitle">Cette section sera déverrouillée une fois toutes les phases de poules terminées.</div>
+      <div class="lock-progress">
+        ${['A','B','C','D'].map(p => {
+          const total = MATCHES_RAW.filter(m=>m.phase===p).length;
+          const done = MATCHES_RAW.filter(m=>m.phase===p).filter(m=>{const r=getMatchResult(getMatchId(m));return r.w1===2||r.w2===2;}).length;
+          const pct = Math.round(done/total*100);
+          return `<div class="lock-poule-row">
+            <span class="lock-poule-label mp-${p}">${p}</span>
+            <div class="lock-bar-track"><div class="lock-bar-fill" style="width:${pct}%"></div></div>
+            <span class="lock-poule-count">${done}/${total}</span>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="lock-hint">🏓 Continue les matchs de poule pour révéler le tableau !</div>
+    </div>`;
+}
+
+function showLockedPageElim(tabId, btn) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tabId).classList.add('active');
+  btn.classList.add('active');
+  const total = ELIM.length;
+  const done = ELIM.filter(m=>getElimMatchResult(m.id).done).length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('tab-'+tabId).innerHTML = `
+    <div class="locked-page">
+      <div class="lock-icon">🏆</div>
+      <div class="lock-title">Finale</div>
+      <div class="lock-subtitle">La grande finale sera révélée une fois la phase éliminatoire terminée.</div>
+      <div class="lock-progress">
+        <div class="lock-poule-row">
+          <span class="lock-poule-label" style="background:#f1efe8;color:#5f5e5a;min-width:40px">Élim.</span>
+          <div class="lock-bar-track"><div class="lock-bar-fill" style="width:${pct}%"></div></div>
+          <span class="lock-poule-count">${done}/${total}</span>
+        </div>
+      </div>
+      <div class="lock-hint">⚔️ ${total-done} match${total-done>1?'s':''} restant${total-done>1?'s':''} en phase éliminatoire</div>
+    </div>`;
+}
+
+// ─── WIDGET MATCH ÉLIM (format manches) ───────────────────────────────────────
+function getElimMatchDate(id) { return elimMatchEdits[id]?.date || ELIM.find(m=>m.id===id)?.date || ''; }
+function getElimMatchTime(id) { return elimMatchEdits[id]?.time || ELIM.find(m=>m.id===id)?.time || ''; }
+
+function elimMatchWidget(id, p1name, p2name, label, extraClass='') {
+  const setsData = elimSetScores[id] || [];
+  const res = getElimMatchResult(id);
+  const done = res.done;
+  const isEditing = editingElimMatch === id;
+  const curDate = getElimMatchDate(id);
+  const curTime = getElimMatchTime(id);
+
+  // Trouver le badge de round (QF, 1/2, PF, F)
+  const roundBadgeMap = {
+    'Q1':'QF','Q2':'QF','Q3':'QF','Q4':'QF',
+    'D1':'1/2','D2':'1/2',
+    'PF':'PF','F':'F'
+  };
+  const roundBadge = roundBadgeMap[id] || id;
+
+  let setsHtml = '';
+  for(let i=0;i<3;i++){
+    const sv = setsData[i]||{s1:'',s2:''};
+    setsHtml+=`<div class="set-row">
+      <span class="set-label">Manche ${i+1}</span>
+      <input class="score-in set-in" type="number" min="0" max="99" placeholder="–" value="${sv.s1===undefined?'':sv.s1}" id="ess1_${id}_${i}">
+      <span class="set-dash">-</span>
+      <input class="score-in set-in" type="number" min="0" max="99" placeholder="–" value="${sv.s2===undefined?'':sv.s2}" id="ess2_${id}_${i}">
+    </div>`;
+  }
+
+  const winnerName = done ? (res.w1>res.w2 ? p1name : p2name) : '';
+  const finalScore = done
+    ? `<div class="final-score-val">${res.w1}–${res.w2}</div>`
+    : `<div class="final-score-val final-score-empty">–</div>`;
+
+  return `<div class="match-item match-item-col${extraClass}">
+    <div class="match-top-row">
+      <span class="m-poule mp-E">${roundBadge}</span>
+      ${curTime ? `<span class="m-time">${curTime}</span>` : ''}
+      <div class="m-players" style="flex:1">
+        <span style="font-weight:600">${p1name}</span>
+        <span class="m-vs">vs</span>
+        <span style="font-weight:600">${p2name}</span>
+      </div>
+      <span class="m-status ${done?'ms-done':'ms-upcoming'}">${done?'Joué':'À jouer'}</span>
+      <button class="edit-btn" onclick="toggleElimEdit('${id}')" title="Modifier / Réinitialiser">✏️</button>
+    </div>
+    <div class="match-sets-row">
+      <div class="sets-col">${setsHtml}</div>
+      <div class="final-score-col">
+        <div class="final-score-label">Score final</div>
+        ${finalScore}
+        ${done?`<div style="font-size:10px;color:var(--green);font-family:'Barlow Condensed',sans-serif;font-weight:700;text-align:center">✓ ${winnerName}</div>`:''}
+        <button class="ok-btn ok-btn-lg" onclick="saveElimScore('${id}')">✓ OK</button>
+      </div>
+    </div>
+    ${isEditing?`<div class="edit-row">
+      <label>Date</label>
+      <input class="edit-in" id="elim-edit-date-${id}" value="${curDate}" placeholder="JJ/MM" style="width:80px">
+      <label>Heure</label>
+      <input class="edit-in" id="elim-edit-time-${id}" value="${curTime}" placeholder="HH:MM" style="width:70px">
+      <button class="edit-save" onclick="saveElimMatchEdit('${id}')">Enregistrer</button>
+      <button class="edit-cancel" onclick="cancelElimEdit()">Annuler</button>
+      <button class="edit-reset" onclick="resetElimMatch('${id}')">🔄 Remettre À jouer</button>
+    </div>`:''}
+  </div>`;
+}
+
+function renderBracket() {
+  if(!arePoulesDone()) { showLockedPage('bracket', document.getElementById('nav-elim')); return; }
+
+  // Slots: p1slot/p2slot indique d'où vient le joueur
+  const quarts = [
+    {id:'Q1', label:'Quart 1', p1slot:'1A', p2slot:'2B'},
+    {id:'Q2', label:'Quart 2', p1slot:'1B', p2slot:'2A'},
+    {id:'Q3', label:'Quart 3', p1slot:'1C', p2slot:'2D'},
+    {id:'Q4', label:'Quart 4', p1slot:'1D', p2slot:'2C'},
+  ];
+  const demis = [
+    {id:'D1', label:'Demi-finale 1', p1slot:'WQ1', p2slot:'WQ3'},
+    {id:'D2', label:'Demi-finale 2', p1slot:'WQ2', p2slot:'WQ4'},
+  ];
+  // Stocker les slots dans ELIM pour résolution en chaîne
+  ELIM.forEach(m => {
+    const q = quarts.find(q=>q.id===m.id) || demis.find(d=>d.id===m.id);
+    if(q){ m.p1slot=q.p1slot; m.p2slot=q.p2slot; }
+  });
+
+  const allDayLabels = {};
+  for(let d=1;d<=30;d++) for(let mo=1;mo<=12;mo++){
+    const key=String(d).padStart(2,'0')+'/'+String(mo).padStart(2,'0');
+    const date=new Date(2026,mo-1,d);
+    const days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    allDayLabels[key]=days[date.getDay()]+' '+d+' '+months[mo-1];
+  }
+
+  function renderRound(matches, resolverFn) {
+    // Group by date
+    const byDay = {};
+    matches.forEach(m => {
+      const date = getElimMatchDate(m.id);
+      const key = date || '__nodate__';
+      if(!byDay[key]) byDay[key] = [];
+      byDay[key].push(m);
+    });
+    let html = '';
+    // no-date group first, then sorted dates
+    const keys = Object.keys(byDay).sort((a,b) => {
+      if(a==='__nodate__') return -1; if(b==='__nodate__') return 1;
+      const parseD = s => { const [d,mo]=s.split('/').map(Number); return mo*100+d; };
+      return parseD(a)-parseD(b);
+    });
+    keys.forEach(key => {
+      if(key !== '__nodate__') {
+        html += `<div class="day-label" style="margin-bottom:6px">${allDayLabels[key]||key}</div>`;
+      }
+      byDay[key].forEach(m => {
+        const {n1, n2} = resolverFn(m);
+        html += elimMatchWidget(m.id, n1, n2, m.label);
+      });
+    });
+    return html;
+  }
+
+  let html = '';
+  html += `<div class="bracket-section"><div class="bracket-round-title">Quarts de finale</div>`;
+  html += renderRound(quarts, m => ({
+    n1: resolveElimName(m.p1slot),
+    n2: resolveElimName(m.p2slot)
+  }));
+  html += '</div>';
+
+  html += `<div class="bracket-section"><div class="bracket-round-title">Demi-finales</div>`;
+  html += renderRound(demis, m => ({
+    n1: resolveElimName(m.p1slot),
+    n2: resolveElimName(m.p2slot)
+  }));
+  html += '</div>';
+
+  html += `<div class="m-note">Saisissez les scores manche par manche · La Petite Finale et la Grande Finale s'affichent dans <strong>Finale 🏆</strong></div>`;
+  document.getElementById('tab-bracket').innerHTML = html;
+}
+
+function renderFinal() {
+  if(!areElimDone()) { showLockedPageElim('final', document.getElementById('nav-final')); return; }
+
+  const d1res = getElimMatchResult('D1');
+  const d2res = getElimMatchResult('D2');
+  const D1m = ELIM.find(m=>m.id==='D1');
+  const D2m = ELIM.find(m=>m.id==='D2');
+
+  const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
+  const d1n2 = resolveElimName(D1m?.p2slot||'WQ3');
+  const d2n1 = resolveElimName(D2m?.p1slot||'WQ2');
+  const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
+
+  const pf_p1 = d1res.w1>d1res.w2 ? d1n2 : d1n1; // perdant D1
+  const pf_p2 = d2res.w1>d2res.w2 ? d2n2 : d2n1; // perdant D2
+  const f_p1  = d1res.w1>d1res.w2 ? d1n1 : d1n2;  // vainqueur D1
+  const f_p2  = d2res.w1>d2res.w2 ? d2n1 : d2n2;  // vainqueur D2
+
+  const pfRes = getElimMatchResult('PF');
+  const fRes  = getElimMatchResult('F');
+
+  const allDayLabels = {};
+  for(let d=1;d<=30;d++) for(let mo=1;mo<=12;mo++){
+    const key=String(d).padStart(2,'0')+'/'+String(mo).padStart(2,'0');
+    const date=new Date(2026,mo-1,d);
+    const days=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    allDayLabels[key]=days[date.getDay()]+' '+d+' '+months[mo-1];
+  }
+
+  function dayLabelHtml(id) {
+    const date = getElimMatchDate(id);
+    if(!date) return '';
+    return `<div class="day-label" style="margin-bottom:6px">${allDayLabels[date]||date}</div>`;
+  }
+
+  let html = '';
+
+  html += `<div class="bracket-section">
+    <div class="bracket-round-title">🥉 Petite Finale · 3ème place</div>`;
+  html += dayLabelHtml('PF');
+  html += elimMatchWidget('PF', pf_p1, pf_p2, 'Petite Finale');
+  html += '</div>';
+
+  html += `<div class="bracket-section">
+    <div class="bracket-round-title">🏆 Grande Finale</div>`;
+  html += dayLabelHtml('F');
+  html += elimMatchWidget('F', f_p1, f_p2, 'Finale', ' final-match-wrap');
+  html += '</div>';
+
+  if(fRes.done && pfRes.done) {
+    const champion  = fRes.w1>fRes.w2 ? f_p1 : f_p2;
+    const vicechamp = fRes.w1>fRes.w2 ? f_p2 : f_p1;
+    const third     = pfRes.w1>pfRes.w2 ? pf_p1 : pf_p2;
+    html += `<div class="podium">
+      <div class="podium-place p2"><div class="podium-icon">🥈</div><div class="podium-name">${vicechamp}</div><div class="podium-rank">2ème</div></div>
+      <div class="podium-place p1"><div class="podium-icon">🥇</div><div class="podium-name">${champion}</div><div class="podium-rank">Champion 🏆</div></div>
+      <div class="podium-place p3"><div class="podium-icon">🥉</div><div class="podium-name">${third}</div><div class="podium-rank">3ème</div></div>
+    </div>`;
+  } else {
+    html += `<div class="trophy"><span class="trophy-icon">🏆</span><p>La finale aura lieu le 29 avril 2026</p></div>`;
+  }
+
+  document.getElementById('tab-final').innerHTML = html;
+}
+
+
 
 // ─── MOT DE PASSE ────────────────────────────────────────────────────────────
 let pendingAction = null; // { type: 'score'|'elim'|'edit', args: [...] }
@@ -805,6 +1674,9 @@ function confirmPassword() {
   if(type==='score') doSaveScore(...args);
   if(type==='elim')  doSaveElimScore(...args);
   if(type==='edit')  doSaveMatchEdit(...args);
+  if(type==='reset') doResetMatch(...args);
+  if(type==='elimEdit')  doSaveElimMatchEdit(...args);
+  if(type==='elimReset') doResetElimMatch(...args);
 }
 document.addEventListener('keydown', e => {
   if(e.key==='Enter' && document.getElementById('pwd-modal').style.display==='flex') confirmPassword();
@@ -812,26 +1684,97 @@ document.addEventListener('keydown', e => {
 });
 
 // ─── ACTIONS SCORE (avec mot de passe) ───────────────────────────────────────
-function saveScore(id) {
-  const s1=document.getElementById('s1_'+id)?.value;
-  const s2=document.getElementById('s2_'+id)?.value;
-  askPassword({type:'score', args:[id,s1,s2]});
+function updateSetInput(id, setIdx, player, val) {
+  if(!setScores[id]) setScores[id] = [];
+  if(!setScores[id][setIdx]) setScores[id][setIdx] = {s1:'',s2:''};
+  if(player===0) setScores[id][setIdx].s1 = val;
+  else setScores[id][setIdx].s2 = val;
+  renderMatchs(); // re-render pour afficher/masquer la 3e manche dynamiquement
 }
-function doSaveScore(id,s1,s2) {
-  scores[id]={s1,s2};
+
+function saveScore(id) {
+  const sets = [];
+  for(let i=0;i<3;i++){
+    const el1=document.getElementById(`ss1_${id}_${i}`);
+    const el2=document.getElementById(`ss2_${id}_${i}`);
+    if(el1&&el2){ sets.push({s1:el1.value, s2:el2.value}); }
+  }
+  askPassword({type:'score', args:[id, sets]});
+}
+// Re-rend uniquement l'onglet actif (+ poules en arrière-plan pour les classements)
+function refreshActiveTab() {
+  renderPoules(); // toujours, car alimente les classements
+  const active = document.querySelector('.section.active')?.id;
+  if(active === 'tab-matchs')   renderMatchs();
+  else if(active === 'tab-bracket') renderBracket();
+  else if(active === 'tab-final')   renderFinal();
+  else if(active === 'tab-stats')   renderStats();
+  // poules & regles n'ont pas besoin d'un appel supplémentaire
+}
+
+function doSaveScore(id, sets) {
+  setScores[id] = sets;
   persist();
-  renderPoules(); renderMatchs(); renderBracket();
+  refreshActiveTab();
+}
+
+function resetMatch(id) {
+  askPassword({type:'reset', args:[id]});
+}
+function doResetMatch(id) {
+  delete setScores[id];
+  editingMatch = null;
+  persist();
+  refreshActiveTab();
 }
 
 function saveElimScore(id) {
-  const s1=document.getElementById('es1_'+id)?.value;
-  const s2=document.getElementById('es2_'+id)?.value;
-  askPassword({type:'elim', args:[id,s1,s2]});
+  const sets = [];
+  for(let i=0;i<3;i++){
+    const el1=document.getElementById(`ess1_${id}_${i}`);
+    const el2=document.getElementById(`ess2_${id}_${i}`);
+    if(el1&&el2){ sets.push({s1:el1.value, s2:el2.value}); }
+  }
+  askPassword({type:'elim', args:[id, sets]});
 }
-function doSaveElimScore(id,s1,s2) {
-  elimScores[id]={s1,s2};
+function doSaveElimScore(id, sets) {
+  elimSetScores[id] = sets;
   persist();
-  renderBracket();
+  refreshActiveTab();
+}
+
+function toggleElimEdit(id) {
+  editingElimMatch = editingElimMatch === id ? null : id;
+  const onFinal = document.getElementById('tab-final').classList.contains('active');
+  if(onFinal) renderFinal(); else renderBracket();
+}
+function cancelElimEdit() {
+  editingElimMatch = null;
+  const onFinal = document.getElementById('tab-final').classList.contains('active');
+  if(onFinal) renderFinal(); else renderBracket();
+}
+function saveElimMatchEdit(id) {
+  askPassword({type:'elimEdit', args:[id]});
+}
+function doSaveElimMatchEdit(id) {
+  const d = document.getElementById('elim-edit-date-'+id)?.value.trim();
+  const t = document.getElementById('elim-edit-time-'+id)?.value.trim();
+  const orig = ELIM.find(m=>m.id===id) || {};
+  if(d||t){ elimMatchEdits[id] = {date: d||orig.date||'', time: t||orig.time||''}; }
+  editingElimMatch = null;
+  persist();
+  const onFinal = document.getElementById('tab-final').classList.contains('active');
+  if(onFinal) renderFinal(); else renderBracket();
+}
+function resetElimMatch(id) {
+  askPassword({type:'elimReset', args:[id]});
+}
+function doResetElimMatch(id) {
+  delete elimSetScores[id];
+  editingElimMatch = null;
+  persist();
+  const onFinal = document.getElementById('tab-final').classList.contains('active');
+  if(onFinal) renderFinal(); else renderBracket();
 }
 
 function toggleEdit(idx) {
@@ -868,15 +1811,18 @@ const SB_HEADERS = {
 async function loadData() {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits`,
+      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits,set_scores,elim_set_scores`,
       { headers: SB_HEADERS }
     );
     if(r.ok) {
       const rows = await r.json();
       if(rows.length > 0) {
-        scores     = rows[0].scores      || {};
-        elimScores = rows[0].elim_scores || {};
-        matchEdits = rows[0].match_edits || {};
+        scores         = rows[0].scores          || {};
+        elimScores     = rows[0].elim_scores     || {};
+        matchEdits     = rows[0].match_edits     || {};
+        setScores      = rows[0].set_scores      || {};
+        elimSetScores  = rows[0].elim_set_scores || {};
+        elimMatchEdits = rows[0].elim_match_edits|| {};
         return;
       }
     }
@@ -886,6 +1832,9 @@ async function loadData() {
   try{const d=localStorage.getItem('pingpong_scores');if(d)scores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_elim');if(d)elimScores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_edits');if(d)matchEdits=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('pingpong_setscores');if(d)setScores=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('pingpong_elimsetscores');if(d)elimSetScores=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('pingpong_elimedits');if(d)elimMatchEdits=JSON.parse(d);}catch(e){}
 }
 
 async function persist() {
@@ -899,6 +1848,9 @@ async function persist() {
           scores,
           elim_scores: elimScores,
           match_edits: matchEdits,
+          set_scores: setScores,
+          elim_set_scores: elimSetScores,
+          elim_match_edits: elimMatchEdits,
           updated_at: new Date().toISOString()
         })
       }
@@ -930,11 +1882,255 @@ function showSaveStatus(msg, ok) {
   el._t = setTimeout(()=>{ el.style.opacity='0'; }, 3000);
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// ─── STATS ────────────────────────────────────────────────────────────────────
+let statsFilter = 'all'; // 'all' or 'PlayerName'
+
+function getAllPlayers() {
+  const list = [];
+  for(const [poule, names] of Object.entries(PLAYERS)) {
+    names.forEach((name, idx) => list.push({name, poule, idx}));
+  }
+  return list;
+}
+
+function computePlayerStats(playerName) {
+  const allPlayers = getAllPlayers();
+  const me = allPlayers.find(p=>p.name===playerName);
+  if(!me) return null;
+
+  let matchWins=0, matchLosses=0, matchPlayed=0;
+  let setWins=0, setLosses=0;
+  let pointsFor=0, pointsAgainst=0;
+  let streak=0, streakType=null, bestStreak=0, curStreak=0;
+  const h2h = []; // {opp, result:'win'|'loss'|'pending', score, sets}
+
+  const myMatches = MATCHES_RAW.filter(m => {
+    const pl = PLAYERS[m.phase];
+    return pl[m.p1]===playerName || pl[m.p2]===playerName;
+  });
+
+  myMatches.forEach(m => {
+    const pl = PLAYERS[m.phase];
+    const isP1 = pl[m.p1]===playerName;
+    const opp = isP1 ? pl[m.p2] : pl[m.p1];
+    const id = getMatchId(m);
+    const res = getMatchResult(id);
+    const done = res.w1===2||res.w2===2;
+
+    const myW = isP1 ? res.w1 : res.w2;
+    const oppW = isP1 ? res.w2 : res.w1;
+
+    if(done) {
+      matchPlayed++;
+      // sets
+      res.sets.forEach(s => {
+        const myPts = isP1 ? s.s1 : s.s2;
+        const oppPts = isP1 ? s.s2 : s.s1;
+        pointsFor += myPts; pointsAgainst += oppPts;
+        if(myPts > oppPts) setWins++; else setLosses++;
+      });
+      if(myW > oppW) {
+        matchWins++;
+        if(streakType==='win') curStreak++; else { streakType='win'; curStreak=1; }
+      } else {
+        matchLosses++;
+        if(streakType==='loss') curStreak++; else { streakType='loss'; curStreak=1; }
+      }
+      bestStreak = Math.max(bestStreak, streakType==='win' ? curStreak : 0);
+      const setStr = res.sets.map(s=>`${isP1?s.s1:s.s2}-${isP1?s.s2:s.s1}`).join(' / ');
+      h2h.push({opp, result: myW>oppW?'win':'loss', score:`${myW}-${oppW}`, sets:setStr});
+    } else {
+      h2h.push({opp, result:'pending', score:'–', sets:'–'});
+    }
+  });
+
+  const winRate = matchPlayed>0 ? Math.round(matchWins/matchPlayed*100) : 0;
+  const setTotal = setWins+setLosses;
+  const setWinRate = setTotal>0 ? Math.round(setWins/setTotal*100) : 0;
+  const avgPtsFor = matchPlayed>0 ? (pointsFor/(setWins+setLosses)||0).toFixed(1) : '–';
+  const avgPtsAgainst = matchPlayed>0 ? (pointsAgainst/(setWins+setLosses)||0).toFixed(1) : '–';
+
+  return {matchWins, matchLosses, matchPlayed, setWins, setLosses, setWinRate,
+    winRate, pointsFor, pointsAgainst, avgPtsFor, avgPtsAgainst,
+    bestStreak, curStreak: streakType==='win'?curStreak:0, streakType, curStreakN: curStreak,
+    h2h, poule: me.poule};
+}
+
+function computeGlobalLeaderboard() {
+  return getAllPlayers().map(p => {
+    const s = computePlayerStats(p.name);
+    return { ...p, ...s };
+  }).sort((a,b) => b.matchWins-a.matchWins || b.winRate-a.winRate || b.setWins-a.setWins);
+}
+
+function renderStats() {
+  const allPlayers = getAllPlayers();
+  const lb = computeGlobalLeaderboard();
+  const totalMatches = MATCHES_RAW.filter(m => { const id=getMatchId(m); const r=getMatchResult(id); return r.w1===2||r.w2===2; }).length;
+
+  // Filter buttons
+  let filterHtml = `<div class="stats-player-filter">
+    <button class="stats-filter-btn${statsFilter==='all'?' active':''}" onclick="setStatsFilter('all')">🌍 Général</button>`;
+  allPlayers.forEach(p => {
+    const initials = p.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    filterHtml += `<button class="stats-filter-btn${statsFilter===p.name?' active':''}" onclick="setStatsFilter('${p.name.replace(/'/g,"\\'")}')">
+      ${initials} · ${p.name.split(' ')[p.name.split(' ').length-1]}
+    </button>`;
+  });
+  filterHtml += '</div>';
+
+  let html = filterHtml;
+
+  if(statsFilter === 'all') {
+    // ── VUE GÉNÉRALE ──
+    html += `<div class="stat-section-title">🏆 Classement général</div>`;
+    html += `<div class="leaderboard">`;
+    lb.forEach((p, i) => {
+      const rankCls = i===0?'r1':i===1?'r2':i===2?'r3':'';
+      const rankIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+      const maxW = lb[0].matchWins||1;
+      const barW = Math.round(p.matchWins/maxW*100);
+      html += `<div class="lb-row">
+        <span class="lb-rank ${rankCls}">${rankIcon}</span>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span class="lb-name">${p.name}</span>
+            <span class="lb-poule mp-${p.poule}" style="font-size:9px;padding:1px 5px">${p.poule}</span>
+          </div>
+          <div class="mini-bar"><div class="mini-bar-fill" style="width:${barW}%"></div></div>
+        </div>
+        <span class="lb-stat">${p.matchPlayed}J</span>
+        <span class="lb-stat">${p.winRate}%</span>
+        <span class="lb-stat pts">${p.matchWins}V</span>
+      </div>`;
+    });
+    html += '</div>';
+
+    html += `<div class="stat-section-title">📊 Stats du tournoi</div>`;
+    const totalSets = lb.reduce((a,p)=>a+p.setWins+p.setLosses,0)/2;
+    const topScorer = [...lb].sort((a,b)=>b.pointsFor-a.pointsFor)[0];
+    const bestWR = [...lb].filter(p=>p.matchPlayed>0).sort((a,b)=>b.winRate-a.winRate)[0];
+    const mostPlayed = [...lb].sort((a,b)=>b.matchPlayed-a.matchPlayed)[0];
+    html += `<div class="stat-cards">
+      <div class="stat-card accent"><div class="sv">${totalMatches}</div><div class="sl">Matchs joués</div></div>
+      <div class="stat-card"><div class="sv">${Math.round(totalSets)}</div><div class="sl">Manches jouées</div></div>
+      <div class="stat-card gold"><div class="sv">${bestWR?.winRate||0}%</div><div class="sl">Meilleur %V · ${bestWR?.name.split(' ').slice(-1)[0]||'–'}</div></div>
+      <div class="stat-card accent"><div class="sv">${topScorer?.pointsFor||0}</div><div class="sl">Max points · ${topScorer?.name.split(' ').slice(-1)[0]||'–'}</div></div>
+      <div class="stat-card"><div class="sv">${mostPlayed?.matchPlayed||0}</div><div class="sl">Plus actif · ${mostPlayed?.name.split(' ').slice(-1)[0]||'–'}</div></div>
+      <div class="stat-card"><div class="sv">${lb.filter(p=>p.matchPlayed>0).length}</div><div class="sl">Joueurs actifs</div></div>
+    </div>`;
+
+    // Top 3 podium
+    html += `<div class="stat-section-title">🎯 Meilleurs taux de victoire</div>`;
+    const topWR = lb.filter(p=>p.matchPlayed>=2).sort((a,b)=>b.winRate-a.winRate).slice(0,5);
+    html += `<div class="h2h-table">`;
+    topWR.forEach((p,i) => {
+      html += `<div class="h2h-row">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--muted);min-width:20px">${i+1}</span>
+        <span class="h2h-opp">${p.name}</span>
+        <span class="lb-poule mp-${p.poule}">${p.poule}</span>
+        <span class="h2h-result h2h-win">${p.winRate}%</span>
+        <span class="h2h-score">${p.matchWins}V ${p.matchLosses}D</span>
+      </div>`;
+    });
+    html += '</div>';
+
+  } else {
+    // ── VUE JOUEUR ──
+    const s = computePlayerStats(statsFilter);
+    if(!s) { html += '<p>Joueur introuvable.</p>'; document.getElementById('tab-stats').innerHTML=html; return; }
+
+    const initials = statsFilter.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const matchesLeft = s.h2h.filter(h=>h.result==='pending').length;
+
+    html += `<div class="player-hero">
+      <div class="player-avatar">${initials}</div>
+      <div>
+        <div class="player-hero-name">${statsFilter}</div>
+        <div class="player-hero-sub">Poule ${s.poule} · ${s.matchPlayed} match${s.matchPlayed>1?'s':''} joué${s.matchPlayed>1?'s':''} · ${matchesLeft} à venir</div>
+      </div>
+      <div class="player-hero-badge">
+        <span class="bval">${s.matchWins}</span>
+        <span class="blbl">Victoires</span>
+      </div>
+    </div>`;
+
+    // Taux de victoire
+    html += `<div class="winrate-bar-wrap">
+      <div class="winrate-bar-label"><span>Taux de victoire matchs</span><span>${s.matchWins}V · ${s.matchLosses}D</span></div>
+      <div class="winrate-bar-track"><div class="winrate-bar-fill" style="width:${s.winRate}%"></div></div>
+      <div class="winrate-bar-pct">${s.winRate}%</div>
+    </div>`;
+
+    // Stat cards
+    html += `<div class="stat-cards">
+      <div class="stat-card accent"><div class="sv">${s.matchPlayed}</div><div class="sl">Matchs joués</div></div>
+      <div class="stat-card gold"><div class="sv">${s.setWins}</div><div class="sl">Manches gagnées</div></div>
+      <div class="stat-card red"><div class="sv">${s.setLosses}</div><div class="sl">Manches perdues</div></div>
+      <div class="stat-card"><div class="sv">${s.avgPtsFor}</div><div class="sl">Moy. pts / manche</div></div>
+      <div class="stat-card"><div class="sv">${s.pointsFor}</div><div class="sl">Points marqués</div></div>
+      <div class="stat-card"><div class="sv">${s.bestStreak}</div><div class="sl">Meilleure série V</div></div>
+    </div>`;
+
+    // Set winrate bar
+    html += `<div class="set-stats-row">
+      <div class="set-stat-box">
+        <div class="ssv" style="color:var(--green)">${s.setWins}</div>
+        <div class="ssl">Manches W</div>
+      </div>
+      <div class="set-stat-box">
+        <div class="ssv">${s.setWinRate}%</div>
+        <div class="ssl">% Manches gagnées</div>
+      </div>
+      <div class="set-stat-box">
+        <div class="ssv" style="color:#c0392b">${s.setLosses}</div>
+        <div class="ssl">Manches L</div>
+      </div>
+    </div>`;
+
+    // Série actuelle
+    if(s.matchPlayed > 0) {
+      const streakColor = s.streakType==='win' ? 'var(--green)' : '#c0392b';
+      const streakIcon = s.streakType==='win' ? '🔥' : '❄️';
+      const streakLabel = s.streakType==='win' ? `${s.curStreakN} victoire${s.curStreakN>1?'s':''} d'affilée` : `${s.curStreakN} défaite${s.curStreakN>1?'s':''} d'affilée`;
+      html += `<div class="stat-card" style="margin-bottom:1rem;text-align:left;display:flex;align-items:center;gap:10px;padding:.8rem 1rem">
+        <span style="font-size:24px">${streakIcon}</span>
+        <div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:${streakColor}">${streakLabel}</div>
+          <div style="font-size:11px;color:var(--muted)">Série en cours</div>
+        </div>
+      </div>`;
+    }
+
+    // Bilan H2H
+    html += `<div class="stat-section-title">⚔️ Bilan face à chaque adversaire</div>`;
+    html += `<div class="h2h-table">`;
+    s.h2h.forEach(h => {
+      const cls = h.result==='win'?'h2h-win':h.result==='loss'?'h2h-loss':'h2h-pending';
+      const label = h.result==='win'?'Victoire':h.result==='loss'?'Défaite':'À jouer';
+      html += `<div class="h2h-row">
+        <span class="h2h-opp">${h.opp}</span>
+        <span class="h2h-result ${cls}">${label}</span>
+        <span class="h2h-score">${h.score}${h.sets!=='–'?' · '+h.sets:''}</span>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('tab-stats').innerHTML = html;
+}
+
+function setStatsFilter(name) {
+  statsFilter = name;
+  renderStats();
+}
+
+
 loadData().then(() => {
   renderPoules();
   renderMatchs();
   renderBracket();
+  renderFinal();
 });
 </script>
 <!-- MODAL MOT DE PASSE -->
