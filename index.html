@@ -489,7 +489,7 @@
   .podium-name { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:var(--dark); line-height:1.2; }
   .podium-rank { font-size:10px; color:var(--muted); margin-top:2px; font-family:'Barlow Condensed',sans-serif; text-transform:uppercase; letter-spacing:.5px; }
 
-  /* BRACKET TREE VISUEL (affiché dans tab-poules après fin des poules) */
+  /* BRACKET TREE VISUEL */
   .bracket-tree-wrap { padding: .5rem 0 1rem; }
   .back-poules-btn {
     display: inline-flex; align-items: center; gap: 6px;
@@ -684,7 +684,6 @@
   }
   .stat-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
 
-  /* Player hero card */
   .player-hero {
     background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
     border-radius: 14px; padding: 1.25rem 1.5rem;
@@ -707,7 +706,6 @@
   .player-hero-badge .bval { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:700; color:var(--gold); display:block; line-height:1; }
   .player-hero-badge .blbl { font-size:9px; letter-spacing:1px; text-transform:uppercase; opacity:.7; }
 
-  /* Stat cards grid */
   .stat-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 1rem; }
   @media(max-width:480px){ .stat-cards { grid-template-columns: repeat(2,1fr); } }
   .stat-card {
@@ -720,20 +718,17 @@
   .stat-card.gold .sv { color: #b8860b; }
   .stat-card.red .sv { color: #c0392b; }
 
-  /* Win rate bar */
   .winrate-bar-wrap { background: white; border-radius: 10px; padding: 1rem 1.1rem; box-shadow: 0 1px 3px rgba(0,0,0,.05); margin-bottom: 1rem; }
   .winrate-bar-label { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:.4rem; font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.3px; }
   .winrate-bar-track { height: 10px; background: #f0ede6; border-radius: 10px; overflow: hidden; }
   .winrate-bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--green), var(--green-light)); transition: width .6s ease; }
   .winrate-bar-pct { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; color:var(--green); text-align:center; margin-top:.4rem; }
 
-  /* Set stats */
   .set-stats-row { display:flex; gap:8px; margin-bottom:1rem; }
   .set-stat-box { flex:1; background:white; border-radius:10px; padding:.75rem; text-align:center; box-shadow:0 1px 3px rgba(0,0,0,.05); }
   .set-stat-box .ssv { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; color:var(--text); }
   .set-stat-box .ssl { font-size:9px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-weight:600; }
 
-  /* H2H table */
   .h2h-table { background:white; border-radius:10px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.05); }
   .h2h-row { display:flex; align-items:center; justify-content:space-between; padding:.6rem 1rem; border-bottom:1px solid var(--border); font-size:13px; gap:8px; }
   .h2h-row:last-child { border-bottom:none; }
@@ -744,7 +739,6 @@
   .h2h-pending { background:#f1efe8; color:#888; }
   .h2h-score { font-size:11px; color:var(--muted); }
 
-  /* Global leaderboard */
   .leaderboard { background:white; border-radius:12px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.05); }
   .lb-row { display:flex; align-items:center; gap:10px; padding:.65rem 1rem; border-bottom:1px solid var(--border); }
   .lb-row:last-child { border-bottom:none; }
@@ -757,11 +751,9 @@
   .lb-stat { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; color:var(--muted); min-width:38px; text-align:right; }
   .lb-stat.pts { color:var(--text); font-size:15px; }
 
-  /* Points avg bar */
   .mini-bar { height:4px; border-radius:4px; background:#f0ede6; margin-top:2px; }
   .mini-bar-fill { height:100%; border-radius:4px; background:var(--green); }
 
-  /* Responsive */
   @media(max-width:540px){ .player-hero { flex-wrap:wrap; } .player-hero-badge { margin-left:0; } }
 </style>
 </head>
@@ -885,32 +877,30 @@ const ELIM = [
   {round:"Demi-finales",id:"D2",label:"Demi-finale 2",p1:"Vainqueur Q3",p2:"Vainqueur Q4",date:"29/04",time:"13:30"},
 ];
 
-
 let scores = {};
 let elimScores = {};
-let elimSetScores = {}; // scores par manche pour les matchs élim {id: [{s1,s2},{s1,s2},{s1,s2}]}
+let elimSetScores = {};
 let matchEdits = {};
-let elimMatchEdits = {}; // date/heure modifiables pour les matchs élim {id: {date, time}}
-let setScores = {}; // { matchId: [{s1:11,s2:8},{s1:9,s2:11},{s1:11,s2:4}] }
+let elimMatchEdits = {};
+let setScores = {};
 let activeFilter = 'all';
 let poulesPlayerFilter = '';
 let editingMatch = null;
-let editingElimMatch = null; // id du match élim en cours d'édition
+let editingElimMatch = null;
 
-// ─── CONFIG SUPABASE ─────────────────────────────────────────────────────────
-const SUPABASE_URL      = 'https://bdcfkjbdggeqfbpcmwfo.supabase.co';  // ← ton Project URL
-const SUPABASE_ANON_KEY = 'sb_publishable_mwkd0P2l02adfCir3AE7fA_iRNf4Xpj';  // ← ta clé anon/public
-const TOURNAMENT_PASSWORD = 'icam2026'; // mot de passe pour valider les scores
+// ─── Variable anti-écrasement : timestamp de la dernière lecture Supabase ────
+let lastLoadedAt = null;
 // ─────────────────────────────────────────────────────────────────────────────
+
+const SUPABASE_URL      = 'https://bdcfkjbdggeqfbpcmwfo.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_mwkd0P2l02adfCir3AE7fA_iRNf4Xpj';
+const TOURNAMENT_PASSWORD = 'icam2026';
 
 function getMatchId(m) { return m.phase+'-'+m.date+'-'+m.p1+'-'+m.p2; }
 function getMatchIdx(m) { return MATCHES_RAW.indexOf(m); }
-
 function getMatchDate(m) { return matchEdits[getMatchIdx(m)]?.date || m.date; }
 function getMatchTime(m) { return matchEdits[getMatchIdx(m)]?.time || m.time; }
 
-// ─── CALCUL RÉSULTAT D'UN MATCH ──────────────────────────────────────────────
-// Retourne {w1, w2, sets:[{s1,s2}]} depuis setScores[id]
 function getMatchResult(id) {
   const sets = setScores[id] || [];
   let w1 = 0, w2 = 0;
@@ -920,12 +910,11 @@ function getMatchResult(id) {
     if(s.s1===''&&s.s2==='') continue;
     validSets.push({s1:a,s2:b});
     if(a>b) w1++; else if(b>a) w2++;
-    if(w1===2||w2===2) break; // BO3 : stop à 2 manches gagnées
+    if(w1===2||w2===2) break;
   }
   return {w1, w2, sets: validSets};
 }
 
-// Nombre de manches à afficher dans les inputs (1, 2 ou 3)
 function getVisibleSets(id) {
   const sets = setScores[id] || [];
   let w1=0, w2=0, n=1;
@@ -934,7 +923,7 @@ function getVisibleSets(id) {
     const a=parseInt(s.s1)||0, b=parseInt(s.s2)||0;
     const hasValue = s.s1!=='' || s.s2!=='';
     if(hasValue){
-      n = Math.min(i+2, 3); // affiche jusqu'à la manche suivante
+      n = Math.min(i+2, 3);
       if(a>b) w1++; else if(b>a) w2++;
       if(w1===2||w2===2){ n=i+1; break; }
     }
@@ -991,7 +980,6 @@ function renderPoulesClassement() {
 }
 
 function renderPoulesBracket() {
-  // Initialise les slots ELIM
   const quarts = [
     {id:'Q1', p1slot:'1A', p2slot:'2B'},
     {id:'Q2', p1slot:'1B', p2slot:'2A'},
@@ -1007,7 +995,7 @@ function renderPoulesBracket() {
     if(q){ m.p1slot=q.p1slot; m.p2slot=q.p2slot; }
   });
 
-  function sn(n) { // short name
+  function sn(n) {
     if(!n||n==='?') return '?';
     const parts = n.trim().split(' ');
     if(parts.length===1) return n;
@@ -1052,14 +1040,10 @@ function renderPoulesBracket() {
     const res = getElimMatchResult(id);
     const done = res.done;
     const w1 = res.w1 > res.w2;
-    const date = getElimMatchDate(id);
-    const time = getElimMatchTime(id);
-    const meta = date ? `${date}${time?' · '+time:''}` : '';
     const cls1 = done?(w1?'winner':'loser'):(n1==='?'?'tbd':'');
     const cls2 = done?(!w1?'winner':'loser'):(n2==='?'?'tbd':'');
-    const scoreStr = done ? `${res.w1}–${res.w2}` : meta;
+    const scoreStr = done ? `${res.w1}–${res.w2}` : '';
     const scoreCls = done ? 'done' : '';
-    const isRight = side==='right';
     return `<div class="btree-match">
       <div class="btree-player ${cls1}" title="${n1}">${sn(n1)}</div>
       <div class="btree-score ${scoreCls}">${scoreStr}</div>
@@ -1067,7 +1051,6 @@ function renderPoulesBracket() {
     </div>`;
   }
 
-  // Finale
   const d1res = getElimMatchResult('D1');
   const d2res = getElimMatchResult('D2');
   const D1m = ELIM.find(m=>m.id==='D1');
@@ -1092,10 +1075,7 @@ function renderPoulesBracket() {
   <div class="bracket-tree-wrap">
     <button class="back-poules-btn" onclick="showPoulesClassement()">📊 Scores des poules</button>
     <div class="btree-title">Tableau éliminatoire</div>
-
     <div class="btree">
-
-      <!-- GAUCHE -->
       <div class="btree-side">
         <div class="btree-col">
           <div>
@@ -1121,22 +1101,16 @@ function renderPoulesBracket() {
           <line x1="0" y1="25" x2="14" y2="25" stroke="#b5c9be" stroke-width="1.5"/>
         </svg>
       </div>
-
-      <!-- CENTRE -->
       <div class="btree-center">
         <div class="btree-center-label">🏆 Finale</div>
         ${fMeta&&!fDone?`<div style="font-family:'Barlow Condensed',sans-serif;font-size:9px;color:var(--muted)">${fMeta}</div>`:''}
         <div class="btree-final-box${fDone?' done':''}">
           <div class="btree-player center ${fCls1}" style="margin-bottom:4px">${sn(f_p1)}</div>
-          ${fDone
-            ? `<div class="btree-final-score">${fRes.w1}–${fRes.w2}</div>`
-            : `<div class="btree-final-vs">vs</div>`}
+          ${fDone ? `<div class="btree-final-score">${fRes.w1}–${fRes.w2}</div>` : `<div class="btree-final-vs">vs</div>`}
           <div class="btree-player center ${fCls2}" style="margin-top:4px">${sn(f_p2)}</div>
         </div>
         ${champion?`<div class="btree-champion">🥇 ${sn(champion)}</div>`:''}
       </div>
-
-      <!-- DROITE -->
       <div class="btree-side right">
         <div class="btree-col right">
           <div>
@@ -1162,7 +1136,6 @@ function renderPoulesBracket() {
           <line x1="14" y1="25" x2="0" y2="25" stroke="#b5c9be" stroke-width="1.5"/>
         </svg>
       </div>
-
     </div>
     <p class="m-note">Scores saisis dans l'onglet <strong>Matchs</strong> · Détail des matchs élim. dans <strong>Phase élim.</strong></p>
   </div>`;
@@ -1170,7 +1143,7 @@ function renderPoulesBracket() {
   document.getElementById('tab-poules').innerHTML = html;
 }
 
-let poulesViewMode = 'bracket'; // 'bracket' | 'classement'
+let poulesViewMode = 'bracket';
 function showPoulesClassement() {
   poulesViewMode = 'classement';
   let html = `<button class="back-poules-btn" onclick="showPoulesTree()">🏆 Tableau éliminatoire</button>`;
@@ -1210,7 +1183,6 @@ function setPoulePlayerFilter(val) {
 }
 
 function renderMatchs() {
-  // Si un joueur est sélectionné, on filtre ses matchs uniquement
   let matches;
   if (poulesPlayerFilter) {
     matches = MATCHES_RAW.filter(m => {
@@ -1221,7 +1193,6 @@ function renderMatchs() {
     matches = activeFilter==='all' ? MATCHES_RAW : MATCHES_RAW.filter(m=>m.phase===activeFilter);
   }
 
-  // Build player options
   let playerOpts = '<option value="">Tous les joueurs</option>';
   ['A','B','C','D'].forEach(p => {
     playerOpts += `<optgroup label="Poule ${p}">`;
@@ -1231,7 +1202,6 @@ function renderMatchs() {
     playerOpts += '</optgroup>';
   });
 
-  // Poule filter bar (hidden when a player is selected)
   const pouleBarStyle = poulesPlayerFilter ? 'display:none' : '';
 
   let html = `<div class="filter-bar" style="align-items:center;gap:8px;flex-wrap:wrap">
@@ -1251,7 +1221,6 @@ function renderMatchs() {
     </div>
   </div>`;
 
-  // If player selected: show a small info banner
   if (poulesPlayerFilter) {
     let playerPoule = '';
     for (const [p, names] of Object.entries(PLAYERS)) {
@@ -1298,7 +1267,6 @@ function renderMatchs() {
       const curTime=getMatchTime(m);
 
       const setsData = setScores[id] || [];
-      // Toujours 3 manches visibles
       let setsHtml = '';
       for(let i=0;i<3;i++){
         const sv = setsData[i]||{s1:'',s2:''};
@@ -1353,10 +1321,7 @@ function renderMatchs() {
   document.getElementById('tab-matchs').innerHTML=html;
 }
 
-// ─── RÉSOLUTION DES NOMS ÉLIM ─────────────────────────────────────────────────
-function getPouleRanking(poule) {
-  return getStandings(poule); // retourne joueurs triés [{name,...}]
-}
+function getPouleRanking(poule) { return getStandings(poule); }
 
 function getElimMatchResult(id) {
   const sets = elimSetScores[id] || [];
@@ -1372,9 +1337,7 @@ function getElimMatchResult(id) {
   return {w1, w2, sets:validSets, done:w1===2||w2===2};
 }
 
-// Résout le nom d'un joueur en phase élim selon son identifiant de slot
 function resolveElimName(slot) {
-  // Slots de quarts : "1A","2A","1B","2B","1C","2C","1D","2D"
   const pouleMap = {
     '1A': ()=>getPouleRanking('A')[0]?.name,
     '2A': ()=>getPouleRanking('A')[1]?.name,
@@ -1386,8 +1349,6 @@ function resolveElimName(slot) {
     '2D': ()=>getPouleRanking('D')[1]?.name,
   };
   if(pouleMap[slot]) return pouleMap[slot]() || '?';
-
-  // Slots de demi : vainqueur/perdant d'un quart
   const m = slot.match(/^([WL])(Q[1-4]|D[12])$/);
   if(m) {
     const [,wl,qid] = m;
@@ -1402,7 +1363,6 @@ function resolveElimName(slot) {
   return slot;
 }
 
-// ─── VÉRIFIE SI LES POULES SONT TERMINÉES ────────────────────────────────────
 function arePoulesDone() {
   return MATCHES_RAW.every(m => {
     const res = getMatchResult(getMatchId(m));
@@ -1415,21 +1375,13 @@ function areElimDone() {
 }
 
 function handleElimClick(btn) {
-  if(!arePoulesDone()) {
-    showLockedPage('bracket', btn);
-  } else {
-    showTab('bracket', btn);
-    renderBracket();
-  }
+  if(!arePoulesDone()) { showLockedPage('bracket', btn); }
+  else { showTab('bracket', btn); renderBracket(); }
 }
 
 function handleFinalClick(btn) {
-  if(!areElimDone()) {
-    showLockedPageElim('final', btn);
-  } else {
-    showTab('final', btn);
-    renderFinal();
-  }
+  if(!areElimDone()) { showLockedPageElim('final', btn); }
+  else { showTab('final', btn); renderFinal(); }
 }
 
 function showLockedPage(tabId, btn) {
@@ -1483,7 +1435,6 @@ function showLockedPageElim(tabId, btn) {
     </div>`;
 }
 
-// ─── WIDGET MATCH ÉLIM (format manches) ───────────────────────────────────────
 function getElimMatchDate(id) { return elimMatchEdits[id]?.date || ELIM.find(m=>m.id===id)?.date || ''; }
 function getElimMatchTime(id) { return elimMatchEdits[id]?.time || ELIM.find(m=>m.id===id)?.time || ''; }
 
@@ -1494,13 +1445,7 @@ function elimMatchWidget(id, p1name, p2name, label, extraClass='') {
   const isEditing = editingElimMatch === id;
   const curDate = getElimMatchDate(id);
   const curTime = getElimMatchTime(id);
-
-  // Trouver le badge de round (QF, 1/2, PF, F)
-  const roundBadgeMap = {
-    'Q1':'QF','Q2':'QF','Q3':'QF','Q4':'QF',
-    'D1':'1/2','D2':'1/2',
-    'PF':'PF','F':'F'
-  };
+  const roundBadgeMap = {'Q1':'QF','Q2':'QF','Q3':'QF','Q4':'QF','D1':'1/2','D2':'1/2','PF':'PF','F':'F'};
   const roundBadge = roundBadgeMap[id] || id;
 
   let setsHtml = '';
@@ -1555,7 +1500,6 @@ function elimMatchWidget(id, p1name, p2name, label, extraClass='') {
 function renderBracket() {
   if(!arePoulesDone()) { showLockedPage('bracket', document.getElementById('nav-elim')); return; }
 
-  // Slots: p1slot/p2slot indique d'où vient le joueur
   const quarts = [
     {id:'Q1', label:'Quart 1', p1slot:'1A', p2slot:'2B'},
     {id:'Q2', label:'Quart 2', p1slot:'1B', p2slot:'2A'},
@@ -1566,7 +1510,6 @@ function renderBracket() {
     {id:'D1', label:'Demi-finale 1', p1slot:'WQ1', p2slot:'WQ2'},
     {id:'D2', label:'Demi-finale 2', p1slot:'WQ3', p2slot:'WQ4'},
   ];
-  // Stocker les slots dans ELIM pour résolution en chaîne
   ELIM.forEach(m => {
     const q = quarts.find(q=>q.id===m.id) || demis.find(d=>d.id===m.id);
     if(q){ m.p1slot=q.p1slot; m.p2slot=q.p2slot; }
@@ -1582,7 +1525,6 @@ function renderBracket() {
   }
 
   function renderRound(matches, resolverFn) {
-    // Group by date
     const byDay = {};
     matches.forEach(m => {
       const date = getElimMatchDate(m.id);
@@ -1591,16 +1533,13 @@ function renderBracket() {
       byDay[key].push(m);
     });
     let html = '';
-    // no-date group first, then sorted dates
     const keys = Object.keys(byDay).sort((a,b) => {
       if(a==='__nodate__') return -1; if(b==='__nodate__') return 1;
       const parseD = s => { const [d,mo]=s.split('/').map(Number); return mo*100+d; };
       return parseD(a)-parseD(b);
     });
     keys.forEach(key => {
-      if(key !== '__nodate__') {
-        html += `<div class="day-label" style="margin-bottom:6px">${allDayLabels[key]||key}</div>`;
-      }
+      if(key !== '__nodate__') html += `<div class="day-label" style="margin-bottom:6px">${allDayLabels[key]||key}</div>`;
       byDay[key].forEach(m => {
         const {n1, n2} = resolverFn(m);
         html += elimMatchWidget(m.id, n1, n2, m.label);
@@ -1611,19 +1550,11 @@ function renderBracket() {
 
   let html = '';
   html += `<div class="bracket-section"><div class="bracket-round-title">Quarts de finale</div>`;
-  html += renderRound(quarts, m => ({
-    n1: resolveElimName(m.p1slot),
-    n2: resolveElimName(m.p2slot)
-  }));
+  html += renderRound(quarts, m => ({ n1: resolveElimName(m.p1slot), n2: resolveElimName(m.p2slot) }));
   html += '</div>';
-
   html += `<div class="bracket-section"><div class="bracket-round-title">Demi-finales</div>`;
-  html += renderRound(demis, m => ({
-    n1: resolveElimName(m.p1slot),
-    n2: resolveElimName(m.p2slot)
-  }));
+  html += renderRound(demis, m => ({ n1: resolveElimName(m.p1slot), n2: resolveElimName(m.p2slot) }));
   html += '</div>';
-
   html += `<div class="m-note">Saisissez les scores manche par manche · La Petite Finale et la Grande Finale s'affichent dans <strong>Finale 🏆</strong></div>`;
   document.getElementById('tab-bracket').innerHTML = html;
 }
@@ -1635,17 +1566,14 @@ function renderFinal() {
   const d2res = getElimMatchResult('D2');
   const D1m = ELIM.find(m=>m.id==='D1');
   const D2m = ELIM.find(m=>m.id==='D2');
-
   const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
   const d1n2 = resolveElimName(D1m?.p2slot||'WQ2');
   const d2n1 = resolveElimName(D2m?.p1slot||'WQ3');
   const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
-
-  const pf_p1 = d1res.w1>d1res.w2 ? d1n2 : d1n1; // perdant D1
-  const pf_p2 = d2res.w1>d2res.w2 ? d2n2 : d2n1; // perdant D2
-  const f_p1  = d1res.w1>d1res.w2 ? d1n1 : d1n2;  // vainqueur D1
-  const f_p2  = d2res.w1>d2res.w2 ? d2n1 : d2n2;  // vainqueur D2
-
+  const pf_p1 = d1res.w1>d1res.w2 ? d1n2 : d1n1;
+  const pf_p2 = d2res.w1>d2res.w2 ? d2n2 : d2n1;
+  const f_p1  = d1res.w1>d1res.w2 ? d1n1 : d1n2;
+  const f_p2  = d2res.w1>d2res.w2 ? d2n1 : d2n2;
   const pfRes = getElimMatchResult('PF');
   const fRes  = getElimMatchResult('F');
 
@@ -1665,15 +1593,11 @@ function renderFinal() {
   }
 
   let html = '';
-
-  html += `<div class="bracket-section">
-    <div class="bracket-round-title">🥉 Petite Finale · 3ème place</div>`;
+  html += `<div class="bracket-section"><div class="bracket-round-title">🥉 Petite Finale · 3ème place</div>`;
   html += dayLabelHtml('PF');
   html += elimMatchWidget('PF', pf_p1, pf_p2, 'Petite Finale');
   html += '</div>';
-
-  html += `<div class="bracket-section">
-    <div class="bracket-round-title">🏆 Grande Finale</div>`;
+  html += `<div class="bracket-section"><div class="bracket-round-title">🏆 Grande Finale</div>`;
   html += dayLabelHtml('F');
   html += elimMatchWidget('F', f_p1, f_p2, 'Finale', ' final-match-wrap');
   html += '</div>';
@@ -1694,10 +1618,8 @@ function renderFinal() {
   document.getElementById('tab-final').innerHTML = html;
 }
 
-
-
 // ─── MOT DE PASSE ────────────────────────────────────────────────────────────
-let pendingAction = null; // { type: 'score'|'elim'|'edit', args: [...] }
+let pendingAction = null;
 
 function askPassword(action) {
   pendingAction = action;
@@ -1712,19 +1634,11 @@ function closePwdModal() {
 }
 function confirmPassword() {
   const val = document.getElementById('pwd-input').value;
-
-  if(val !== TOURNAMENT_PASSWORD) {
-    document.getElementById('pwd-error').style.display = 'block';
-    return;
-  }
-
-  const action = pendingAction; // 🔥 sauvegarde AVANT reset
+  if(val !== TOURNAMENT_PASSWORD) { document.getElementById('pwd-error').style.display = 'block'; return; }
+  const action = pendingAction;
   closePwdModal();
-
   if(!action) return;
-
   const {type, args} = action;
-
   if(type==='score') doSaveScore(...args);
   if(type==='elim')  doSaveElimScore(...args);
   if(type==='edit')  doSaveMatchEdit(...args);
@@ -1737,13 +1651,12 @@ document.addEventListener('keydown', e => {
   if(e.key==='Escape') closePwdModal();
 });
 
-// ─── ACTIONS SCORE (avec mot de passe) ───────────────────────────────────────
 function updateSetInput(id, setIdx, player, val) {
   if(!setScores[id]) setScores[id] = [];
   if(!setScores[id][setIdx]) setScores[id][setIdx] = {s1:'',s2:''};
   if(player===0) setScores[id][setIdx].s1 = val;
   else setScores[id][setIdx].s2 = val;
-  renderMatchs(); // re-render pour afficher/masquer la 3e manche dynamiquement
+  renderMatchs();
 }
 
 function saveScore(id) {
@@ -1755,15 +1668,14 @@ function saveScore(id) {
   }
   askPassword({type:'score', args:[id, sets]});
 }
-// Re-rend uniquement l'onglet actif (+ poules en arrière-plan pour les classements)
+
 function refreshActiveTab() {
-  renderPoules(); // toujours, car alimente les classements
+  renderPoules();
   const active = document.querySelector('.section.active')?.id;
-  if(active === 'tab-matchs')   renderMatchs();
+  if(active === 'tab-matchs')       renderMatchs();
   else if(active === 'tab-bracket') renderBracket();
   else if(active === 'tab-final')   renderFinal();
   else if(active === 'tab-stats')   renderStats();
-  // poules & regles n'ont pas besoin d'un appel supplémentaire
 }
 
 function doSaveScore(id, sets) {
@@ -1772,9 +1684,7 @@ function doSaveScore(id, sets) {
   refreshActiveTab();
 }
 
-function resetMatch(id) {
-  askPassword({type:'reset', args:[id]});
-}
+function resetMatch(id) { askPassword({type:'reset', args:[id]}); }
 function doResetMatch(id) {
   delete setScores[id];
   editingMatch = null;
@@ -1807,9 +1717,7 @@ function cancelElimEdit() {
   const onFinal = document.getElementById('tab-final').classList.contains('active');
   if(onFinal) renderFinal(); else renderBracket();
 }
-function saveElimMatchEdit(id) {
-  doSaveElimMatchEdit(id);
-}
+function saveElimMatchEdit(id) { doSaveElimMatchEdit(id); }
 function doSaveElimMatchEdit(id) {
   const d = document.getElementById('elim-edit-date-'+id)?.value.trim();
   const t = document.getElementById('elim-edit-time-'+id)?.value.trim();
@@ -1820,9 +1728,7 @@ function doSaveElimMatchEdit(id) {
   const onFinal = document.getElementById('tab-final').classList.contains('active');
   if(onFinal) renderFinal(); else renderBracket();
 }
-function resetElimMatch(id) {
-  askPassword({type:'elimReset', args:[id]});
-}
+function resetElimMatch(id) { askPassword({type:'elimReset', args:[id]}); }
 function doResetElimMatch(id) {
   delete elimSetScores[id];
   editingElimMatch = null;
@@ -1831,14 +1737,9 @@ function doResetElimMatch(id) {
   if(onFinal) renderFinal(); else renderBracket();
 }
 
-function toggleEdit(idx) {
-  editingMatch = editingMatch===idx ? null : idx;
-  renderMatchs();
-}
+function toggleEdit(idx) { editingMatch = editingMatch===idx ? null : idx; renderMatchs(); }
 function cancelEdit() { editingMatch=null; renderMatchs(); }
-function saveMatchEdit(idx) {
-  doSaveMatchEdit(idx);
-}
+function saveMatchEdit(idx) { doSaveMatchEdit(idx); }
 function doSaveMatchEdit(idx) {
   const d=document.getElementById('edit-date-'+idx)?.value.trim();
   const t=document.getElementById('edit-time-'+idx)?.value.trim();
@@ -1855,34 +1756,36 @@ function showTab(name,btn){
   btn.classList.add('active');
 }
 
-// ─── SUPABASE : lecture + écriture ───────────────────────────────────────────
+// ─── SUPABASE ─────────────────────────────────────────────────────────────────
 const SB_HEADERS = {
   'Content-Type': 'application/json',
   'apikey': SUPABASE_ANON_KEY,
   'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
 };
 
+// ─── CHARGEMENT : mémorise le updated_at de la base ──────────────────────────
 async function loadData() {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits,set_scores,elim_set_scores`,
+      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits,set_scores,elim_set_scores,elim_match_edits,updated_at`,
       { headers: SB_HEADERS }
     );
     if(r.ok) {
       const rows = await r.json();
       if(rows.length > 0) {
-        scores         = rows[0].scores          || {};
-        elimScores     = rows[0].elim_scores     || {};
-        matchEdits     = rows[0].match_edits     || {};
-        setScores      = rows[0].set_scores      || {};
-        elimSetScores  = rows[0].elim_set_scores || {};
-        elimMatchEdits = rows[0].elim_match_edits|| {};
+        scores         = rows[0].scores           || {};
+        elimScores     = rows[0].elim_scores      || {};
+        matchEdits     = rows[0].match_edits      || {};
+        setScores      = rows[0].set_scores       || {};
+        elimSetScores  = rows[0].elim_set_scores  || {};
+        elimMatchEdits = rows[0].elim_match_edits || {};
+        lastLoadedAt   = rows[0].updated_at       || null; // ← mémorise la version
         return;
       }
     }
   } catch(e) { console.warn('Supabase lecture échouée, fallback localStorage', e); }
 
-  // Fallback localStorage si Supabase inaccessible
+  // Fallback localStorage
   try{const d=localStorage.getItem('pingpong_scores');if(d)scores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_elim');if(d)elimScores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_edits');if(d)matchEdits=JSON.parse(d);}catch(e){}
@@ -1891,8 +1794,28 @@ async function loadData() {
   try{const d=localStorage.getItem('pingpong_elimedits');if(d)elimMatchEdits=JSON.parse(d);}catch(e){}
 }
 
+// ─── SAUVEGARDE : vérifie que personne n'a écrasé entre-temps ────────────────
 async function persist() {
   try {
+    // 1. Vérifie le updated_at actuel en base
+    const check = await fetch(
+      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=updated_at`,
+      { headers: SB_HEADERS }
+    );
+    if(check.ok) {
+      const rows = await check.json();
+      const remoteUpdatedAt = rows[0]?.updated_at || null;
+
+      // 2. Si la base est plus récente que notre dernière lecture → conflit !
+      if(remoteUpdatedAt && lastLoadedAt && remoteUpdatedAt > lastLoadedAt) {
+        showConflictModal();
+        console.warn('Conflit détecté — remote:', remoteUpdatedAt, '/ local:', lastLoadedAt);
+        return; // on n'écrase PAS
+      }
+    }
+
+    // 3. Pas de conflit → on sauvegarde
+    const newTimestamp = new Date().toISOString();
     const r = await fetch(
       `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main`,
       {
@@ -1905,16 +1828,22 @@ async function persist() {
           set_scores: setScores,
           elim_set_scores: elimSetScores,
           elim_match_edits: elimMatchEdits,
-          updated_at: new Date().toISOString()
+          updated_at: newTimestamp
         })
       }
     );
 
-    console.log('Status:', r.status);
-    console.log('Response:', await r.text());
-
-  } catch (e) {
-    console.error('Erreur fetch:', e);
+    if(r.ok) {
+      lastLoadedAt = newTimestamp; // ← met à jour notre référence locale
+      showSaveStatus('✓ Sauvegardé', true);
+    } else {
+      const errText = await r.text();
+      console.error('Supabase PATCH error:', r.status, errText);
+      showSaveStatus('⚠️ Erreur sauvegarde', false);
+    }
+  } catch(e) {
+    console.error('Erreur réseau:', e);
+    showSaveStatus('⚠️ Hors ligne', false);
   }
 }
 
@@ -1933,11 +1862,61 @@ function showSaveStatus(msg, ok) {
   el.style.color = ok ? '#2a6a14' : '#7a4a0a';
   el.style.opacity = '1';
   clearTimeout(el._t);
-  el._t = setTimeout(()=>{ el.style.opacity='0'; }, 3000);
+  el._t = setTimeout(()=>{ el.style.opacity='0'; }, 4000);
 }
 
-// ─── STATS ────────────────────────────────────────────────────────────────────
-let statsFilter = 'all'; // 'all' or 'PlayerName'
+function showConflictModal() {
+  let overlay = document.getElementById('conflict-modal');
+  if(!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'conflict-modal';
+    overlay.style.cssText = `position:fixed;inset:0;z-index:2000;
+      background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;
+      backdrop-filter:blur(4px);`;
+    overlay.innerHTML = `
+      <div style="background:white;border-radius:20px;padding:2.25rem 2rem;max-width:360px;width:90%;
+        box-shadow:0 12px 48px rgba(0,0,0,.25);text-align:center;animation:conflictPop .25s ease;">
+        <div style="font-size:48px;margin-bottom:.75rem;line-height:1;">⚠️</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;
+          color:#7a4a0a;letter-spacing:.5px;margin-bottom:.5rem;">
+          Conflit détecté
+        </div>
+        <div style="font-size:13px;color:#0f1f15;font-weight:500;margin-bottom:.5rem;line-height:1.5;">
+          Recharge la page avant de sauvegarder !
+        </div>
+        <div style="font-size:12px;color:#6b7c70;line-height:1.6;margin-bottom:1.75rem;">
+          Il y a un conflit dans la base de données,<br>
+          donc rafraîchis la page avant d'enregistrer tes modifications.
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button onclick="document.getElementById('conflict-modal').style.display='none'"
+            style="flex:1;height:40px;border:1.5px solid #ddd;border-radius:10px;background:none;
+            font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
+            color:#6b7c70;cursor:pointer;letter-spacing:.5px;">
+            IGNORER
+          </button>
+          <button onclick="location.reload()"
+            style="flex:2;height:40px;border:none;border-radius:10px;
+            background:#1a5c3a;color:white;
+            font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+            cursor:pointer;letter-spacing:.5px;">
+            🔄 RAFRAÎCHIR LA PAGE
+          </button>
+        </div>
+      </div>
+      <style>
+        @keyframes conflictPop {
+          from { transform:scale(.88); opacity:0; }
+          to   { transform:scale(1);  opacity:1; }
+        }
+      </style>`;
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+}
+
+
+let statsFilter = 'all';
 
 function getAllPlayers() {
   const list = [];
@@ -1955,8 +1934,8 @@ function computePlayerStats(playerName) {
   let matchWins=0, matchLosses=0, matchPlayed=0;
   let setWins=0, setLosses=0;
   let pointsFor=0, pointsAgainst=0;
-  let streak=0, streakType=null, bestStreak=0, curStreak=0;
-  const h2h = []; // {opp, result:'win'|'loss'|'pending', score, sets}
+  let streakType=null, bestStreak=0, curStreak=0;
+  const h2h = [];
 
   const myMatches = MATCHES_RAW.filter(m => {
     const pl = PLAYERS[m.phase];
@@ -1970,13 +1949,11 @@ function computePlayerStats(playerName) {
     const id = getMatchId(m);
     const res = getMatchResult(id);
     const done = res.w1===2||res.w2===2;
-
     const myW = isP1 ? res.w1 : res.w2;
     const oppW = isP1 ? res.w2 : res.w1;
 
     if(done) {
       matchPlayed++;
-      // sets
       res.sets.forEach(s => {
         const myPts = isP1 ? s.s1 : s.s2;
         const oppPts = isP1 ? s.s2 : s.s1;
@@ -2029,7 +2006,6 @@ function renderStats() {
   });
   const totalMatches = MATCHES_RAW.filter(m => { const id=getMatchId(m); const r=getMatchResult(id); return r.w1===2||r.w2===2; }).length;
 
-  // Filter buttons
   let filterHtml = `<div class="stats-player-filter">
     <button class="stats-filter-btn${statsFilter==='all'?' active':''}" onclick="setStatsFilter('all')">🌍 Général</button>`;
   allPlayers.forEach(p => {
@@ -2043,7 +2019,6 @@ function renderStats() {
   let html = filterHtml;
 
   if(statsFilter === 'all') {
-    // ── VUE GÉNÉRALE ──
     html += `<div class="stat-section-title">🏆 Classement général</div>`;
     html += `<div class="leaderboard">`;
     lb.forEach((p, i) => {
@@ -2081,7 +2056,6 @@ function renderStats() {
       <div class="stat-card"><div class="sv">${lb.filter(p=>p.matchPlayed>0).length}</div><div class="sl">Joueurs actifs</div></div>
     </div>`;
 
-    // Top 3 podium
     html += `<div class="stat-section-title">🎯 Meilleurs taux de victoire</div>`;
     const topWR = lb.filter(p=>p.matchPlayed>=2).sort((a,b)=>b.winRate-a.winRate).slice(0,5);
     html += `<div class="h2h-table">`;
@@ -2097,7 +2071,6 @@ function renderStats() {
     html += '</div>';
 
   } else {
-    // ── VUE JOUEUR ──
     const s = computePlayerStats(statsFilter);
     if(!s) { html += '<p>Joueur introuvable.</p>'; document.getElementById('tab-stats').innerHTML=html; return; }
 
@@ -2116,14 +2089,12 @@ function renderStats() {
       </div>
     </div>`;
 
-    // Taux de victoire
     html += `<div class="winrate-bar-wrap">
       <div class="winrate-bar-label"><span>Taux de victoire matchs</span><span>${s.matchWins}V · ${s.matchLosses}D</span></div>
       <div class="winrate-bar-track"><div class="winrate-bar-fill" style="width:${s.winRate}%"></div></div>
       <div class="winrate-bar-pct">${s.winRate}%</div>
     </div>`;
 
-    // Stat cards
     html += `<div class="stat-cards">
       <div class="stat-card accent"><div class="sv">${s.matchPlayed}</div><div class="sl">Matchs joués</div></div>
       <div class="stat-card gold"><div class="sv">${s.setWins}</div><div class="sl">Manches gagnées</div></div>
@@ -2133,23 +2104,12 @@ function renderStats() {
       <div class="stat-card"><div class="sv">${s.bestStreak}</div><div class="sl">Meilleure série V</div></div>
     </div>`;
 
-    // Set winrate bar
     html += `<div class="set-stats-row">
-      <div class="set-stat-box">
-        <div class="ssv" style="color:var(--green)">${s.setWins}</div>
-        <div class="ssl">% Victoires manches</div>
-      </div>
-      <div class="set-stat-box">
-        <div class="ssv">${s.setWinRate}%</div>
-        <div class="ssl">Taux de victoire</div>
-      </div>
-      <div class="set-stat-box">
-        <div class="ssv" style="color:#c0392b">${s.setLosses}</div>
-        <div class="ssl">% Défaites manches</div>
-      </div>
+      <div class="set-stat-box"><div class="ssv" style="color:var(--green)">${s.setWins}</div><div class="ssl">Manches gagnées</div></div>
+      <div class="set-stat-box"><div class="ssv">${s.setWinRate}%</div><div class="ssl">Taux de victoire</div></div>
+      <div class="set-stat-box"><div class="ssv" style="color:#c0392b">${s.setLosses}</div><div class="ssl">Manches perdues</div></div>
     </div>`;
 
-    // Série actuelle
     if(s.matchPlayed > 0) {
       const streakColor = s.streakType==='win' ? 'var(--green)' : '#c0392b';
       const streakIcon = s.streakType==='win' ? '🔥' : '❄️';
@@ -2163,7 +2123,6 @@ function renderStats() {
       </div>`;
     }
 
-    // Bilan H2H
     html += `<div class="stat-section-title">⚔️ Bilan face à chaque adversaire</div>`;
     html += `<div class="h2h-table">`;
     s.h2h.forEach(h => {
@@ -2183,8 +2142,6 @@ function renderStats() {
 
 function getEliminatedPlayers() {
   const out = new Set();
-
-  // Éliminés en poules (3ème, 4ème... uniquement si la poule est terminée)
   ['A','B','C','D'].forEach(poule => {
     const standings = getStandings(poule);
     const pouleDone = MATCHES_RAW.filter(m => m.phase === poule)
@@ -2192,8 +2149,6 @@ function getEliminatedPlayers() {
     if(!pouleDone) return;
     standings.slice(2).forEach(p => out.add(p.name));
   });
-
-  // Éliminés en quarts (perdants directs)
   ['Q1','Q2','Q3','Q4'].forEach(id => {
     const res = getElimMatchResult(id);
     if(!res.done) return;
@@ -2202,8 +2157,6 @@ function getEliminatedPlayers() {
     const loser = res.w1 > res.w2 ? resolveElimName(m.p2slot) : resolveElimName(m.p1slot);
     if(loser && loser !== '?') out.add(loser);
   });
-
-  // Perdants des demis : rayés UNIQUEMENT si la petite finale est jouée
   const pfRes = getElimMatchResult('PF');
   if(pfRes.done) {
     ['D1','D2'].forEach(id => {
@@ -2214,31 +2167,23 @@ function getEliminatedPlayers() {
       const loser = res.w1 > res.w2 ? resolveElimName(m.p2slot) : resolveElimName(m.p1slot);
       if(loser && loser !== '?') out.add(loser);
     });
-
-    // Perdant de la petite finale (4ème) aussi rayé
     const mPF = ELIM.find(e => e.id === 'PF');
     if(mPF) {
       const loser = pfRes.w1 > pfRes.w2 ? resolveElimName(mPF.p2slot) : resolveElimName(mPF.p1slot);
       if(loser && loser !== '?') out.add(loser);
     }
   }
-
-  // Finale : personne n'est rayé (1er et 2ème restent affichés normalement)
-
   return out;
 }
 
-function setStatsFilter(name) {
-  statsFilter = name;
-  renderStats();
-}
-
+function setStatsFilter(name) { statsFilter = name; renderStats(); }
 
 loadData().then(() => {
   renderPoules();
   renderMatchs();
 });
 </script>
+
 <!-- MODAL MOT DE PASSE -->
 <div id="pwd-modal" style="display:none;position:fixed;inset:0;z-index:1000;
   background:rgba(0,0,0,.55);align-items:center;justify-content:center;backdrop-filter:blur(3px);">
