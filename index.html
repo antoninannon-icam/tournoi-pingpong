@@ -536,7 +536,7 @@
   .btree-player.winner { opacity: 1; box-shadow: 0 2px 5px rgba(26,92,58,.25); }
   .btree-player.loser  { background: #aaa; opacity: .45; }
   .btree-player.tbd    { background: #c8d4cc; color: #7a8c80; opacity: .8; font-style: italic; }
-  .btree-player.center { text-align: center; width: 122px; max-width: 122px; }
+  .btree-player.center { text-align: center; width: 140px; max-width: 140px; }
   .btree-score {
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 10px; font-weight: 700; color: var(--muted);
@@ -552,7 +552,7 @@
     text-transform: uppercase; color: var(--muted); text-align: center;
   }
   .btree-final-box {
-    width: 122px; border-radius: 10px; padding: 6px 8px; text-align: center;
+    width: 160px; border-radius: 10px; padding: 8px 10px; text-align: center;
     background: white; border: 1.5px solid #ddd;
   }
   .btree-final-box.done { background: #fffbea; border: 2px solid var(--gold); }
@@ -565,7 +565,7 @@
     .btree-match { width: 110px; }
     .btree-player { font-size:10px; padding:4px 6px; max-width:110px; }
     .btree-player.center { width:100px; max-width:100px; }
-    .btree-final-box { width:100px; }
+    .btree-final-box { width:116px; }
   }
   /* BRACKET */
   .bracket-section { margin-bottom: 1.5rem; }
@@ -881,8 +881,8 @@ const ELIM = [
   {round:"Quarts de finale",id:"Q2",label:"Quart 2",p1:"1er Poule B",p2:"2e Poule A",date:"27/04",time:"13:30"},
   {round:"Quarts de finale",id:"Q3",label:"Quart 3",p1:"1er Poule C",p2:"2e Poule D",date:"28/04",time:"13:00"},
   {round:"Quarts de finale",id:"Q4",label:"Quart 4",p1:"1er Poule D",p2:"2e Poule C",date:"28/04",time:"13:30"},
-  {round:"Demi-finales",id:"D1",label:"Demi-finale 1",p1:"Vainqueur Q1",p2:"Vainqueur Q3",date:"29/04",time:"13:00"},
-  {round:"Demi-finales",id:"D2",label:"Demi-finale 2",p1:"Vainqueur Q2",p2:"Vainqueur Q4",date:"29/04",time:"13:30"},
+  {round:"Demi-finales",id:"D1",label:"Demi-finale 1",p1:"Vainqueur Q1",p2:"Vainqueur Q2",date:"29/04",time:"13:00"},
+  {round:"Demi-finales",id:"D2",label:"Demi-finale 2",p1:"Vainqueur Q3",p2:"Vainqueur Q4",date:"29/04",time:"13:30"},
 ];
 
 
@@ -998,8 +998,8 @@ function renderPoulesBracket() {
     {id:'Q4', p1slot:'1D', p2slot:'2C'},
   ];
   const demis = [
-    {id:'D1', p1slot:'WQ1', p2slot:'WQ3'},
-    {id:'D2', p1slot:'WQ2', p2slot:'WQ4'},
+    {id:'D1', p1slot:'WQ1', p2slot:'WQ2'},
+    {id:'D2', p1slot:'WQ3', p2slot:'WQ4'},
   ];
   ELIM.forEach(m => {
     const q = quarts.find(q=>q.id===m.id) || demis.find(d=>d.id===m.id);
@@ -1072,8 +1072,8 @@ function renderPoulesBracket() {
   const D1m = ELIM.find(m=>m.id==='D1');
   const D2m = ELIM.find(m=>m.id==='D2');
   const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
-  const d1n2 = resolveElimName(D1m?.p2slot||'WQ3');
-  const d2n1 = resolveElimName(D2m?.p1slot||'WQ2');
+  const d1n2 = resolveElimName(D1m?.p2slot||'WQ2');
+  const d2n1 = resolveElimName(D2m?.p1slot||'WQ3');
   const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
   const f_p1 = d1res.done?(d1res.w1>d1res.w2?d1n1:d1n2):'?';
   const f_p2 = d2res.done?(d2res.w1>d2res.w2?d2n1:d2n2):'?';
@@ -1509,8 +1509,8 @@ function renderBracket() {
     {id:'Q4', label:'Quart 4', p1slot:'1D', p2slot:'2C'},
   ];
   const demis = [
-    {id:'D1', label:'Demi-finale 1', p1slot:'WQ1', p2slot:'WQ3'},
-    {id:'D2', label:'Demi-finale 2', p1slot:'WQ2', p2slot:'WQ4'},
+    {id:'D1', label:'Demi-finale 1', p1slot:'WQ1', p2slot:'WQ2'},
+    {id:'D2', label:'Demi-finale 2', p1slot:'WQ3', p2slot:'WQ4'},
   ];
   // Stocker les slots dans ELIM pour résolution en chaîne
   ELIM.forEach(m => {
@@ -1583,8 +1583,8 @@ function renderFinal() {
   const D2m = ELIM.find(m=>m.id==='D2');
 
   const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
-  const d1n2 = resolveElimName(D1m?.p2slot||'WQ3');
-  const d2n1 = resolveElimName(D2m?.p1slot||'WQ2');
+  const d1n2 = resolveElimName(D1m?.p2slot||'WQ2');
+  const d2n1 = resolveElimName(D2m?.p1slot||'WQ3');
   const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
 
   const pf_p1 = d1res.w1>d1res.w2 ? d1n2 : d1n1; // perdant D1
