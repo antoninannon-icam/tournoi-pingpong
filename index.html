@@ -893,6 +893,7 @@ let matchEdits = {};
 let elimMatchEdits = {}; // date/heure modifiables pour les matchs élim {id: {date, time}}
 let setScores = {}; // { matchId: [{s1:11,s2:8},{s1:9,s2:11},{s1:11,s2:4}] }
 let activeFilter = 'all';
+let poulesPlayerFilter = '';
 let editingMatch = null;
 let editingElimMatch = null; // id du match élim en cours d'édition
 
@@ -1202,15 +1203,65 @@ function showPoulesTree() {
   renderPoulesBracket();
 }
 
+function setPoulePlayerFilter(val) {
+  poulesPlayerFilter = val;
+  activeFilter = 'all';
+  renderMatchs();
+}
+
 function renderMatchs() {
-  const matches = activeFilter==='all' ? MATCHES_RAW : MATCHES_RAW.filter(m=>m.phase===activeFilter);
-  let html = `<div class="filter-bar">
-    <button class="filter-btn${activeFilter==='all'?' active':''}" onclick="setFilter('all')">Tous</button>
-    <button class="filter-btn${activeFilter==='A'?' active':''}" onclick="setFilter('A')">Poule A</button>
-    <button class="filter-btn${activeFilter==='B'?' active':''}" onclick="setFilter('B')">Poule B</button>
-    <button class="filter-btn${activeFilter==='C'?' active':''}" onclick="setFilter('C')">Poule C</button>
-    <button class="filter-btn${activeFilter==='D'?' active':''}" onclick="setFilter('D')">Poule D</button>
+  // Si un joueur est sélectionné, on filtre ses matchs uniquement
+  let matches;
+  if (poulesPlayerFilter) {
+    matches = MATCHES_RAW.filter(m => {
+      const names = PLAYERS[m.phase];
+      return names[m.p1] === poulesPlayerFilter || names[m.p2] === poulesPlayerFilter;
+    });
+  } else {
+    matches = activeFilter==='all' ? MATCHES_RAW : MATCHES_RAW.filter(m=>m.phase===activeFilter);
+  }
+
+  // Build player options
+  let playerOpts = '<option value="">Tous les joueurs</option>';
+  ['A','B','C','D'].forEach(p => {
+    playerOpts += `<optgroup label="Poule ${p}">`;
+    PLAYERS[p].forEach(n => {
+      playerOpts += `<option value="${n}"${poulesPlayerFilter===n?' selected':''}>${n}</option>`;
+    });
+    playerOpts += '</optgroup>';
+  });
+
+  // Poule filter bar (hidden when a player is selected)
+  const pouleBarStyle = poulesPlayerFilter ? 'display:none' : '';
+
+  let html = `<div class="filter-bar" style="align-items:center;gap:8px;flex-wrap:wrap">
+    <div class="filter-bar" style="${pouleBarStyle};margin-bottom:0;flex:1;min-width:0">
+      <button class="filter-btn${activeFilter==='all'&&!poulesPlayerFilter?' active':''}" onclick="poulesPlayerFilter='';setFilter('all')">Tous</button>
+      <button class="filter-btn${activeFilter==='A'&&!poulesPlayerFilter?' active':''}" onclick="poulesPlayerFilter='';setFilter('A')">Poule A</button>
+      <button class="filter-btn${activeFilter==='B'&&!poulesPlayerFilter?' active':''}" onclick="poulesPlayerFilter='';setFilter('B')">Poule B</button>
+      <button class="filter-btn${activeFilter==='C'&&!poulesPlayerFilter?' active':''}" onclick="poulesPlayerFilter='';setFilter('C')">Poule C</button>
+      <button class="filter-btn${activeFilter==='D'&&!poulesPlayerFilter?' active':''}" onclick="poulesPlayerFilter='';setFilter('D')">Poule D</button>
+    </div>
+    <div style="position:relative;flex-shrink:0">
+      <select onchange="setPoulePlayerFilter(this.value)"
+        style="height:30px;padding:0 28px 0 12px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;border-radius:20px;border:1.5px solid ${poulesPlayerFilter?'var(--green)':'var(--border)'};background:${poulesPlayerFilter?'var(--green)':'white'};color:${poulesPlayerFilter?'white':'var(--muted)'};cursor:pointer;appearance:none;outline:none;transition:all .15s;">
+        ${playerOpts}
+      </select>
+      <span style="pointer-events:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:9px;color:${poulesPlayerFilter?'rgba(255,255,255,.7)':'var(--muted)'}">▾</span>
+    </div>
   </div>`;
+
+  // If player selected: show a small info banner
+  if (poulesPlayerFilter) {
+    let playerPoule = '';
+    for (const [p, names] of Object.entries(PLAYERS)) {
+      if (names.includes(poulesPlayerFilter)) { playerPoule = p; break; }
+    }
+    const done = matches.filter(m => { const r=getMatchResult(getMatchId(m)); return r.w1===2||r.w2===2; }).length;
+    html += `<div class="day-label" style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding:.35rem .8rem;border-radius:6px;background:rgba(26,92,58,.09);color:var(--green);font-size:11px">
+      🏓 ${poulesPlayerFilter} · Poule ${playerPoule} · ${done}/${matches.length} matchs joués
+    </div>`;
+  }
 
   const byDay={};
   matches.forEach(m=>{
@@ -1264,9 +1315,9 @@ function renderMatchs() {
           <span class="m-poule mp-${m.phase}">${m.phase}</span>
           <span class="m-time">${curTime}</span>
           <div class="m-players">
-            <span>${PLAYERS[m.phase][m.p1]}</span>
+            <span style="${PLAYERS[m.phase][m.p1]===poulesPlayerFilter&&poulesPlayerFilter?'color:var(--green);font-weight:700':''}">${PLAYERS[m.phase][m.p1]}</span>
             <span class="m-vs">vs</span>
-            <span>${PLAYERS[m.phase][m.p2]}</span>
+            <span style="${PLAYERS[m.phase][m.p2]===poulesPlayerFilter&&poulesPlayerFilter?'color:var(--green);font-weight:700':''}">${PLAYERS[m.phase][m.p2]}</span>
           </div>
           <span class="m-status ${done?'ms-done':'ms-upcoming'}">${done?'Joué':'À venir'}</span>
           <button class="edit-btn" onclick="toggleEdit(${idx})" title="Modifier / Réinitialiser">✏️</button>
