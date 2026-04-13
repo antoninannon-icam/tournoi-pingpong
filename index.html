@@ -1754,7 +1754,7 @@ function cancelElimEdit() {
   if(onFinal) renderFinal(); else renderBracket();
 }
 function saveElimMatchEdit(id) {
-  askPassword({type:'elimEdit', args:[id]});
+  doSaveElimMatchEdit(id);
 }
 function doSaveElimMatchEdit(id) {
   const d = document.getElementById('elim-edit-date-'+id)?.value.trim();
@@ -1783,7 +1783,7 @@ function toggleEdit(idx) {
 }
 function cancelEdit() { editingMatch=null; renderMatchs(); }
 function saveMatchEdit(idx) {
-  askPassword({type:'edit', args:[idx]});
+  doSaveMatchEdit(idx);
 }
 function doSaveMatchEdit(idx) {
   const d=document.getElementById('edit-date-'+idx)?.value.trim();
@@ -1966,6 +1966,13 @@ function computeGlobalLeaderboard() {
 function renderStats() {
   const allPlayers = getAllPlayers();
   const lb = computeGlobalLeaderboard();
+  const eliminated = getEliminatedPlayers();
+  lb.sort((a, b) => {
+    const aElim = eliminated.has(a.name);
+    const bElim = eliminated.has(b.name);
+    if(aElim !== bElim) return aElim ? 1 : -1;
+    return b.matchWins - a.matchWins || b.winRate - a.winRate || b.setWins - a.setWins;
+  });
   const totalMatches = MATCHES_RAW.filter(m => { const id=getMatchId(m); const r=getMatchResult(id); return r.w1===2||r.w2===2; }).length;
 
   // Filter buttons
@@ -1994,7 +2001,7 @@ function renderStats() {
         <span class="lb-rank ${rankCls}">${rankIcon}</span>
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:6px">
-            <span class="lb-name">${p.name}</span>
+            <span class="lb-name" style="${eliminated.has(p.name)?'text-decoration:line-through;color:var(--muted);opacity:.6':''}">${p.name}</span>
             <span class="lb-poule mp-${p.poule}" style="font-size:9px;padding:1px 5px">${p.poule}</span>
           </div>
           <div class="mini-bar"><div class="mini-bar-fill" style="width:${barW}%"></div></div>
@@ -2076,15 +2083,15 @@ function renderStats() {
     html += `<div class="set-stats-row">
       <div class="set-stat-box">
         <div class="ssv" style="color:var(--green)">${s.setWins}</div>
-        <div class="ssl">Manches W</div>
+        <div class="ssl">% Victoires manches</div>
       </div>
       <div class="set-stat-box">
         <div class="ssv">${s.setWinRate}%</div>
-        <div class="ssl">% Manches gagnées</div>
+        <div class="ssl">Taux de victoire</div>
       </div>
       <div class="set-stat-box">
         <div class="ssv" style="color:#c0392b">${s.setLosses}</div>
-        <div class="ssl">Manches L</div>
+        <div class="ssl">% Défaites manches</div>
       </div>
     </div>`;
 
@@ -2118,6 +2125,53 @@ function renderStats() {
   }
 
   document.getElementById('tab-stats').innerHTML = html;
+}
+
+function getEliminatedPlayers() {
+  const out = new Set();
+
+  // Éliminés en poules (3ème, 4ème... uniquement si la poule est terminée)
+  ['A','B','C','D'].forEach(poule => {
+    const standings = getStandings(poule);
+    const pouleDone = MATCHES_RAW.filter(m => m.phase === poule)
+      .every(m => { const r = getMatchResult(getMatchId(m)); return r.w1===2||r.w2===2; });
+    if(!pouleDone) return;
+    standings.slice(2).forEach(p => out.add(p.name));
+  });
+
+  // Éliminés en quarts (perdants directs)
+  ['Q1','Q2','Q3','Q4'].forEach(id => {
+    const res = getElimMatchResult(id);
+    if(!res.done) return;
+    const m = ELIM.find(e => e.id === id);
+    if(!m) return;
+    const loser = res.w1 > res.w2 ? resolveElimName(m.p2slot) : resolveElimName(m.p1slot);
+    if(loser && loser !== '?') out.add(loser);
+  });
+
+  // Perdants des demis : rayés UNIQUEMENT si la petite finale est jouée
+  const pfRes = getElimMatchResult('PF');
+  if(pfRes.done) {
+    ['D1','D2'].forEach(id => {
+      const res = getElimMatchResult(id);
+      if(!res.done) return;
+      const m = ELIM.find(e => e.id === id);
+      if(!m) return;
+      const loser = res.w1 > res.w2 ? resolveElimName(m.p2slot) : resolveElimName(m.p1slot);
+      if(loser && loser !== '?') out.add(loser);
+    });
+
+    // Perdant de la petite finale (4ème) aussi rayé
+    const mPF = ELIM.find(e => e.id === 'PF');
+    if(mPF) {
+      const loser = pfRes.w1 > pfRes.w2 ? resolveElimName(mPF.p2slot) : resolveElimName(mPF.p1slot);
+      if(loser && loser !== '?') out.add(loser);
+    }
+  }
+
+  // Finale : personne n'est rayé (1er et 2ème restent affichés normalement)
+
+  return out;
 }
 
 function setStatsFilter(name) {
