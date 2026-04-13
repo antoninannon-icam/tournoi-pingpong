@@ -1268,6 +1268,9 @@ function renderMatchs() {
     const d=getMatchDate(m);
     if(!byDay[d])byDay[d]=[];byDay[d].push(m);
   });
+  Object.keys(byDay).forEach(d=>{
+    byDay[d].sort((a,b)=>getMatchTime(a).localeCompare(getMatchTime(b)));
+  });
 
   const sortedDays = Object.keys(byDay).sort((a,b)=>{
     const parseD = s => { const [d,mo]=s.split('/').map(Number); return mo*100+d; };
