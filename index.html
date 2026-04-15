@@ -1779,7 +1779,7 @@ async function loadData() {
         setScores      = rows[0].set_scores       || {};
         elimSetScores  = rows[0].elim_set_scores  || {};
         elimMatchEdits = rows[0].elim_match_edits || {};
-        lastLoadedAt   = rows[0].updated_at       || null; // ← mémorise la version
+        lastLoadedAt   = rows[0].updated_at       || null;
         return;
       }
     }
@@ -1834,7 +1834,7 @@ async function persist() {
     );
 
     if(r.ok) {
-      lastLoadedAt = newTimestamp; // ← met à jour notre référence locale
+      lastLoadedAt = newTimestamp;
       showSaveStatus('✓ Sauvegardé', true);
     } else {
       const errText = await r.text();
@@ -2035,9 +2035,10 @@ function renderStats() {
           </div>
           <div class="mini-bar"><div class="mini-bar-fill" style="width:${barW}%"></div></div>
         </div>
-        <span class="lb-stat">${p.matchPlayed}J</span>
-        <span class="lb-stat">${p.winRate}%</span>
-        <span class="lb-stat pts">${p.matchWins}V</span>
+        <span class="lb-stat" style="font-size:11px;color:var(--muted);min-width:90px;text-align:right">${p.matchPlayed} match${p.matchPlayed>1?'s':''} joué${p.matchPlayed>1?'s':''}</span>
+        <span class="lb-stat" style="color:#2a6a14">${p.matchWins}V</span>
+        <span class="lb-stat" style="color:#c0392b">${p.matchLosses}D</span>
+        <span class="lb-stat" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--gold);background:rgba(232,184,75,.12);border-radius:6px;padding:2px 7px;font-size:13px;min-width:44px;text-align:center">${p.matchPlayed>0?Math.round(p.matchWins/p.matchPlayed*100)+'%':'–'}</span>
       </div>`;
     });
     html += '</div>';
@@ -2105,9 +2106,9 @@ function renderStats() {
     </div>`;
 
     html += `<div class="set-stats-row">
-      <div class="set-stat-box"><div class="ssv" style="color:var(--green)">${s.setWins}</div><div class="ssl">Manches gagnées</div></div>
+      <div class="set-stat-box"><div class="ssv" style="color:var(--green)">${s.setWins}–${s.setLosses}</div><div class="ssl">Ratio manches</div></div>
       <div class="set-stat-box"><div class="ssv">${s.setWinRate}%</div><div class="ssl">Taux de victoire</div></div>
-      <div class="set-stat-box"><div class="ssv" style="color:#c0392b">${s.setLosses}</div><div class="ssl">Manches perdues</div></div>
+      <div class="set-stat-box"><div class="ssv" style="color:#c0392b">${s.avgPtsAgainst}</div><div class="ssl">Moy. pts encaissés</div></div>
     </div>`;
 
     if(s.matchPlayed > 0) {
