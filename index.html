@@ -2024,8 +2024,7 @@ function renderStats() {
     lb.forEach((p, i) => {
       const rankCls = i===0?'r1':i===1?'r2':i===2?'r3':'';
       const rankIcon = i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
-      const maxW = lb[0].matchWins||1;
-      const barW = Math.round(p.matchWins/maxW*100);
+      const barW = p.matchPlayed>0?Math.round(p.matchWins/p.matchPlayed*100):0;
       html += `<div class="lb-row">
         <span class="lb-rank ${rankCls}">${rankIcon}</span>
         <div style="flex:1">
