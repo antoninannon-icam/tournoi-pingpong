@@ -775,6 +775,102 @@
   .mini-bar-fill { height:100%; border-radius:4px; background:var(--green); }
 
   @media(max-width:540px){ .player-hero { flex-wrap:wrap; } .player-hero-badge { margin-left:0; } }
+
+  /* ── BADGES ── */
+  .badges-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:1rem; }
+  .badge {
+    display:inline-flex; align-items:center; gap:5px;
+    padding:5px 10px; border-radius:20px;
+    font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700;
+    letter-spacing:.4px; text-transform:uppercase; white-space:nowrap;
+  }
+  .badge-gold   { background:#fffbea; color:#b8860b; border:1.5px solid #e8b84b; }
+  .badge-green  { background:#eaf3de; color:#2a6a14; border:1.5px solid #7bc47f; }
+  .badge-red    { background:#fbeaea; color:#c0392b; border:1.5px solid #e87b7b; }
+  .badge-blue   { background:#e6f1fb; color:#1a5c8a; border:1.5px solid #7bade8; }
+  .badge-purple { background:#f3e6fb; color:#6a1a8a; border:1.5px solid #b87be8; }
+  .badge-muted  { background:#f1efe8; color:#6b7c70; border:1.5px solid #c8c4b8; }
+
+  /* ── SURNOM ── */
+  .player-nickname {
+    display:inline-block;
+    font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700;
+    letter-spacing:.5px; text-transform:uppercase;
+    color:var(--gold); background:rgba(232,184,75,.15);
+    border-radius:6px; padding:2px 10px; margin-top:4px;
+  }
+
+  /* ── RIVALITÉS ── */
+  .rivalry-card {
+    background:white; border-radius:12px; padding:1rem 1.1rem;
+    box-shadow:0 1px 3px rgba(0,0,0,.05); margin-bottom:8px;
+    border-left:3px solid #c0392b;
+  }
+  .rivalry-title {
+    font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700;
+    color:var(--text); margin-bottom:4px; display:flex; align-items:center; gap:6px;
+  }
+  .rivalry-sub { font-size:11px; color:var(--muted); }
+  .rivalry-score {
+    font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700;
+    color:var(--green); margin-left:auto; white-space:nowrap;
+  }
+  .rivalry-heat {
+    display:inline-block; font-size:10px; font-weight:700;
+    font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px;
+    padding:2px 8px; border-radius:10px; text-transform:uppercase;
+  }
+  .heat-fire   { background:#fbeaea; color:#c0392b; }
+  .heat-warm   { background:#faeeda; color:#7a4a0a; }
+  .heat-normal { background:#f1efe8; color:#888; }
+
+  /* ── MOMENTUM ── */
+  .momentum-wrap { background:white; border-radius:12px; padding:1rem 1.1rem; box-shadow:0 1px 3px rgba(0,0,0,.05); margin-bottom:1rem; overflow-x:auto; }
+  .momentum-chart { display:flex; align-items:flex-end; gap:4px; min-height:60px; padding-top:8px; }
+  .momentum-bar-group { display:flex; flex-direction:column; align-items:center; gap:2px; min-width:28px; }
+  .momentum-bar {
+    width:22px; border-radius:4px 4px 0 0; transition:height .4s ease;
+    cursor:default;
+  }
+  .momentum-bar.win  { background:var(--green); }
+  .momentum-bar.loss { background:#e87b7b; }
+  .momentum-bar.pending { background:#e8e4da; height:8px !important; }
+  .momentum-label { font-size:8px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-weight:600; text-align:center; white-space:nowrap; }
+  .momentum-player-row { display:flex; align-items:center; gap:6px; margin-bottom:6px; flex-wrap:wrap; }
+  .momentum-player-name { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; color:var(--text); }
+
+  /* ── PRONOSTICS / COTES ── */
+  .prono-card {
+    background:white; border-radius:12px; padding:1rem 1.1rem;
+    box-shadow:0 1px 3px rgba(0,0,0,.05); margin-bottom:8px;
+  }
+  .prono-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:.6rem; }
+  .prono-round {
+    font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700;
+    letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);
+  }
+  .prono-date { font-size:10px; color:var(--muted); }
+  .prono-matchup { display:flex; align-items:center; gap:8px; }
+  .prono-player {
+    flex:1; text-align:center;
+    font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700;
+  }
+  .prono-vs { font-size:11px; font-weight:700; color:var(--muted); }
+  .prono-bars { display:flex; gap:0; border-radius:8px; overflow:hidden; margin-top:.6rem; height:20px; }
+  .prono-bar-p1 { background:var(--green); display:flex; align-items:center; justify-content:flex-start; padding:0 6px; }
+  .prono-bar-p2 { background:#c0392b; display:flex; align-items:center; justify-content:flex-end; padding:0 6px; }
+  .prono-bar-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; color:white; }
+  .prono-cote-row { display:flex; justify-content:space-between; margin-top:.4rem; }
+  .prono-cote {
+    font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700;
+    padding:3px 10px; border-radius:6px;
+  }
+  .prono-cote.fav  { background:#eaf3de; color:#2a6a14; }
+  .prono-cote.out  { background:#fbeaea; color:#c0392b; }
+  .prono-cote.even { background:#f1efe8; color:#888; }
+  .prono-insight { font-size:10px; color:var(--muted); margin-top:.3rem; font-style:italic; text-align:center; }
+  .prono-tbd { font-size:11px; color:var(--muted); font-style:italic; text-align:center; padding:.5rem 0; }
+
 </style>
 </head>
 <body>
@@ -2078,7 +2174,7 @@ function renderStats() {
       <div class="stat-card gold"><div class="sv">${bestWR?.winRate||0}%</div><div class="sl">Meilleur %V · ${bestWR?.name.split(' ').slice(-1)[0]||'–'}</div></div>
       <div class="stat-card accent"><div class="sv">${topScorer?.pointsFor||0}</div><div class="sl">Max points · ${topScorer?.name.split(' ').slice(-1)[0]||'–'}</div></div>
       <div class="stat-card"><div class="sv">${mostPlayed?.matchPlayed||0}</div><div class="sl">Plus actif · ${mostPlayed?.name.split(' ').slice(-1)[0]||'–'}</div></div>
-      <div class="stat-card"><div class="sv">${bestDefense?.avgPtsAgainst||'–'}</div><div class="sl">Moins de pts encaissé/manche · ${bestDefense?.name.split(' ').slice(-1)[0]||'–'}</div></div>
+      <div class="stat-card"><div class="sv">${bestDefense?.avgPtsAgainst||'–'}</div><div class="sl">Moins encaissé/manche · ${bestDefense?.name.split(' ').slice(-1)[0]||'–'}</div></div>
     </div>`;
 
     html += `<div class="stat-section-title">🎯 Meilleurs taux de victoire</div>`;
@@ -2095,6 +2191,34 @@ function renderStats() {
     });
     html += '</div>';
 
+    // ── RIVALITÉS ──
+    const rivalries = computeRivalries();
+    if (rivalries.length > 0) {
+      html += `<div class="stat-section-title">🔥 Clasicos du tournoi</div>`;
+      rivalries.forEach(r => {
+        const heatCls = r.tightness >= 4 ? 'heat-fire' : r.tightness >= 2 ? 'heat-warm' : 'heat-normal';
+        const heatLbl = r.tightness >= 4 ? '🔥 Ultra serré' : r.tightness >= 2 ? '⚡ Serré' : '📋 Disputé';
+        const winnerShort = r.winner.split(' ').slice(-1)[0];
+        html += `<div class="rivalry-card">
+          <div class="rivalry-title" style="display:flex;align-items:center;gap:6px">
+            <span>${r.p1.split(' ').slice(-1)[0]}</span>
+            <span style="color:var(--muted);font-size:11px">vs</span>
+            <span>${r.p2.split(' ').slice(-1)[0]}</span>
+            <span class="rivalry-heat ${heatCls}">${heatLbl}</span>
+            <span class="rivalry-score">${r.score}</span>
+          </div>
+          <div class="rivalry-sub">
+            Vainqueur : <strong>${winnerShort}</strong> · Manches : ${r.setDetail}
+            · Écart moy. ${r.avgDiff.toFixed(1)} pts/manche
+          </div>
+        </div>`;
+      });
+    }
+
+    // ── PRONOSTICS ──
+    html += `<div class="stat-section-title">🎰 Pronostics & cotes</div>`;
+    html += renderPronostics();
+
   } else {
     const s = computePlayerStats(statsFilter);
     if(!s) { html += '<p>Joueur introuvable.</p>'; document.getElementById('tab-stats').innerHTML=html; return; }
@@ -2102,17 +2226,22 @@ function renderStats() {
     const initials = statsFilter.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
     const matchesLeft = s.h2h.filter(h=>h.result==='pending').length;
 
+    const { nick, badges } = computeBadges(s, statsFilter);
     html += `<div class="player-hero">
       <div class="player-avatar">${initials}</div>
       <div>
         <div class="player-hero-name">${statsFilter}</div>
         <div class="player-hero-sub">Poule ${s.poule} · ${s.matchPlayed} match${s.matchPlayed>1?'s':''} joué${s.matchPlayed>1?'s':''} · ${matchesLeft} à venir</div>
+        ${nick ? `<span class="player-nickname">${nick}</span>` : ''}
       </div>
       <div class="player-hero-badge">
         <span class="bval">${s.matchWins}</span>
         <span class="blbl">Victoires</span>
       </div>
     </div>`;
+    if (badges.length > 0) {
+      html += `<div class="badges-row">` + badges.map(b => `<span class="badge ${b.cls}">${b.icon} ${b.label}</span>`).join('') + `</div>`;
+    }
 
     html += `<div class="winrate-bar-wrap">
       <div class="winrate-bar-label"><span>Taux de victoire matchs</span><span>${s.matchWins}V · ${s.matchLosses}D</span></div>
@@ -2160,6 +2289,64 @@ function renderStats() {
       </div>`;
     });
     html += '</div>';
+
+    // ── MOMENTUM du joueur ──
+    const momentum = computeMomentum(statsFilter);
+    if (momentum.length > 0) {
+      const maxPts = Math.max(...momentum.map(m => m.pts), 1);
+      html += `<div class="stat-section-title">📈 Momentum</div>`;
+      html += `<div class="momentum-wrap"><div class="momentum-chart">`;
+      momentum.forEach((m, i) => {
+        const oppShort = m.opp ? m.opp.split(' ').slice(-1)[0] : '?';
+        const barH = m.result === 'pending' ? 8 : Math.max(12, Math.round((m.pts / maxPts) * 52));
+        html += `<div class="momentum-bar-group">
+          <div class="momentum-bar ${m.result}" style="height:${barH}px" title="${m.result==='win'?'Victoire':m.result==='loss'?'Défaite':'À jouer'} vs ${m.opp}"></div>
+          <div class="momentum-label">${oppShort}</div>
+        </div>`;
+      });
+      html += `</div></div>`;
+    }
+
+    // ── PRONOSTICS pour les prochains matchs du joueur ──
+    const myUpcoming = MATCHES_RAW.filter(m => {
+      const pl = PLAYERS[m.phase];
+      const involved = pl[m.p1]===statsFilter || pl[m.p2]===statsFilter;
+      if (!involved) return false;
+      const id = getMatchId(m);
+      const res = getMatchResult(id);
+      return !(res.w1===2||res.w2===2);
+    });
+    if (myUpcoming.length > 0) {
+      html += `<div class="stat-section-title">🎰 Pronostics à venir</div>`;
+      myUpcoming.forEach(m => {
+        const pl = PLAYERS[m.phase];
+        const nA = pl[m.p1], nB = pl[m.p2];
+        const prono = computeProno(nA, nB);
+        const shortA = nA.split(' ').slice(-1)[0];
+        const shortB = nB.split(' ').slice(-1)[0];
+        const dateLbl = `${getMatchDate(m)} · ${getMatchTime(m)}`;
+        if (!prono) return;
+        const clsA = prono.pA > prono.pB ? 'fav' : prono.pA < prono.pB ? 'out' : 'even';
+        const clsB = prono.pB > prono.pA ? 'fav' : prono.pB < prono.pA ? 'out' : 'even';
+        html += `<div class="prono-card">
+          <div class="prono-header"><span class="prono-round">Poule ${m.phase}</span><span class="prono-date">${dateLbl}</span></div>
+          <div class="prono-matchup">
+            <div class="prono-player" style="color:${prono.pA>=prono.pB?'var(--green)':'var(--text)'}">${shortA}</div>
+            <div class="prono-vs">VS</div>
+            <div class="prono-player" style="color:${prono.pB>prono.pA?'#c0392b':'var(--text)'}">${shortB}</div>
+          </div>
+          <div class="prono-bars">
+            <div class="prono-bar-p1" style="width:${prono.pA}%"><span class="prono-bar-label">${prono.pA}%</span></div>
+            <div class="prono-bar-p2" style="width:${prono.pB}%"><span class="prono-bar-label" style="margin-left:auto">${prono.pB}%</span></div>
+          </div>
+          <div class="prono-cote-row">
+            <span class="prono-cote ${clsA}">Cote ${prono.coteA}</span>
+            <span class="prono-cote ${clsB}">Cote ${prono.coteB}</span>
+          </div>
+          <div class="prono-insight">${prono.insight}</div>
+        </div>`;
+      });
+    }
   }
 
   document.getElementById('tab-stats').innerHTML = html;
@@ -2199,6 +2386,245 @@ function getEliminatedPlayers() {
     }
   }
   return out;
+}
+
+
+// ═══════════════════════════════════════════════════
+// BADGES & SURNOMS
+// ═══════════════════════════════════════════════════
+function computeBadges(s, name) {
+  const badges = [];
+  // Surnom auto
+  let nick = null;
+  if (s.matchPlayed === 0) { nick = "❓ L'Inconnu"; }
+  else if (s.winRate === 100) { nick = "👑 L'Intouchable"; }
+  else if (s.winRate >= 75) { nick = "🔥 Le Patron"; }
+  else if (s.winRate === 0 && s.matchPlayed >= 2) { nick = "🥲 Le Punching-Ball"; }
+  else if (parseFloat(s.avgPtsAgainst) < 6) { nick = "🧱 Le Mur"; }
+  else if (parseFloat(s.avgPtsFor) >= 10) { nick = "🎯 Le Sniper"; }
+  else if (s.winRate >= 40 && s.winRate <= 60 && s.matchPlayed >= 3) { nick = "🎲 L'Imprévisible"; }
+  else if (s.bestStreak >= 3) { nick = "🚀 L'En Forme"; }
+  else if (s.setWins > 0 && s.setLosses > 0 && s.setWins / (s.setWins + s.setLosses) >= 0.7) { nick = "⚡ Le Gladiateur"; }
+  else if (s.matchPlayed >= 2 && s.winRate >= 50) { nick = "💪 Le Compétiteur"; }
+  else { nick = "🏓 Le Joueur"; }
+
+  // Badges
+  if (s.winRate === 100 && s.matchPlayed >= 2) badges.push({icon:'👑', label:'Invaincu', cls:'badge-gold'});
+  if (s.bestStreak >= 3) badges.push({icon:'🔥', label:`Série ${s.bestStreak}V`, cls:'badge-gold'});
+  if (s.winRate === 0 && s.matchPlayed >= 2) badges.push({icon:'🥲', label:'0% WR', cls:'badge-muted'});
+  if (parseFloat(s.avgPtsAgainst) !== NaN && parseFloat(s.avgPtsAgainst) < 7 && s.matchPlayed > 0) badges.push({icon:'🧱', label:'Béton', cls:'badge-blue'});
+  if (parseFloat(s.avgPtsFor) >= 9.5 && s.matchPlayed > 0) badges.push({icon:'🎯', label:'Sniper', cls:'badge-green'});
+  // Remontada : a-t-il gagné un match après avoir perdu la 1ère manche ?
+  const hasRemontada = s.h2h.some(h => {
+    if (h.result !== 'win') return false;
+    if (!h.sets || h.sets === '–') return false;
+    const firstSet = h.sets.split(' / ')[0];
+    if (!firstSet) return false;
+    const [a, b] = firstSet.split('-').map(Number);
+    return b > a; // a perdu la 1ère manche mais a gagné le match
+  });
+  if (hasRemontada) badges.push({icon:'⚔️', label:'Remontada', cls:'badge-purple'});
+  if (s.matchPlayed >= 3 && s.setLosses === 0) badges.push({icon:'💎', label:'Sans perdre 1 manche', cls:'badge-gold'});
+  if (s.matchPlayed >= 2 && s.winRate >= 50 && parseFloat(s.avgPtsFor) >= 9 && parseFloat(s.avgPtsAgainst) < 8) badges.push({icon:'🏆', label:'Complet', cls:'badge-green'});
+
+  return { nick, badges };
+}
+
+// ═══════════════════════════════════════════════════
+// RIVALITÉS
+// ═══════════════════════════════════════════════════
+function computeRivalries() {
+  const rivalries = [];
+  const seen = new Set();
+
+  MATCHES_RAW.forEach(m => {
+    const id = getMatchId(m);
+    const res = getMatchResult(id);
+    if (!(res.w1 === 2 || res.w2 === 2)) return;
+    const pl = PLAYERS[m.phase];
+    const p1 = pl[m.p1], p2 = pl[m.p2];
+    const key = [p1, p2].sort().join('|');
+    if (seen.has(key)) return;
+    seen.add(key);
+
+    // Score serré = 2-1 OU écart total de points faible
+    const is3sets = (res.w1 + res.w2) === 3;
+    let totalDiff = 0;
+    res.sets.forEach(s => { totalDiff += Math.abs(s.s1 - s.s2); });
+    const avgDiff = res.sets.length > 0 ? totalDiff / res.sets.length : 99;
+
+    const tightness = (is3sets ? 2 : 0) + (avgDiff < 4 ? 2 : avgDiff < 7 ? 1 : 0);
+    if (tightness < 1) return; // pas une rivalité
+
+    const winner = res.w1 > res.w2 ? p1 : p2;
+    const score = `${res.w1}–${res.w2}`;
+    const setDetail = res.sets.map(s=>`${s.s1}-${s.s2}`).join(' / ');
+
+    rivalries.push({ p1, p2, winner, score, setDetail, tightness, is3sets, avgDiff });
+  });
+
+  rivalries.sort((a, b) => b.tightness - a.tightness);
+  return rivalries.slice(0, 5);
+}
+
+// ═══════════════════════════════════════════════════
+// MOMENTUM
+// ═══════════════════════════════════════════════════
+function computeMomentum(playerName) {
+  const myMatches = MATCHES_RAW.filter(m => {
+    const pl = PLAYERS[m.phase];
+    return pl[m.p1] === playerName || pl[m.p2] === playerName;
+  });
+  return myMatches.map(m => {
+    const pl = PLAYERS[m.phase];
+    const isP1 = pl[m.p1] === playerName;
+    const opp = isP1 ? pl[m.p2] : pl[m.p1];
+    const id = getMatchId(m);
+    const res = getMatchResult(id);
+    const done = res.w1 === 2 || res.w2 === 2;
+    if (!done) return { result: 'pending', opp, pts: 0 };
+    const myW = isP1 ? res.w1 : res.w2;
+    const myPts = res.sets.reduce((a, s) => a + (isP1 ? s.s1 : s.s2), 0);
+    return { result: myW > (isP1 ? res.w2 : res.w1) ? 'win' : 'loss', opp, pts: myPts };
+  });
+}
+
+// ═══════════════════════════════════════════════════
+// PRONOSTICS / COTES
+// ═══════════════════════════════════════════════════
+function computeProno(nameA, nameB) {
+  if (!nameA || nameA === '?' || !nameB || nameB === '?') return null;
+  const sA = computePlayerStats(nameA);
+  const sB = computePlayerStats(nameB);
+  if (!sA || !sB) return null;
+
+  // Score composite : winRate 50% + avgPtsFor 30% + avgPtsAgainst (inversé) 20%
+  const maxPts = 11;
+  const scoreA = (sA.matchPlayed > 0 ? sA.winRate : 50) * 0.5
+               + (sA.matchPlayed > 0 ? (parseFloat(sA.avgPtsFor) / maxPts) * 100 : 50) * 0.3
+               + (sA.matchPlayed > 0 ? (1 - parseFloat(sA.avgPtsAgainst) / maxPts) * 100 : 50) * 0.2;
+  const scoreB = (sB.matchPlayed > 0 ? sB.winRate : 50) * 0.5
+               + (sB.matchPlayed > 0 ? (parseFloat(sB.avgPtsFor) / maxPts) * 100 : 50) * 0.3
+               + (sB.matchPlayed > 0 ? (1 - parseFloat(sB.avgPtsAgainst) / maxPts) * 100 : 50) * 0.2;
+
+  const total = scoreA + scoreB || 1;
+  let pA = Math.round(scoreA / total * 100);
+  let pB = 100 - pA;
+
+  // Cote = 1 / probabilité (style bookmaker, arrondi 1 décimale)
+  const coteA = pA > 0 ? (100 / pA).toFixed(1) : '–';
+  const coteB = pB > 0 ? (100 / pB).toFixed(1) : '–';
+
+  // Insight texte
+  let insight = '';
+  const diff = Math.abs(pA - pB);
+  if (diff < 8) insight = '⚖️ Match très équilibré, tout est possible !';
+  else if (diff < 20) {
+    const fav = pA > pB ? nameA.split(' ').slice(-1)[0] : nameB.split(' ').slice(-1)[0];
+    insight = `📊 Légère faveur pour ${fav}, mais attention aux surprises.`;
+  } else {
+    const fav = pA > pB ? nameA.split(' ').slice(-1)[0] : nameB.split(' ').slice(-1)[0];
+    insight = `🎯 ${fav} part clairement favori d'après les stats.`;
+  }
+
+  // Si l'un des deux n'a pas joué
+  if (sA.matchPlayed === 0 && sB.matchPlayed === 0) insight = '🤷 Pas assez de données pour les deux joueurs.';
+  else if (sA.matchPlayed === 0) insight = `⚠️ ${nameA.split(' ').slice(-1)[0]} n'a pas encore joué — cote estimée.`;
+  else if (sB.matchPlayed === 0) insight = `⚠️ ${nameB.split(' ').slice(-1)[0]} n'a pas encore joué — cote estimée.`;
+
+  return { pA, pB, coteA, coteB, insight, scoreA, scoreB };
+}
+
+function renderPronostics() {
+  const upcoming = [];
+
+  // Matchs de poules à venir
+  MATCHES_RAW.forEach(m => {
+    const id = getMatchId(m);
+    const res = getMatchResult(id);
+    if (res.w1 === 2 || res.w2 === 2) return;
+    const pl = PLAYERS[m.phase];
+    upcoming.push({
+      round: `Poule ${m.phase}`,
+      date: getMatchDate(m),
+      time: getMatchTime(m),
+      nameA: pl[m.p1],
+      nameB: pl[m.p2]
+    });
+  });
+
+  // Matchs élim à venir
+  [...ELIM].forEach(m => {
+    const res = getElimMatchResult(m.id);
+    if (res.done) return;
+    const nA = resolveElimName(m.p1slot || m.p1);
+    const nB = resolveElimName(m.p2slot || m.p2);
+    upcoming.push({
+      round: m.round || m.label,
+      date: getElimMatchDate(m.id),
+      time: getElimMatchTime(m.id),
+      nameA: nA,
+      nameB: nB,
+      isElim: true
+    });
+  });
+
+  // Finale
+  const fDate = getElimMatchDate('F');
+  const fTime = getElimMatchTime('F');
+  const fRes = getElimMatchResult('F');
+  if (!fRes.done) {
+    const D1m = ELIM.find(e=>e.id==='D1'); const D2m = ELIM.find(e=>e.id==='D2');
+    const d1r = getElimMatchResult('D1'); const d2r = getElimMatchResult('D2');
+    const nA = d1r.done ? (d1r.w1>d1r.w2?resolveElimName(D1m?.p1slot):resolveElimName(D1m?.p2slot)) : '?';
+    const nB = d2r.done ? (d2r.w1>d2r.w2?resolveElimName(D2m?.p1slot):resolveElimName(D2m?.p2slot)) : '?';
+    upcoming.push({ round: 'Finale 🏆', date: fDate, time: fTime, nameA: nA, nameB: nB, isElim: true });
+  }
+
+  if (upcoming.length === 0) return '<p style="font-size:12px;color:var(--muted);text-align:center;padding:1rem 0">Tous les matchs sont terminés !</p>';
+
+  let html = '';
+  upcoming.slice(0, 8).forEach(m => {
+    const prono = computeProno(m.nameA, m.nameB);
+    const shortA = m.nameA === '?' ? '?' : m.nameA.split(' ').slice(-1)[0];
+    const shortB = m.nameB === '?' ? '?' : m.nameB.split(' ').slice(-1)[0];
+    const dateLbl = m.date ? `${m.date}${m.time ? ' · ' + m.time : ''}` : '';
+
+    if (!prono || m.nameA === '?' || m.nameB === '?') {
+      html += `<div class="prono-card">
+        <div class="prono-header"><span class="prono-round">${m.round}</span><span class="prono-date">${dateLbl}</span></div>
+        <div class="prono-matchup">
+          <div class="prono-player">${shortA}</div>
+          <div class="prono-vs">VS</div>
+          <div class="prono-player">${shortB}</div>
+        </div>
+        <div class="prono-tbd">Adversaires non encore connus</div>
+      </div>`;
+      return;
+    }
+
+    const clsA = prono.pA > prono.pB ? 'fav' : prono.pA < prono.pB ? 'out' : 'even';
+    const clsB = prono.pB > prono.pA ? 'fav' : prono.pB < prono.pA ? 'out' : 'even';
+
+    html += `<div class="prono-card">
+      <div class="prono-header"><span class="prono-round">${m.round}</span><span class="prono-date">${dateLbl}</span></div>
+      <div class="prono-matchup">
+        <div class="prono-player" style="color:${prono.pA>=prono.pB?'var(--green)':'var(--text)'}">${shortA}</div>
+        <div class="prono-vs">VS</div>
+        <div class="prono-player" style="color:${prono.pB>prono.pA?'#c0392b':'var(--text)'}">${shortB}</div>
+      </div>
+      <div class="prono-bars">
+        <div class="prono-bar-p1" style="width:${prono.pA}%"><span class="prono-bar-label">${prono.pA}%</span></div>
+        <div class="prono-bar-p2" style="width:${prono.pB}%"><span class="prono-bar-label" style="margin-left:auto">${prono.pB}%</span></div>
+      </div>
+      <div class="prono-cote-row">
+        <span class="prono-cote ${clsA}">Cote ${prono.coteA}</span>
+        <span class="prono-cote ${clsB}">Cote ${prono.coteB}</span>
+      </div>
+      <div class="prono-insight">${prono.insight}</div>
+    </div>`;
+  });
+  return html;
 }
 
 function setStatsFilter(name) { statsFilter = name; renderStats(); }
