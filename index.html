@@ -663,17 +663,37 @@
   }
   /* STATS */
   .stats-player-filter {
-    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
   }
-  .stats-filter-btn {
+  .stats-select-wrap {
+    position: relative; display: inline-block; width: 100%;
+  }
+  .stats-select-wrap::after {
+    content: '▾';
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 14px; color: var(--green); pointer-events: none;
+  }
+  .stats-player-select {
+    width: 100%; height: 42px;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px; font-weight: 600; letter-spacing: .5px;
-    text-transform: uppercase; padding: 5px 12px; border-radius: 20px;
-    border: 1.5px solid var(--border); background: white;
-    cursor: pointer; color: var(--muted); transition: all .15s;
+    font-size: 14px; font-weight: 600; letter-spacing: .5px;
+    text-transform: uppercase;
+    padding: 0 40px 0 14px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--text);
+    cursor: pointer;
+    appearance: none; -webkit-appearance: none;
+    transition: border-color .15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
   }
-  .stats-filter-btn.active { background: var(--dark); color: var(--gold); border-color: var(--dark); }
-  .stats-filter-btn:hover:not(.active) { border-color: var(--green); color: var(--green); }
+  .stats-player-select:focus {
+    outline: none; border-color: var(--green);
+  }
+  .stats-player-select.active-player {
+    background: var(--dark); color: var(--gold); border-color: var(--dark);
+  }
 
   .stat-section-title {
     font-family: 'Barlow Condensed', sans-serif;
@@ -2006,15 +2026,19 @@ function renderStats() {
   });
   const totalMatches = MATCHES_RAW.filter(m => { const id=getMatchId(m); const r=getMatchResult(id); return r.w1===2||r.w2===2; }).length;
 
-  let filterHtml = `<div class="stats-player-filter">
-    <button class="stats-filter-btn${statsFilter==='all'?' active':''}" onclick="setStatsFilter('all')">🌍 Général</button>`;
-  allPlayers.forEach(p => {
-    const initials = p.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-    filterHtml += `<button class="stats-filter-btn${statsFilter===p.name?' active':''}" onclick="setStatsFilter('${p.name.replace(/'/g,"\\'")}')">
-      ${initials} · ${p.name.split(' ')[p.name.split(' ').length-1]}
-    </button>`;
+  const pouleOrder = ['A','B','C','D'];
+  let filterHtml = `<div class="stats-player-filter"><div class="stats-select-wrap">
+    <select class="stats-player-select${statsFilter!=='all'?' active-player':''}" onchange="setStatsFilter(this.value)">
+      <option value="all"${statsFilter==='all'?' selected':''}>🌍 Vue générale</option>`;
+  pouleOrder.forEach(poule => {
+    const players = allPlayers.filter(p=>p.poule===poule);
+    filterHtml += `<optgroup label="── Poule ${poule} ──">`;
+    players.forEach(p => {
+      filterHtml += `<option value="${p.name}"${statsFilter===p.name?' selected':''}>${p.name}</option>`;
+    });
+    filterHtml += `</optgroup>`;
   });
-  filterHtml += '</div>';
+  filterHtml += `</select></div></div>`;
 
   let html = filterHtml;
 
@@ -2047,13 +2071,14 @@ function renderStats() {
     const topScorer = [...lb].sort((a,b)=>b.pointsFor-a.pointsFor)[0];
     const bestWR = [...lb].filter(p=>p.matchPlayed>0).sort((a,b)=>b.winRate-a.winRate)[0];
     const mostPlayed = [...lb].sort((a,b)=>b.matchPlayed-a.matchPlayed)[0];
+    const bestDefense = [...lb].filter(p=>p.matchPlayed>0&&(p.setWins+p.setLosses)>0).sort((a,b)=>parseFloat(a.avgPtsAgainst)-parseFloat(b.avgPtsAgainst))[0];
     html += `<div class="stat-cards">
       <div class="stat-card accent"><div class="sv">${totalMatches}</div><div class="sl">Matchs joués</div></div>
       <div class="stat-card"><div class="sv">${Math.round(totalSets)}</div><div class="sl">Manches jouées</div></div>
       <div class="stat-card gold"><div class="sv">${bestWR?.winRate||0}%</div><div class="sl">Meilleur %V · ${bestWR?.name.split(' ').slice(-1)[0]||'–'}</div></div>
       <div class="stat-card accent"><div class="sv">${topScorer?.pointsFor||0}</div><div class="sl">Max points · ${topScorer?.name.split(' ').slice(-1)[0]||'–'}</div></div>
       <div class="stat-card"><div class="sv">${mostPlayed?.matchPlayed||0}</div><div class="sl">Plus actif · ${mostPlayed?.name.split(' ').slice(-1)[0]||'–'}</div></div>
-      <div class="stat-card"><div class="sv">${lb.filter(p=>p.matchPlayed>0).length}</div><div class="sl">Joueurs actifs</div></div>
+      <div class="stat-card"><div class="sv">${bestDefense?.avgPtsAgainst||'–'}</div><div class="sl">Moins de pts encaissé/manche · ${bestDefense?.name.split(' ').slice(-1)[0]||'–'}</div></div>
     </div>`;
 
     html += `<div class="stat-section-title">🎯 Meilleurs taux de victoire</div>`;
