@@ -2174,7 +2174,7 @@ function renderStats() {
       <div class="stat-card gold"><div class="sv">${bestWR?.winRate||0}%</div><div class="sl">Meilleur %V · ${bestWR?.name.split(' ').slice(-1)[0]||'–'}</div></div>
       <div class="stat-card accent"><div class="sv">${topScorer?.pointsFor||0}</div><div class="sl">Max points · ${topScorer?.name.split(' ').slice(-1)[0]||'–'}</div></div>
       <div class="stat-card"><div class="sv">${mostPlayed?.matchPlayed||0}</div><div class="sl">Plus actif · ${mostPlayed?.name.split(' ').slice(-1)[0]||'–'}</div></div>
-      <div class="stat-card"><div class="sv">${bestDefense?.avgPtsAgainst||'–'}</div><div class="sl">Moins encaissé/manche · ${bestDefense?.name.split(' ').slice(-1)[0]||'–'}</div></div>
+      <div class="stat-card"><div class="sv">${bestDefense?.avgPtsAgainst||'–'}</div><div class="sl">Moins de pts encaissé/manche · ${bestDefense?.name.split(' ').slice(-1)[0]||'–'}</div></div>
     </div>`;
 
     html += `<div class="stat-section-title">🎯 Meilleurs taux de victoire</div>`;
