@@ -1000,6 +1000,7 @@ let matchEdits = {};
 let elimMatchEdits = {};
 let setScores = {};
 let quartDrawOverrides = {}; // {Q1:{p1:'Nom',p2:'Nom'}, Q2:..., Q3:..., Q4:...}
+let semiDrawOverrides  = {}; // {D1:{p1:'Nom',p2:'Nom'}, D2:{p1:'Nom',p2:'Nom'}}
 let activeFilter = 'all';
 let poulesPlayerFilter = '';
 let editingMatch = null;
@@ -1144,12 +1145,8 @@ function renderPoulesBracket() {
   }
 
   function sfCard(id, side) {
-    const elim = ELIM.find(m=>m.id===id);
-    const pd = demis.find(d=>d.id===id);
-    const p1slot = elim?.p1slot || pd?.p1slot || '';
-    const p2slot = elim?.p2slot || pd?.p2slot || '';
-    const n1 = resolveElimName(p1slot);
-    const n2 = resolveElimName(p2slot);
+    const n1 = resolveSFName(id, 'p1');
+    const n2 = resolveSFName(id, 'p2');
     const res = getElimMatchResult(id);
     const done = res.done;
     const w1 = res.w1 > res.w2;
@@ -1166,12 +1163,10 @@ function renderPoulesBracket() {
 
   const d1res = getElimMatchResult('D1');
   const d2res = getElimMatchResult('D2');
-  const D1m = ELIM.find(m=>m.id==='D1');
-  const D2m = ELIM.find(m=>m.id==='D2');
-  const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
-  const d1n2 = resolveElimName(D1m?.p2slot||'WQ2');
-  const d2n1 = resolveElimName(D2m?.p1slot||'WQ3');
-  const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
+  const d1n1 = resolveSFName('D1', 'p1');
+  const d1n2 = resolveSFName('D1', 'p2');
+  const d2n1 = resolveSFName('D2', 'p1');
+  const d2n2 = resolveSFName('D2', 'p2');
   const f_p1 = d1res.done?(d1res.w1>d1res.w2?d1n1:d1n2):'?';
   const f_p2 = d2res.done?(d2res.w1>d2res.w2?d2n1:d2n2):'?';
   const fRes = getElimMatchResult('F');
@@ -1470,9 +1465,9 @@ function resolveElimName(slot) {
     const res = getElimMatchResult(qid);
     const match = ELIM.find(e=>e.id===qid);
     if(!match||!res.done) return '?';
-    // ✅ Pour les QF, passer par resolveQFName pour respecter les overrides du tirage
-    const n1 = /^Q[1-4]$/.test(qid) ? resolveQFName(qid, 'p1') : resolveElimName(match.p1slot);
-    const n2 = /^Q[1-4]$/.test(qid) ? resolveQFName(qid, 'p2') : resolveElimName(match.p2slot);
+    // ✅ Pour les QF, passer par resolveQFName ; pour les demi, resolveSFName
+    const n1 = /^Q[1-4]$/.test(qid) ? resolveQFName(qid, 'p1') : resolveSFName(qid, 'p1');
+    const n2 = /^Q[1-4]$/.test(qid) ? resolveQFName(qid, 'p2') : resolveSFName(qid, 'p2');
     if(wl==='W') return res.w1>res.w2 ? n1 : n2;
     else          return res.w1>res.w2 ? n2 : n1;
   }
@@ -1493,6 +1488,20 @@ function resolveQFName(matchId, side) {
   const q = quarts.find(x=>x.id===matchId);
   if(!q) return '?';
   return resolveElimName(side==='p1' ? q.p1slot : q.p2slot);
+}
+
+// Résout le nom d'un joueur demi-finale en tenant compte du tirage manuel
+function resolveSFName(matchId, side) {
+  const ov = semiDrawOverrides[matchId];
+  if(ov && ov[side]) return ov[side];
+  // Fallback : résolution automatique (vainqueur des QF correspondants)
+  const defaultSlots = {
+    D1: { p1: 'WQ1', p2: 'WQ2' },
+    D2: { p1: 'WQ3', p2: 'WQ4' },
+  };
+  const slots = defaultSlots[matchId];
+  if(!slots) return '?';
+  return resolveElimName(side === 'p1' ? slots.p1 : slots.p2);
 }
 
 // Retourne la liste des joueurs qualifiés (top 2 de chaque poule)
@@ -1700,8 +1709,13 @@ function renderBracket() {
   </div>`;
   html += renderRound(quarts, m => ({ n1: resolveQFName(m.id, 'p1'), n2: resolveQFName(m.id, 'p2') }));
   html += '</div>';
-  html += `<div class="bracket-section"><div class="bracket-round-title">Demi-finales</div>`;
-  html += renderRound(demis, m => ({ n1: resolveElimName(m.p1slot), n2: resolveElimName(m.p2slot) }));
+  html += `<div class="bracket-section"><div class="bracket-round-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <span>Demi-finales</span>
+    <button onclick="openSFDrawModal()" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:6px 16px;border-radius:20px;border:none;background:var(--gold);color:#4a3000;cursor:pointer;">
+      🎲 Modifier le tirage DF
+    </button>
+  </div>`;
+  html += renderRound(demis, m => ({ n1: resolveSFName(m.id, 'p1'), n2: resolveSFName(m.id, 'p2') }));
   html += '</div>';
   html += `<div class="m-note">Saisissez les scores manche par manche · La Petite Finale et la Grande Finale s'affichent dans <strong>Finale 🏆</strong></div>`;
   document.getElementById('tab-bracket').innerHTML = html;
@@ -1712,12 +1726,10 @@ function renderFinal() {
 
   const d1res = getElimMatchResult('D1');
   const d2res = getElimMatchResult('D2');
-  const D1m = ELIM.find(m=>m.id==='D1');
-  const D2m = ELIM.find(m=>m.id==='D2');
-  const d1n1 = resolveElimName(D1m?.p1slot||'WQ1');
-  const d1n2 = resolveElimName(D1m?.p2slot||'WQ2');
-  const d2n1 = resolveElimName(D2m?.p1slot||'WQ3');
-  const d2n2 = resolveElimName(D2m?.p2slot||'WQ4');
+  const d1n1 = resolveSFName('D1', 'p1');
+  const d1n2 = resolveSFName('D1', 'p2');
+  const d2n1 = resolveSFName('D2', 'p1');
+  const d2n2 = resolveSFName('D2', 'p2');
   const pf_p1 = d1res.w1>d1res.w2 ? d1n2 : d1n1;
   const pf_p2 = d2res.w1>d2res.w2 ? d2n2 : d2n1;
   const f_p1  = d1res.w1>d1res.w2 ? d1n1 : d1n2;
@@ -1794,6 +1806,7 @@ function confirmPassword() {
   if(type==='elimEdit')  doSaveElimMatchEdit(...args);
   if(type==='elimReset') doResetElimMatch(...args);
   if(type==='qfDraw') doSaveQFDraw(...args);
+  if(type==='sfDraw') doSaveSFDraw(...args);
 }
 document.addEventListener('keydown', e => {
   if(e.key==='Enter' && document.getElementById('pwd-modal').style.display==='flex') confirmPassword();
@@ -1916,7 +1929,7 @@ const SB_HEADERS = {
 async function loadData() {
   try {
     const r = await fetch(
-      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits,set_scores,elim_set_scores,elim_match_edits,quart_draw_overrides,updated_at`,
+      `${SUPABASE_URL}/rest/v1/tournament_data?id=eq.main&select=scores,elim_scores,match_edits,set_scores,elim_set_scores,elim_match_edits,quart_draw_overrides,semi_draw_overrides,updated_at`,
       { headers: SB_HEADERS }
     );
     if(r.ok) {
@@ -1929,6 +1942,7 @@ async function loadData() {
         elimSetScores  = rows[0].elim_set_scores  || {};
         elimMatchEdits = rows[0].elim_match_edits || {};
         quartDrawOverrides = rows[0].quart_draw_overrides || {};
+        semiDrawOverrides  = rows[0].semi_draw_overrides  || {};
         lastLoadedAt   = rows[0].updated_at       || null;
         return;
       }
@@ -1943,6 +1957,7 @@ async function loadData() {
   try{const d=localStorage.getItem('pingpong_elimsetscores');if(d)elimSetScores=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_elimedits');if(d)elimMatchEdits=JSON.parse(d);}catch(e){}
   try{const d=localStorage.getItem('pingpong_qfdraw');if(d)quartDrawOverrides=JSON.parse(d);}catch(e){}
+  try{const d=localStorage.getItem('pingpong_sfdraw');if(d)semiDrawOverrides=JSON.parse(d);}catch(e){}
 }
 
 // ─── SAUVEGARDE : vérifie que personne n'a écrasé entre-temps ────────────────
@@ -1980,6 +1995,7 @@ async function persist() {
           elim_set_scores: elimSetScores,
           elim_match_edits: elimMatchEdits,
           quart_draw_overrides: quartDrawOverrides,
+          semi_draw_overrides: semiDrawOverrides,
           updated_at: newTimestamp
         })
       }
@@ -2089,6 +2105,7 @@ function computePlayerStats(playerName) {
   let streakType=null, bestStreak=0, curStreak=0;
   const h2h = [];
 
+  // ── Matchs de poules ──
   const myMatches = MATCHES_RAW.filter(m => {
     const pl = PLAYERS[m.phase];
     return pl[m.p1]===playerName || pl[m.p2]===playerName;
@@ -2124,6 +2141,70 @@ function computePlayerStats(playerName) {
       h2h.push({opp, result: myW>oppW?'win':'loss', score:`${myW}-${oppW}`, sets:setStr});
     } else {
       h2h.push({opp, result:'pending', score:'–', sets:'–'});
+    }
+  });
+
+  // ── Matchs éliminatoires ──
+  // Résout les noms des deux côtés pour chaque match élim (QF, demi, PF, finale)
+  const elimIds = [...ELIM.map(e=>e.id), 'PF', 'F'];
+  elimIds.forEach(eid => {
+    // Résolution des noms selon le type de match
+    let n1, n2;
+    if(/^Q[1-4]$/.test(eid)) {
+      n1 = resolveQFName(eid, 'p1');
+      n2 = resolveQFName(eid, 'p2');
+    } else if(eid==='D1'||eid==='D2') {
+      n1 = resolveSFName(eid, 'p1');
+      n2 = resolveSFName(eid, 'p2');
+    } else if(eid==='F'||eid==='PF') {
+      const d1res = getElimMatchResult('D1');
+      const d2res = getElimMatchResult('D2');
+      const d1n1 = resolveSFName('D1', 'p1');
+      const d1n2 = resolveSFName('D1', 'p2');
+      const d2n1 = resolveSFName('D2', 'p1');
+      const d2n2 = resolveSFName('D2', 'p2');
+      if(eid==='F') {
+        n1 = d1res.done ? (d1res.w1>d1res.w2 ? d1n1 : d1n2) : '?';
+        n2 = d2res.done ? (d2res.w1>d2res.w2 ? d2n1 : d2n2) : '?';
+      } else { // PF
+        n1 = d1res.done ? (d1res.w1>d1res.w2 ? d1n2 : d1n1) : '?';
+        n2 = d2res.done ? (d2res.w1>d2res.w2 ? d2n2 : d2n1) : '?';
+      }
+    } else {
+      return;
+    }
+
+    if(!n1 || n1==='?' || !n2 || n2==='?') return;
+    if(n1 !== playerName && n2 !== playerName) return;
+
+    const isP1 = n1 === playerName;
+    const opp = isP1 ? n2 : n1;
+    const res = getElimMatchResult(eid);
+    const done = res.done;
+    const myW = isP1 ? res.w1 : res.w2;
+    const oppW = isP1 ? res.w2 : res.w1;
+
+    const labelMap = {'Q1':'QF 1','Q2':'QF 2','Q3':'QF 3','Q4':'QF 4','D1':'Demi 1','D2':'Demi 2','PF':'Petite Finale','F':'Finale'};
+    if(done) {
+      matchPlayed++;
+      res.sets.forEach(s => {
+        const myPts = isP1 ? s.s1 : s.s2;
+        const oppPts = isP1 ? s.s2 : s.s1;
+        pointsFor += myPts; pointsAgainst += oppPts;
+        if(myPts > oppPts) setWins++; else setLosses++;
+      });
+      if(myW > oppW) {
+        matchWins++;
+        if(streakType==='win') curStreak++; else { streakType='win'; curStreak=1; }
+      } else {
+        matchLosses++;
+        if(streakType==='loss') curStreak++; else { streakType='loss'; curStreak=1; }
+      }
+      bestStreak = Math.max(bestStreak, streakType==='win' ? curStreak : 0);
+      const setStr = res.sets.map(s=>`${isP1?s.s1:s.s2}-${isP1?s.s2:s.s1}`).join(' / ');
+      h2h.push({opp, result: myW>oppW?'win':'loss', score:`${myW}-${oppW}`, sets:setStr, label: labelMap[eid]||eid});
+    } else {
+      h2h.push({opp, result:'pending', score:'–', sets:'–', label: labelMap[eid]||eid});
     }
   });
 
@@ -2318,8 +2399,9 @@ function renderStats() {
     s.h2h.forEach(h => {
       const cls = h.result==='win'?'h2h-win':h.result==='loss'?'h2h-loss':'h2h-pending';
       const label = h.result==='win'?'Victoire':h.result==='loss'?'Défaite':'À jouer';
+      const matchLabel = h.label ? ` <span style="font-size:9px;background:#f1efe8;border-radius:4px;padding:1px 5px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600">${h.label}</span>` : '';
       html += `<div class="h2h-row">
-        <span class="h2h-opp">${h.opp}</span>
+        <span class="h2h-opp">${h.opp}${matchLabel}</span>
         <span class="h2h-result ${cls}">${label}</span>
         <span class="h2h-score">${h.score}${h.sets!=='–'?' · '+h.sets:''}</span>
       </div>`;
@@ -2344,7 +2426,7 @@ function renderStats() {
     }
 
     // ── PRONOSTICS pour les prochains matchs du joueur ──
-    const myUpcoming = MATCHES_RAW.filter(m => {
+    const myUpcomingPoule = MATCHES_RAW.filter(m => {
       const pl = PLAYERS[m.phase];
       const involved = pl[m.p1]===statsFilter || pl[m.p2]===statsFilter;
       if (!involved) return false;
@@ -2352,20 +2434,69 @@ function renderStats() {
       const res = getMatchResult(id);
       return !(res.w1===2||res.w2===2);
     });
+
+    // Matchs élim à venir impliquant ce joueur
+    const myUpcomingElim = [];
+    const elimIdsForPlayer = [...ELIM.map(e=>e.id), 'PF', 'F'];
+    elimIdsForPlayer.forEach(eid => {
+      const res = getElimMatchResult(eid);
+      if (res.done) return;
+      let nA, nB;
+      if (/^Q[1-4]$/.test(eid)) {
+        nA = resolveQFName(eid, 'p1');
+        nB = resolveQFName(eid, 'p2');
+      } else if (eid === 'D1' || eid === 'D2') {
+        nA = resolveSFName(eid, 'p1');
+        nB = resolveSFName(eid, 'p2');
+      } else if (eid === 'F' || eid === 'PF') {
+        const d1res = getElimMatchResult('D1');
+        const d2res = getElimMatchResult('D2');
+        const d1n1 = resolveSFName('D1', 'p1');
+        const d1n2 = resolveSFName('D1', 'p2');
+        const d2n1 = resolveSFName('D2', 'p1');
+        const d2n2 = resolveSFName('D2', 'p2');
+        if (eid === 'F') {
+          nA = d1res.done ? (d1res.w1>d1res.w2 ? d1n1 : d1n2) : '?';
+          nB = d2res.done ? (d2res.w1>d2res.w2 ? d2n1 : d2n2) : '?';
+        } else {
+          nA = d1res.done ? (d1res.w1>d1res.w2 ? d1n2 : d1n1) : '?';
+          nB = d2res.done ? (d2res.w1>d2res.w2 ? d2n2 : d2n1) : '?';
+        }
+        } else {
+          nA = '?'; nB = '?'; // fallback
+        }
+      if (!nA || nA==='?' || !nB || nB==='?') return;
+      if (nA !== statsFilter && nB !== statsFilter) return;
+      const labelMap = {'Q1':'Quart 1','Q2':'Quart 2','Q3':'Quart 3','Q4':'Quart 4','D1':'Demi-finale 1','D2':'Demi-finale 2','PF':'Petite Finale','F':'Finale'};
+      myUpcomingElim.push({ eid, nA, nB, round: labelMap[eid]||eid, date: getElimMatchDate(eid), time: getElimMatchTime(eid) });
+    });
+
+    const myUpcoming = [...myUpcomingPoule.map(m=>({type:'poule', m})), ...myUpcomingElim.map(e=>({type:'elim', e}))];
+
     if (myUpcoming.length > 0) {
       html += `<div class="stat-section-title">🎰 Pronostics à venir</div>`;
-      myUpcoming.forEach(m => {
-        const pl = PLAYERS[m.phase];
-        const nA = pl[m.p1], nB = pl[m.p2];
+      myUpcoming.forEach(item => {
+        let nA, nB, roundLabel, dateLbl;
+        if (item.type === 'poule') {
+          const m = item.m;
+          const pl = PLAYERS[m.phase];
+          nA = pl[m.p1]; nB = pl[m.p2];
+          roundLabel = `Poule ${m.phase}`;
+          dateLbl = `${getMatchDate(m)} · ${getMatchTime(m)}`;
+        } else {
+          const e = item.e;
+          nA = e.nA; nB = e.nB;
+          roundLabel = e.round;
+          dateLbl = e.date ? `${e.date}${e.time?' · '+e.time:''}` : '';
+        }
         const prono = computeProno(nA, nB);
         const shortA = nA.split(' ').slice(-1)[0];
         const shortB = nB.split(' ').slice(-1)[0];
-        const dateLbl = `${getMatchDate(m)} · ${getMatchTime(m)}`;
         if (!prono) return;
         const clsA = prono.pA > prono.pB ? 'fav' : prono.pA < prono.pB ? 'out' : 'even';
         const clsB = prono.pB > prono.pA ? 'fav' : prono.pB < prono.pA ? 'out' : 'even';
         html += `<div class="prono-card">
-          <div class="prono-header"><span class="prono-round">Poule ${m.phase}</span><span class="prono-date">${dateLbl}</span></div>
+          <div class="prono-header"><span class="prono-round">${roundLabel}</span><span class="prono-date">${dateLbl}</span></div>
           <div class="prono-matchup">
             <div class="prono-player" style="color:${prono.pA>=prono.pB?'var(--green)':'var(--text)'}">${shortA}</div>
             <div class="prono-vs">VS</div>
@@ -2390,36 +2521,75 @@ function renderStats() {
 
 function getEliminatedPlayers() {
   const out = new Set();
+
+  // Collecte tous les joueurs actuellement dans un QF (via overrides ou classement)
+  const inQF = new Set();
+  ['Q1','Q2','Q3','Q4'].forEach(id => {
+    const n1 = resolveQFName(id, 'p1');
+    const n2 = resolveQFName(id, 'p2');
+    if(n1 && n1 !== '?') inQF.add(n1);
+    if(n2 && n2 !== '?') inQF.add(n2);
+  });
+
   ['A','B','C','D'].forEach(poule => {
     const standings = getStandings(poule);
     const pouleDone = MATCHES_RAW.filter(m => m.phase === poule)
       .every(m => { const r = getMatchResult(getMatchId(m)); return r.w1===2||r.w2===2; });
     if(!pouleDone) return;
-    standings.slice(2).forEach(p => out.add(p.name));
+    // Un joueur 3e/4e est éliminé seulement s'il n'est pas dans un QF
+    standings.slice(2).forEach(p => { if(!inQF.has(p.name)) out.add(p.name); });
   });
+  // Perdants des QF (éliminés dès qu'un QF est joué)
   ['Q1','Q2','Q3','Q4'].forEach(id => {
     const res = getElimMatchResult(id);
     if(!res.done) return;
-    const m = ELIM.find(e => e.id === id);
-    if(!m) return;
-    const loser = res.w1 > res.w2 ? resolveElimName(m.p2slot) : resolveElimName(m.p1slot);
+    const n1 = resolveQFName(id, 'p1');
+    const n2 = resolveQFName(id, 'p2');
+    const loser = res.w1 > res.w2 ? n2 : n1;
     if(loser && loser !== '?') out.add(loser);
   });
+
+  // Collecte les joueurs actuellement dans une demi-finale (pour ne pas les barrer)
+  const inSF = new Set();
+  ['D1','D2'].forEach(id => {
+    const n1 = resolveSFName(id, 'p1');
+    const n2 = resolveSFName(id, 'p2');
+    if(n1 && n1 !== '?') inSF.add(n1);
+    if(n2 && n2 !== '?') inSF.add(n2);
+  });
+
+  // Perdants des demi-finales (seulement si petite finale jouée)
   const pfRes = getElimMatchResult('PF');
   if(pfRes.done) {
     ['D1','D2'].forEach(id => {
       const res = getElimMatchResult(id);
       if(!res.done) return;
-      const m = ELIM.find(e => e.id === id);
-      if(!m) return;
-      const loser = res.w1 > res.w2 ? resolveElimName(m.p2slot) : resolveElimName(m.p1slot);
-      if(loser && loser !== '?') out.add(loser);
+      const n1 = resolveSFName(id, 'p1');
+      const n2 = resolveSFName(id, 'p2');
+      const loser = res.w1 > res.w2 ? n2 : n1;
+      if(loser && loser !== '?' && !inSF.has(loser)) out.add(loser);
     });
-    const mPF = ELIM.find(e => e.id === 'PF');
-    if(mPF) {
-      const loser = pfRes.w1 > pfRes.w2 ? resolveElimName(mPF.p2slot) : resolveElimName(mPF.p1slot);
-      if(loser && loser !== '?') out.add(loser);
+    // Perdant de la petite finale
+    const d1res = getElimMatchResult('D1');
+    const d2res = getElimMatchResult('D2');
+    if(d1res.done && d2res.done) {
+      const pf_p1 = d1res.w1>d1res.w2 ? resolveSFName('D1','p2') : resolveSFName('D1','p1');
+      const pf_p2 = d2res.w1>d2res.w2 ? resolveSFName('D2','p2') : resolveSFName('D2','p1');
+      const pfLoser = pfRes.w1>pfRes.w2 ? pf_p2 : pf_p1;
+      if(pfLoser && pfLoser !== '?') out.add(pfLoser);
     }
+  } else {
+    // Avant que la petite finale soit jouée : perdants des demies sont éliminés
+    // seulement s'ils ne sont dans aucune demi encore en cours
+    ['D1','D2'].forEach(id => {
+      const res = getElimMatchResult(id);
+      if(!res.done) return;
+      const n1 = resolveSFName(id, 'p1');
+      const n2 = resolveSFName(id, 'p2');
+      const loser = res.w1 > res.w2 ? n2 : n1;
+      // Le perdant va en petite finale, pas vraiment "éliminé" encore
+      // On ne l'ajoute pas à out ici, il sera barré après la PF
+    });
   }
   return out;
 }
@@ -2511,7 +2681,7 @@ function computeMomentum(playerName) {
     const pl = PLAYERS[m.phase];
     return pl[m.p1] === playerName || pl[m.p2] === playerName;
   });
-  return myMatches.map(m => {
+  const momentum = myMatches.map(m => {
     const pl = PLAYERS[m.phase];
     const isP1 = pl[m.p1] === playerName;
     const opp = isP1 ? pl[m.p2] : pl[m.p1];
@@ -2523,6 +2693,46 @@ function computeMomentum(playerName) {
     const myPts = res.sets.reduce((a, s) => a + (isP1 ? s.s1 : s.s2), 0);
     return { result: myW > (isP1 ? res.w2 : res.w1) ? 'win' : 'loss', opp, pts: myPts };
   });
+
+  // Ajouter les matchs éliminatoires
+  const elimIds = [...ELIM.map(e=>e.id), 'PF', 'F'];
+  elimIds.forEach(eid => {
+    let n1, n2;
+    if (/^Q[1-4]$/.test(eid)) {
+      n1 = resolveQFName(eid, 'p1');
+      n2 = resolveQFName(eid, 'p2');
+    } else if (eid === 'F' || eid === 'PF') {
+      const d1res = getElimMatchResult('D1');
+      const d2res = getElimMatchResult('D2');
+      const d1n1 = resolveSFName('D1', 'p1');
+      const d1n2 = resolveSFName('D1', 'p2');
+      const d2n1 = resolveSFName('D2', 'p1');
+      const d2n2 = resolveSFName('D2', 'p2');
+      if (eid === 'F') {
+        n1 = d1res.done ? (d1res.w1>d1res.w2 ? d1n1 : d1n2) : '?';
+        n2 = d2res.done ? (d2res.w1>d2res.w2 ? d2n1 : d2n2) : '?';
+      } else {
+        n1 = d1res.done ? (d1res.w1>d1res.w2 ? d1n2 : d1n1) : '?';
+        n2 = d2res.done ? (d2res.w1>d2res.w2 ? d2n2 : d2n1) : '?';
+      }
+    } else if (eid === 'D1' || eid === 'D2') {
+      n1 = resolveSFName(eid, 'p1');
+      n2 = resolveSFName(eid, 'p2');
+    } else {
+      return; // PF/F déjà géré au-dessus
+    }
+    if (!n1 || n1==='?' || !n2 || n2==='?') return;
+    if (n1 !== playerName && n2 !== playerName) return;
+    const isP1 = n1 === playerName;
+    const opp = isP1 ? n2 : n1;
+    const res = getElimMatchResult(eid);
+    if (!res.done) { momentum.push({ result: 'pending', opp, pts: 0 }); return; }
+    const myW = isP1 ? res.w1 : res.w2;
+    const myPts = res.sets.reduce((a, s) => a + (isP1 ? s.s1 : s.s2), 0);
+    momentum.push({ result: myW > (isP1 ? res.w2 : res.w1) ? 'win' : 'loss', opp, pts: myPts });
+  });
+
+  return momentum;
 }
 
 // ═══════════════════════════════════════════════════
@@ -2593,8 +2803,18 @@ function renderPronostics() {
   [...ELIM].forEach(m => {
     const res = getElimMatchResult(m.id);
     if (res.done) return;
-    const nA = resolveElimName(m.p1slot || m.p1);
-    const nB = resolveElimName(m.p2slot || m.p2);
+    // Pour les QF, utiliser resolveQFName ; pour les demi, resolveSFName
+    let nA, nB;
+    if (/^Q[1-4]$/.test(m.id)) {
+      nA = resolveQFName(m.id, 'p1');
+      nB = resolveQFName(m.id, 'p2');
+    } else if (m.id === 'D1' || m.id === 'D2') {
+      nA = resolveSFName(m.id, 'p1');
+      nB = resolveSFName(m.id, 'p2');
+    } else {
+      nA = resolveElimName(m.p1slot || m.p1);
+      nB = resolveElimName(m.p2slot || m.p2);
+    }
     upcoming.push({
       round: m.round || m.label,
       date: getElimMatchDate(m.id),
@@ -2612,8 +2832,8 @@ function renderPronostics() {
   if (!fRes.done) {
     const D1m = ELIM.find(e=>e.id==='D1'); const D2m = ELIM.find(e=>e.id==='D2');
     const d1r = getElimMatchResult('D1'); const d2r = getElimMatchResult('D2');
-    const nA = d1r.done ? (d1r.w1>d1r.w2?resolveElimName(D1m?.p1slot):resolveElimName(D1m?.p2slot)) : '?';
-    const nB = d2r.done ? (d2r.w1>d2r.w2?resolveElimName(D2m?.p1slot):resolveElimName(D2m?.p2slot)) : '?';
+    const nA = d1r.done ? (d1r.w1>d1r.w2?resolveSFName('D1','p1'):resolveSFName('D1','p2')) : '?';
+    const nB = d2r.done ? (d2r.w1>d2r.w2?resolveSFName('D2','p1'):resolveSFName('D2','p2')) : '?';
     upcoming.push({ round: 'Finale 🏆', date: fDate, time: fTime, nameA: nA, nameB: nB, isElim: true });
   }
 
@@ -2820,7 +3040,135 @@ function doSaveQFDraw(newDraw) {
   persist();
   refreshActiveTab();
 }
+
+// ─── TIRAGE DEMI-FINALES ───────────────────────────────────────────────────────
+function getQFWinners() {
+  // Retourne les vainqueurs des QF (ou les joueurs en lice si pas joué)
+  const list = [];
+  ['Q1','Q2','Q3','Q4'].forEach(id => {
+    const res = getElimMatchResult(id);
+    const n1 = resolveQFName(id, 'p1');
+    const n2 = resolveQFName(id, 'p2');
+    if(res.done) {
+      const winner = res.w1 > res.w2 ? n1 : n2;
+      if(winner && winner !== '?') list.push({name: winner, qf: id, status: 'winner'});
+    } else {
+      if(n1 && n1 !== '?') list.push({name: n1, qf: id, status: 'pending'});
+      if(n2 && n2 !== '?') list.push({name: n2, qf: id, status: 'pending'});
+    }
+  });
+  return list;
+}
+
+function openSFDrawModal() {
+  const players = getQFWinners();
+  const sfs = [
+    {id:'D1', label:'Demi-finale 1'},
+    {id:'D2', label:'Demi-finale 2'},
+  ];
+
+  const selectStyle = `width:100%;height:36px;padding:0 10px;font-family:'Barlow',sans-serif;
+    font-size:13px;border:1.5px solid #ddd;border-radius:8px;background:white;color:#1a1a1a;
+    cursor:pointer;appearance:none;outline:none;transition:border-color .15s;`;
+
+  let html = '';
+  sfs.forEach(sf => {
+    const ov = semiDrawOverrides[sf.id] || {};
+    const p1val = ov.p1 || '';
+    const p2val = ov.p2 || '';
+
+    const optsP1 = players.map(p =>
+      `<option value="${p.name}"${p.name===p1val?' selected':''}>${p.status==='winner'?'✓':'⏳'} ${p.name} (${p.qf})</option>`
+    ).join('');
+    const optsP2 = players.map(p =>
+      `<option value="${p.name}"${p.name===p2val?' selected':''}>${p.status==='winner'?'✓':'⏳'} ${p.name} (${p.qf})</option>`
+    ).join('');
+
+    html += `<div style="background:#f8f6f0;border-radius:10px;padding:.9rem;margin-bottom:.75rem;border:1px solid rgba(26,92,58,.12);">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--green);letter-spacing:.5px;margin-bottom:.6rem;text-transform:uppercase;">
+        ⚔️ ${sf.label}
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center;">
+        <div style="position:relative">
+          <select id="sf-p1-${sf.id}" style="${selectStyle}">
+            <option value="">— Joueur 1 —</option>
+            ${optsP1}
+          </select>
+          <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted);pointer-events:none">▾</span>
+        </div>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--muted)">VS</span>
+        <div style="position:relative">
+          <select id="sf-p2-${sf.id}" style="${selectStyle}">
+            <option value="">— Joueur 2 —</option>
+            ${optsP2}
+          </select>
+          <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--muted);pointer-events:none">▾</span>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  if(players.length === 0) {
+    html = `<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:13px;">
+      ⏳ Aucun quart de finale disputé pour l'instant.<br>Les joueurs apparaîtront ici une fois les QF joués.
+    </div>`;
+  }
+
+  document.getElementById('sf-draw-content').innerHTML = html;
+  document.getElementById('sf-draw-modal').style.display = 'flex';
+}
+
+function closeSFDrawModal() {
+  document.getElementById('sf-draw-modal').style.display = 'none';
+}
+
+function submitSFDraw() {
+  const sfs = ['D1','D2'];
+  const newDraw = {};
+  for(const id of sfs) {
+    const p1 = document.getElementById(`sf-p1-${id}`)?.value || '';
+    const p2 = document.getElementById(`sf-p2-${id}`)?.value || '';
+    if(p1 || p2) newDraw[id] = {p1, p2};
+  }
+  closeSFDrawModal();
+  askPassword({type:'sfDraw', args:[newDraw]});
+}
+
+function doSaveSFDraw(newDraw) {
+  semiDrawOverrides = newDraw;
+  persist();
+  refreshActiveTab();
+}
 </script>
+<!-- MODAL TIRAGE DEMI-FINALES -->
+<div id="sf-draw-modal" style="display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.55);align-items:center;justify-content:center;backdrop-filter:blur(3px);">
+  <div style="background:white;border-radius:16px;padding:1.75rem;max-width:420px;width:95%;
+    box-shadow:0 8px 40px rgba(0,0,0,.2);max-height:90vh;overflow-y:auto;">
+    <div style="font-size:28px;text-align:center;margin-bottom:.25rem;">🎲</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;
+      color:#0f1f15;text-align:center;margin-bottom:.25rem;letter-spacing:.5px;">TIRAGE DEMI-FINALES</div>
+    <div style="font-size:12px;color:#6b7c70;text-align:center;margin-bottom:1.25rem;">
+      Assigne les vainqueurs des quarts aux matchs de demi-finale
+    </div>
+    <div id="sf-draw-content"></div>
+    <div style="display:flex;gap:8px;margin-top:1.25rem;">
+      <button onclick="closeSFDrawModal()"
+        style="flex:1;height:38px;border:1.5px solid #ddd;border-radius:8px;background:none;
+        font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
+        color:#6b7c70;cursor:pointer;letter-spacing:.5px;">
+        ANNULER
+      </button>
+      <button onclick="submitSFDraw()"
+        style="flex:2;height:38px;border:none;border-radius:8px;background:#1a5c3a;color:white;
+        font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;
+        cursor:pointer;letter-spacing:.5px;"
+        onmouseover="this.style.background='#2a7a50'" onmouseout="this.style.background='#1a5c3a'">
+        🔒 ENREGISTRER LE TIRAGE
+      </button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
